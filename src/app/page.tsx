@@ -1,65 +1,148 @@
-import Image from "next/image";
+'use client';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
-export default function Home() {
+const features = [
+  { icon: '📊', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
+  { icon: '✏️', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
+  { icon: '🎯', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
+  { icon: '🔍', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
+  { icon: '📈', title: 'Competitor Analysis', desc: 'See how you rank against peers in your field and experience level.' },
+  { icon: '🔥', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
+];
+
+const steps = [
+  { num: '01', title: 'Enter Your Profile', desc: 'Paste your LinkedIn URL and select your target role and industry.' },
+  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section — photo, headline, about, skills, and more.' },
+  { num: '03', title: 'Get Your Audit Report', desc: 'Receive scores, suggestions, AI rewrites, and a 7-day action plan.' },
+];
+
+const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <Navbar />
+
+      {/* HERO */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px', textAlign: 'center', position: 'relative' }}>
+        {/* Glow orbs */}
+        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+
+        <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24 }}>
+            <span style={{ padding: '8px 20px', borderRadius: 100, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', color: '#a78bfa', fontSize: 13, fontWeight: 600, letterSpacing: 0.5 }}>
+              ✨ AI-Powered LinkedIn Intelligence
+            </span>
+          </motion.div>
+
+          <motion.h1 variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 24, color: '#f1f5f9' }}>
+            Turn Your LinkedIn<br />Into a <span className="gradient-text">Recruiter Magnet</span>
+          </motion.h1>
+
+          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
+            Get AI-powered profile analysis, personalized improvement suggestions, content rewrites, and a complete action plan to 10x your LinkedIn presence.
+          </motion.p>
+
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/audit" className="glow-btn" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              🚀 Analyze My Profile
+            </Link>
+            <Link href="/demo" className="glow-btn glow-btn-outline" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              👀 See Demo Report
+            </Link>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center', gap: 48, marginTop: 60, flexWrap: 'wrap' }}>
+            {[
+              { val: '10K+', label: 'Profiles Analyzed' },
+              { val: '95%', label: 'User Satisfaction' },
+              { val: '3x', label: 'More Recruiter Views' },
+            ].map((s) => (
+              <div key={s.label} style={{ textAlign: 'center' }}>
+                <div className="gradient-text" style={{ fontSize: 32, fontWeight: 800 }}>{s.val}</div>
+                <div style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginTop: 4 }}>{s.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" style={{ padding: '80px 24px', maxWidth: 1280, margin: '0 auto' }}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.5 }} style={{ textAlign: 'center', marginBottom: 60 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, marginBottom: 16, color: '#f1f5f9' }}>
+              Everything You Need to <span className="gradient-text">Stand Out</span>
+            </h2>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 17, maxWidth: 500, margin: '0 auto' }}>
+              A complete toolkit to optimize every aspect of your LinkedIn presence.
+            </p>
+          </motion.div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+            {features.map((f, i) => (
+              <motion.div key={i} variants={fadeUp} transition={{ duration: 0.5 }} className="glass-card" style={{ padding: 32 }}>
+                <div style={{ fontSize: 36, marginBottom: 16 }}>{f.icon}</div>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 10 }}>{f.title}</h3>
+                <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 15, lineHeight: 1.6 }}>{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" style={{ padding: '80px 24px', maxWidth: 900, margin: '0 auto' }}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={{ visible: { transition: { staggerChildren: 0.15 } } }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.5 }} style={{ textAlign: 'center', marginBottom: 60 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, marginBottom: 16, color: '#f1f5f9' }}>
+              How It <span className="gradient-text">Works</span>
+            </h2>
+          </motion.div>
+
+          {steps.map((step, i) => (
+            <motion.div key={i} variants={fadeUp} transition={{ duration: 0.5 }} style={{ display: 'flex', gap: 24, marginBottom: 40, alignItems: 'flex-start' }}>
+              <div style={{
+                minWidth: 56, height: 56, borderRadius: 14,
+                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                border: '1px solid rgba(99,102,241,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 20, fontWeight: 800, color: '#a78bfa',
+              }}>
+                {step.num}
+              </div>
+              <div>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 6 }}>{step.title}</h3>
+                <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 15, lineHeight: 1.6 }}>{step.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ padding: '80px 24px', textAlign: 'center' }}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }}
+          className="gradient-border" style={{ maxWidth: 700, margin: '0 auto', padding: 60 }}
+        >
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 16 }}>
+            Ready to Level Up Your LinkedIn?
+          </h2>
+          <p style={{ color: 'rgba(226,232,240,0.5)', marginBottom: 32, fontSize: 16 }}>
+            Join thousands of professionals who have transformed their LinkedIn profiles with AI.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 17, textDecoration: 'none' }}>
+            🚀 Start Free Audit
+          </Link>
+        </motion.div>
+      </section>
+
+      <Footer />
+    </>
   );
 }
