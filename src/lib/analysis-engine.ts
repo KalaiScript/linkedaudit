@@ -230,7 +230,7 @@ export function analyzeProfile(profile: LinkedInProfile): AuditResult {
   const overallScore = Math.round((weightedScore / totalWeight) * 100);
   const allStrengths = sections.flatMap(s => s.strengths).slice(0, 5);
   const allWeaknesses = sections.flatMap(s => s.weaknesses).slice(0, 5);
-  const recruiterReadiness = Math.min(overallScore + Math.round(Math.random() * 10 - 5), 100);
+  const recruiterReadiness = Math.min(overallScore + Math.round(overallScore * 0.05 - 2), 100);
   const personalBrandScore = Math.round((profile.postsPerWeek * 10 + profile.followers / 100 + (profile.creatorMode ? 20 : 0) + profile.recommendations * 5) / 1.5);
   return {
     profile,
@@ -244,7 +244,7 @@ export function analyzeProfile(profile: LinkedInProfile): AuditResult {
     actionPlan: generateActionPlan(sections),
     careerPositioning: [profile.jobRoleTarget, ...profile.skills.slice(0, 3).map(s => `${s} Specialist`)],
     personalBrandScore: Math.min(personalBrandScore, 100),
-    atsScore: Math.round(overallScore * 0.9 + Math.random() * 10),
+    atsScore: Math.min(Math.round(overallScore * 0.95 + 3), 100),
     roastFeedback: generateRoasts(profile, sections),
   };
 }
