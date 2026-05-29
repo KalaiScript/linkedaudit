@@ -80,7 +80,7 @@ export default function Navbar() {
             }}
           >
             <Link href="/#features" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>Features</Link>
-            <Link href="/#how-it-works" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>How It Works</Link>
+            <Link href="/carousel" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>Carousel Maker</Link>
             <Link href="/pricing" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>Pricing</Link>
             <Link href="/audit" onClick={() => setMenuOpen(false)} className="glow-btn" style={{ padding: '10px 24px', fontSize: 14, textDecoration: 'none', textAlign: 'center' }}>
               Analyze Profile

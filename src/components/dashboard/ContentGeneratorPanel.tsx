@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { generateHeadlines, generateAboutSections, generateExperienceRewrites, generatePosts } from '@/lib/content-generator';
 import { LinkedInProfile } from '@/types';
+import Link from 'next/link';
 
 interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
@@ -38,6 +39,16 @@ export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanel
             {tab}
           </button>
         ))}
+      </div>
+
+      <div className="glass-card" style={{ padding: 24, marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(to right, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
+        <div>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>✨ New: AI Carousel Generator</h3>
+          <p style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>Turn your ideas into visually stunning LinkedIn carousels and export to PDF.</p>
+        </div>
+        <Link href="/carousel" className="glow-btn" style={{ padding: '10px 20px', fontSize: 14, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          Open Carousel Maker →
+        </Link>
       </div>
 
       {/* Content */}
