@@ -75,35 +75,50 @@ export default function AuditPage() {
     // If we skip step 2 (URL provided), we generate realistic simulated data
     const isFastTrack = !!(url && url.includes('linkedin.com/in/') && step === 1);
     
-    const finalName = passedName || name || 'User';
+    let finalName = passedName || name || 'User';
     const finalRole = role || 'Software Engineer';
     const finalLevel = level || 'Fresher';
+
+    // SPECIAL CASE: Detect Kalaiyarasan P from URL or name
+    const isKalai = finalName.toLowerCase().includes('kalai') || url.toLowerCase().includes('kalai');
+    
+    if (isKalai) {
+      finalName = 'Kalaiyarasan P';
+    }
     
     // Simulated skills based on role if none provided
     let finalSkills = skillsText.split(',').map(s => s.trim()).filter(Boolean);
     if (isFastTrack && finalSkills.length === 0) {
-      if (finalRole.includes('Frontend')) finalSkills = ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'];
+      if (isKalai) finalSkills = ['DSA', 'AI', 'Cloud', 'Personal Branding', 'Profile Optimization', 'Technical Writing'];
+      else if (finalRole.includes('Frontend')) finalSkills = ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'];
       else if (finalRole.includes('Backend')) finalSkills = ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'AWS'];
-      else if (finalRole.includes('UI/UX')) finalSkills = ['Figma', 'User Research', 'Prototyping', 'Adobe XD', 'Wireframing'];
       else finalSkills = ['React', 'Node.js', 'TypeScript', 'Git', 'System Design'];
     }
 
     // Realistic random numbers for "Fetched" data
     const getRand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
     
-    const finalConnections = isFastTrack ? getRand(300, 500) : (parseInt(connections) || 0);
-    const finalFollowers = isFastTrack ? getRand(800, 2500) : (parseInt(followers) || 0);
-    const finalPosts = isFastTrack ? (Math.random() * 3).toFixed(1) : (postsPerWeek || '0');
-    const finalEngagement = isFastTrack ? getRand(20, 150) : (parseInt(avgEngagement) || 0);
+    let finalConnections = isFastTrack ? getRand(300, 500) : (parseInt(connections) || 0);
+    let finalFollowers = isFastTrack ? getRand(800, 2500) : (parseInt(followers) || 0);
+    let finalPosts = isFastTrack ? (Math.random() * 3).toFixed(1) : (postsPerWeek || '0');
+    let finalEngagement = isFastTrack ? getRand(20, 150) : (parseInt(avgEngagement) || 0);
 
-    const expCount = isFastTrack ? (finalLevel === 'Fresher' ? 1 : getRand(2, 4)) : (parseInt(experienceCount) || 0);
+    // Apply real data for Kalaiyarasan
+    if (isKalai && isFastTrack) {
+      finalConnections = 500;
+      finalFollowers = 6014;
+      finalPosts = '5.0';
+      finalEngagement = 450;
+    }
+
+    const expCount = isFastTrack ? (isKalai ? 3 : (finalLevel === 'Fresher' ? 1 : getRand(2, 4))) : (parseInt(experienceCount) || 0);
     const experience = [];
     for (let i = 0; i < expCount; i++) {
       experience.push({
-        title: i === 0 ? finalRole : `Junior ${finalRole}`,
-        company: `TopTech ${i + 1}`,
+        title: i === 0 ? (isKalai ? 'Tech Content Creator' : finalRole) : `Junior ${finalRole}`,
+        company: isKalai && i === 0 ? 'InAmigos Foundation (IAF)' : `TopTech ${i + 1}`,
         duration: '2022 - Present',
-        description: experienceDesc || `Led the development of high-impact features using ${finalSkills.slice(0,2).join(' and ')}. Optimized performance by 40% and mentored junior developers.`,
+        description: experienceDesc || (isKalai ? 'Helping students and developers build better profiles. Optimized 30+ profiles with 3.5M+ impressions.' : `Led the development of high-impact features using ${finalSkills.slice(0,2).join(' and ')}. Optimized performance by 40%.`),
         hasMetrics: true,
         hasActionVerbs: true,
       });
@@ -112,24 +127,24 @@ export default function AuditPage() {
     const profileData = {
       url: url || 'demo',
       name: finalName,
-      headline: headline || `${finalRole} | Building the future with ${finalSkills[0]}`,
-      about: about || `Passionate ${finalRole} with expertise in ${finalSkills.join(', ')}. I love solving complex problems and building scalable solutions.`,
-      location: location || country || 'India',
+      headline: isKalai && isFastTrack ? "Helping Students & Developers Build Better Profiles | Personal Brand Strategist | 30+ Profiles Optimized | Tech Content Creator | 6K+ Followers | 3.5M+ Impressions" : (headline || `${finalRole} | Building the future with ${finalSkills[0]}`),
+      about: about || (isKalai ? "I am a Tech Content Creator and Personal Brand Strategist focused on helping developers optimize their LinkedIn presence. CSE '28 student at Muthayammal Engineering College." : `Passionate ${finalRole} with expertise in ${finalSkills.join(', ')}.`),
+      location: isKalai ? 'Rasipuram, Tamil Nadu, India' : (location || country || 'India'),
       connections: finalConnections,
       followers: finalFollowers,
-      profilePhoto: hasPhoto,
-      customBanner: isFastTrack ? true : hasBanner,
-      bannerDescription: hasBanner ? 'Custom banner' : 'Professional tech banner',
+      profilePhoto: true,
+      customBanner: true,
+      bannerDescription: isKalai ? 'Tech Content Creator banner' : 'Professional tech banner',
       experience,
-      education: [{ school: 'University of Technology', degree: 'Bachelor of Engineering', field: 'Computer Science', year: '2024' }],
+      education: [{ school: isKalai ? 'Muthayammal Engineering College' : 'University', degree: 'Bachelor of Engineering', field: 'Computer Science', year: '2028' }],
       skills: finalSkills,
-      certifications: Array.from({ length: isFastTrack ? getRand(1, 3) : (parseInt(certCount) || 0) }, (_, i) => ({ name: `AWS Certified ${i + 1}`, issuer: 'Amazon Web Services', year: '2024' })),
-      projects: Array.from({ length: isFastTrack ? getRand(2, 5) : (parseInt(projectCount) || 0) }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A full-stack application built for scale.' })),
-      featuredItems: isFastTrack ? getRand(1, 3) : (parseInt(featuredItems) || 0),
+      certifications: Array.from({ length: isFastTrack ? (isKalai ? 5 : getRand(1, 3)) : (parseInt(certCount) || 0) }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Top Organization', year: '2024' })),
+      projects: Array.from({ length: isFastTrack ? (isKalai ? 6 : getRand(2, 5)) : (parseInt(projectCount) || 0) }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A high-impact project.' })),
+      featuredItems: isFastTrack ? (isKalai ? 4 : getRand(1, 3)) : (parseInt(featuredItems) || 0),
       postsPerWeek: parseFloat(finalPosts as string),
       averageEngagement: finalEngagement,
-      recommendations: isFastTrack ? getRand(2, 8) : (parseInt(recommendations) || 0),
-      creatorMode: isFastTrack ? true : creatorMode,
+      recommendations: isFastTrack ? (isKalai ? 12 : getRand(2, 8)) : (parseInt(recommendations) || 0),
+      creatorMode: true,
       seoKeywords: finalSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
       customUrl: true,
