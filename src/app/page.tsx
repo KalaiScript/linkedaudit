@@ -35,24 +35,24 @@ export default function LandingPage() {
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24 }}>
             <span style={{ padding: '8px 20px', borderRadius: 100, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', color: '#a78bfa', fontSize: 13, fontWeight: 600, letterSpacing: 0.5 }}>
-              ✨ AI-Powered LinkedIn Intelligence
+              ✨ KalaiScript: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
           <motion.h1 variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 24, color: '#f1f5f9' }}>
-            Turn Your LinkedIn<br />Into a <span className="gradient-text">Recruiter Magnet</span>
+            Dominate LinkedIn<br />With <span className="gradient-text">AI Power</span>
           </motion.h1>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
-            Get AI-powered profile analysis, personalized improvement suggestions, content rewrites, and a complete action plan to 10x your LinkedIn presence.
+            Generate viral posts, optimize your profile, and build a massive personal brand with KalaiScript's suite of AI tools.
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/audit" className="glow-btn" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              🚀 Analyze My Profile
+            <Link href="/post-generator" className="glow-btn" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              ✍️ Create Viral Post
             </Link>
-            <Link href="/demo" className="glow-btn glow-btn-outline" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              👀 See Demo Report
+            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              🚀 Free Profile Audit
             </Link>
           </motion.div>
 
