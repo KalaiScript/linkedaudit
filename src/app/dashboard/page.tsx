@@ -19,10 +19,15 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
   const [roastMode, setRoastMode] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const result: AuditResult = useMemo(() => {
     // Try to read user-entered profile data from localStorage
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && isMounted) {
       const stored = localStorage.getItem('profilepulse_profile');
       if (stored) {
         try {
@@ -45,7 +50,15 @@ function DashboardContent() {
     if (level) profile.experienceLevel = level;
     if (country) profile.country = country;
     return analyzeProfile(profile);
-  }, [searchParams]);
+  }, [searchParams, isMounted]);
+
+  if (!isMounted) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 48 }}>⚡</motion.div>
+      </div>
+    );
+  }
 
   const renderTab = () => {
     switch (activeTab) {
