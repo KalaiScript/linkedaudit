@@ -13,7 +13,7 @@ import { analyzeProfile } from '@/lib/analysis-engine';
 import { demoProfile } from '@/lib/mock-data';
 import { AuditResult } from '@/types';
 
-const dashTabs = ['Overview', 'Score Breakdown', 'AI Suggestions', 'Content Generator', 'SEO Analysis', 'Action Plan', 'Roast Mode 🔥'];
+const dashTabs = ['Overview', 'Score Breakdown', 'AI Suggestions', 'Content Generator', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode 🔥'];
 
 function DashboardContent() {
   const searchParams = useSearchParams();
@@ -54,8 +54,9 @@ function DashboardContent() {
       case 2: return <SuggestionsTab result={result} />;
       case 3: return <ContentGeneratorPanel profile={result.profile} />;
       case 4: return <SEOTab result={result} />;
-      case 5: return <ActionPlanTab result={result} />;
-      case 6: return <RoastTab result={result} />;
+      case 5: return <NetworkingTab result={result} />;
+      case 6: return <ActionPlanTab result={result} />;
+      case 7: return <RoastTab result={result} />;
       default: return null;
     }
   };
@@ -244,46 +245,83 @@ function SuggestionsTab({ result }: { result: AuditResult }) {
 function SEOTab({ result }: { result: AuditResult }) {
   const seoSection = result.sections.find(s => s.name.includes('SEO'));
   const keywords = result.profile.seoKeywords;
-  const missing = ['full stack developer', 'react developer', 'javascript', 'open source', 'agile', 'microservices'].filter(k => !keywords.some(kw => kw.toLowerCase().includes(k)));
+  const missing = ['Full Stack Development', 'System Design', 'Agile Methodologies', 'Cloud Computing', 'Technical Leadership'].filter(k => !keywords.some(kw => kw.toLowerCase().includes(k.toLowerCase())));
+  
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
       <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#14b8a6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🔍 SEO Score</h3>
+        <h3 style={{ color: '#14b8a6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🔍 Search Visibility</h3>
         <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <ScoreCircle score={seoSection?.score || 5} maxScore={10} size={140} label="Search Visibility" />
+          <ScoreCircle score={seoSection?.score || 5} maxScore={10} size={140} label="SEO Index" />
+        </div>
+        <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, textAlign: 'center' }}>
+          Your profile appears in approx. <strong style={{ color: '#5eead4' }}>45</strong> searches per week.
+        </p>
+      </div>
+
+      <div className="glass-card" style={{ padding: 24 }}>
+        <h3 style={{ color: '#8b5cf6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🏷️ Keyword Analysis</h3>
+        <div style={{ marginBottom: 20 }}>
+          <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Detected High-Intent Keywords</h4>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {keywords.map((k, i) => (
+              <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(20,184,166,0.1)', border: '1px solid rgba(20,184,166,0.2)', color: '#5eead4', fontSize: 12, fontWeight: 600 }}>{k}</span>
+            ))}
+          </div>
         </div>
         <div>
-          <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Current Keywords</h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {keywords.map((k, i) => (
-              <span key={i} style={{ padding: '4px 12px', borderRadius: 6, background: 'rgba(20,184,166,0.12)', color: '#5eead4', fontSize: 12, fontWeight: 600 }}>{k}</span>
+          <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Missing for {result.profile.jobRoleTarget}</h4>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {missing.map((k, i) => (
+              <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.1)', color: '#fca5a5', fontSize: 12, fontWeight: 600 }}>+ {k}</span>
             ))}
           </div>
         </div>
       </div>
+
       <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#f59e0b', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>⚠️ Missing Keywords</h3>
-        <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 16 }}>Add these keywords to improve discoverability:</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {missing.map((k, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ color: '#fbbf24' }}>+</span>
-              <span style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>{k}</span>
-            </div>
-          ))}
+        <h3 style={{ color: '#3b82f6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📊 Ranking & Reach</h3>
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13 }}>Profile Discoverability</span>
+            <span style={{ color: '#3b82f6', fontSize: 13, fontWeight: 700 }}>Top 15%</span>
+          </div>
+          <div style={{ height: 8, borderRadius: 4, background: 'rgba(59,130,246,0.1)', overflow: 'hidden' }}>
+            <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 1.5 }} style={{ height: '100%', background: '#3b82f6' }} />
+          </div>
         </div>
-      </div>
-      <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#8b5cf6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📈 Competitor Ranking</h3>
-        <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginBottom: 16 }}>
-          You rank above <strong style={{ color: '#a78bfa' }}>62%</strong> of {result.profile.experienceLevel === 'Fresher' ? 'freshers' : 'professionals'} in {result.profile.industry}
+        <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, lineHeight: 1.6 }}>
+          💡 Tip: Profiles with 5+ skills listed in the &quot;About&quot; section receive 17x more messages from recruiters.
         </p>
-        <div style={{ height: 12, borderRadius: 6, background: 'rgba(99,102,241,0.1)', overflow: 'hidden' }}>
-          <motion.div initial={{ width: 0 }} animate={{ width: '62%' }} transition={{ duration: 1.5, ease: 'easeOut' }}
-            style={{ height: '100%', borderRadius: 6, background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)' }} />
-        </div>
-        <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 12, marginTop: 6 }}>Percentile: 62nd</p>
       </div>
+    </div>
+  );
+}
+
+/* Networking Tab */
+function NetworkingTab({ result }: { result: AuditResult }) {
+  const strategies = [
+    { title: 'Connect with Industry Peers', desc: `Reach out to other ${result.profile.jobRoleTarget}s in the ${result.profile.industry} sector.`, icon: '👥' },
+    { title: 'Find Potential Mentors', desc: `Look for Senior ${result.profile.jobRoleTarget}s with 5+ years of experience who share your interests.`, icon: '👨‍🏫' },
+    { title: 'Target Hiring Managers', desc: `Connect with recruiters at companies focusing on ${result.profile.skills[0] || 'tech'}.`, icon: '🎯' },
+    { title: 'Alumni Outreach', desc: `Connect with former students from your university who are now in roles you aspire to.`, icon: '🎓' },
+  ];
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+      {strategies.map((s, i) => (
+        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="glass-card" style={{ padding: 24 }}>
+          <div style={{ fontSize: 32, marginBottom: 16 }}>{s.icon}</div>
+          <h3 style={{ color: '#f1f5f9', fontSize: 18, fontWeight: 700, marginBottom: 8 }}>{s.title}</h3>
+          <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, lineHeight: 1.6 }}>{s.desc}</p>
+          <div style={{ marginTop: 20, padding: 12, borderRadius: 10, background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
+            <p style={{ color: '#a78bfa', fontSize: 12, fontWeight: 700, marginBottom: 8, textTransform: 'uppercase' }}>Sample Outreach</p>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, fontStyle: 'italic' }}>
+              &quot;Hi [Name], I noticed your work in {result.profile.skills[0] || 'the field'} and would love to connect and learn from your journey...&quot;
+            </p>
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 }

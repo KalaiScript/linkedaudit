@@ -9,7 +9,9 @@ const features = [
   { icon: '✏️', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
   { icon: '🎯', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
   { icon: '🔍', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
-  { icon: '📈', title: 'Competitor Analysis', desc: 'See how you rank against peers in your field and experience level.' },
+  { icon: '📄', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
+  { icon: '💡', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
+  { icon: '🔗', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
   { icon: '🔥', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
 ];
 
@@ -48,10 +50,7 @@ export default function LandingPage() {
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/post-generator" className="glow-btn" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              ✍️ Create Viral Post
-            </Link>
-            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ padding: '16px 40px', fontSize: 16, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 17, textDecoration: 'none' }}>
               🚀 Free Profile Audit
             </Link>
           </motion.div>
@@ -137,7 +136,7 @@ export default function LandingPage() {
             Join thousands of professionals who have transformed their LinkedIn profiles with AI.
           </p>
           <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 17, textDecoration: 'none' }}>
-            🚀 Start Free Audit
+            🚀 Free Profile Audit
           </Link>
         </motion.div>
       </section>
