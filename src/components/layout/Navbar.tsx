@@ -31,10 +31,10 @@ export default function Navbar() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 18, fontWeight: 800, color: 'white',
           }}>
-            LS
+            PP
           </div>
           <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0' }}>
-            Kalai<span style={{ color: '#8b5cf6' }}>Script</span>
+            Profile<span style={{ color: '#8b5cf6' }}>Pulse</span>
           </span>
         </Link>
 

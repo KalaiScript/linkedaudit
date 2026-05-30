@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo, useEffect, Suspense } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
@@ -22,7 +23,7 @@ function DashboardContent() {
   const result: AuditResult = useMemo(() => {
     // Try to read user-entered profile data from localStorage
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('linkedaudit_profile');
+      const stored = localStorage.getItem('profilepulse_profile');
       if (stored) {
         try {
           const profile = JSON.parse(stored);
@@ -64,13 +65,23 @@ function DashboardContent() {
       <Navbar />
       <main style={{ minHeight: '100vh', padding: '100px 24px 60px', maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
-          <h1 style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>
-            Profile Audit <span className="gradient-text">Dashboard</span>
-          </h1>
-          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 15 }}>
-            Analysis for <strong style={{ color: '#a78bfa' }}>{result.profile.name}</strong> — {result.profile.jobRoleTarget}
-          </p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 20 }}>
+          <div>
+            <h1 style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>
+              Profile Audit <span className="gradient-text">Dashboard</span>
+            </h1>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 15 }}>
+              Analysis for <strong style={{ color: '#a78bfa' }}>{result.profile.name}</strong> — {result.profile.jobRoleTarget}
+            </p>
+          </div>
+          <Link href="/audit" style={{
+            display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12,
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+            color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 14, fontWeight: 600,
+            transition: 'all 0.2s'
+          }} className="hover-lift">
+            ← Back to Audit
+          </Link>
         </motion.div>
 
         {/* Tab navigation */}

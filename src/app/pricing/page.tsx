@@ -67,7 +67,7 @@ const plans = [
 ];
 
 const faqs = [
-  { q: 'How does LinkedInAudit analyze my profile?', a: 'Our AI engine evaluates every section of your LinkedIn profile — from your photo and headline to your experience, skills, and posting activity. We use industry best practices and recruiter insights to score and suggest improvements.' },
+    { q: 'How does ProfilePulse analyze my profile?', a: 'Our AI engine evaluates every section of your LinkedIn profile — from your photo and headline to your experience, skills, and posting activity. We use industry best practices and recruiter insights to score and suggest improvements.' },
   { q: 'Is my LinkedIn data safe?', a: 'Absolutely. We don\'t store your LinkedIn credentials. We only analyze the publicly available information from your profile URL. Your data is processed securely and never shared with third parties.' },
   { q: 'Can I cancel my subscription anytime?', a: 'Yes! You can cancel your Pro or Enterprise subscription at any time. No questions asked, no hidden fees.' },
   { q: 'How accurate is the AI scoring?', a: 'Our scoring algorithm is based on analysis of thousands of successful LinkedIn profiles across industries. While no score is perfect, our suggestions consistently help users improve their profile visibility and recruiter engagement.' },

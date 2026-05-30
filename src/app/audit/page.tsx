@@ -79,18 +79,10 @@ export default function AuditPage() {
     const finalRole = role || 'Software Engineer';
     const finalLevel = level || 'Fresher';
 
-    // SPECIAL CASE: Detect Kalaiyarasan P from URL or name
-    const isKalai = finalName.toLowerCase().includes('kalai') || url.toLowerCase().includes('kalai');
-    
-    if (isKalai) {
-      finalName = 'Kalaiyarasan P';
-    }
-    
     // Simulated skills based on role if none provided
     let finalSkills = skillsText.split(',').map(s => s.trim()).filter(Boolean);
     if (isFastTrack && finalSkills.length === 0) {
-      if (isKalai) finalSkills = ['DSA', 'AI', 'Cloud', 'Personal Branding', 'Profile Optimization', 'Technical Writing'];
-      else if (finalRole.includes('Frontend')) finalSkills = ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'];
+      if (finalRole.includes('Frontend')) finalSkills = ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'];
       else if (finalRole.includes('Backend')) finalSkills = ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'AWS'];
       else finalSkills = ['React', 'Node.js', 'TypeScript', 'Git', 'System Design'];
     }
@@ -103,22 +95,14 @@ export default function AuditPage() {
     let finalPosts = isFastTrack ? (Math.random() * 3).toFixed(1) : (postsPerWeek || '0');
     let finalEngagement = isFastTrack ? getRand(20, 150) : (parseInt(avgEngagement) || 0);
 
-    // Apply real data for Kalaiyarasan
-    if (isKalai && isFastTrack) {
-      finalConnections = 500;
-      finalFollowers = 6014;
-      finalPosts = '5.0';
-      finalEngagement = 450;
-    }
-
-    const expCount = isFastTrack ? (isKalai ? 3 : (finalLevel === 'Fresher' ? 1 : getRand(2, 4))) : (parseInt(experienceCount) || 0);
+    const expCount = isFastTrack ? (finalLevel === 'Fresher' ? 1 : getRand(2, 4)) : (parseInt(experienceCount) || 0);
     const experience = [];
     for (let i = 0; i < expCount; i++) {
       experience.push({
-        title: i === 0 ? (isKalai ? 'Tech Content Creator' : finalRole) : `Junior ${finalRole}`,
-        company: isKalai && i === 0 ? 'InAmigos Foundation (IAF)' : `TopTech ${i + 1}`,
+        title: i === 0 ? finalRole : `Junior ${finalRole}`,
+        company: `TopTech ${i + 1}`,
         duration: '2022 - Present',
-        description: experienceDesc || (isKalai ? 'Helping students and developers build better profiles. Optimized 30+ profiles with 3.5M+ impressions.' : `Led the development of high-impact features using ${finalSkills.slice(0,2).join(' and ')}. Optimized performance by 40%.`),
+        description: experienceDesc || `Led the development of high-impact features using ${finalSkills.slice(0,2).join(' and ')}. Optimized performance by 40%.`,
         hasMetrics: true,
         hasActionVerbs: true,
       });
@@ -127,23 +111,23 @@ export default function AuditPage() {
     const profileData = {
       url: url || 'demo',
       name: finalName,
-      headline: isKalai && isFastTrack ? "Helping Students & Developers Build Better Profiles | Personal Brand Strategist | 30+ Profiles Optimized | Tech Content Creator | 6K+ Followers | 3.5M+ Impressions" : (headline || `${finalRole} | Building the future with ${finalSkills[0]}`),
-      about: about || (isKalai ? "I am a Tech Content Creator and Personal Brand Strategist focused on helping developers optimize their LinkedIn presence. CSE '28 student at Muthayammal Engineering College." : `Passionate ${finalRole} with expertise in ${finalSkills.join(', ')}.`),
-      location: isKalai ? 'Rasipuram, Tamil Nadu, India' : (location || country || 'India'),
+      headline: headline || `${finalRole} | Building the future with ${finalSkills[0]}`,
+      about: about || `Passionate ${finalRole} with expertise in ${finalSkills.join(', ')}.`,
+      location: location || country || 'India',
       connections: finalConnections,
       followers: finalFollowers,
       profilePhoto: true,
       customBanner: true,
-      bannerDescription: isKalai ? 'Tech Content Creator banner' : 'Professional tech banner',
+      bannerDescription: 'Professional tech banner',
       experience,
-      education: [{ school: isKalai ? 'Muthayammal Engineering College' : 'University', degree: 'Bachelor of Engineering', field: 'Computer Science', year: '2028' }],
+      education: [{ school: 'University', degree: 'Bachelor of Engineering', field: 'Computer Science', year: '2028' }],
       skills: finalSkills,
-      certifications: Array.from({ length: isFastTrack ? (isKalai ? 5 : getRand(1, 3)) : (parseInt(certCount) || 0) }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Top Organization', year: '2024' })),
-      projects: Array.from({ length: isFastTrack ? (isKalai ? 6 : getRand(2, 5)) : (parseInt(projectCount) || 0) }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A high-impact project.' })),
-      featuredItems: isFastTrack ? (isKalai ? 4 : getRand(1, 3)) : (parseInt(featuredItems) || 0),
+      certifications: Array.from({ length: isFastTrack ? getRand(1, 3) : (parseInt(certCount) || 0) }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Top Organization', year: '2024' })),
+      projects: Array.from({ length: isFastTrack ? getRand(2, 5) : (parseInt(projectCount) || 0) }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A high-impact project.' })),
+      featuredItems: isFastTrack ? getRand(1, 3) : (parseInt(featuredItems) || 0),
       postsPerWeek: parseFloat(finalPosts as string),
       averageEngagement: finalEngagement,
-      recommendations: isFastTrack ? (isKalai ? 12 : getRand(2, 8)) : (parseInt(recommendations) || 0),
+      recommendations: isFastTrack ? getRand(2, 8) : (parseInt(recommendations) || 0),
       creatorMode: true,
       seoKeywords: finalSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
@@ -154,7 +138,7 @@ export default function AuditPage() {
       country: country || 'India',
     };
 
-    localStorage.setItem('linkedaudit_profile', JSON.stringify(profileData));
+    localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
 
     // Simulate AI analysis delay
     await new Promise(r => setTimeout(r, 3000));
@@ -252,7 +236,7 @@ export default function AuditPage() {
 
                   {/* Name & Headline */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                    <InputField label="Full Name" value={name} onChange={setName} placeholder="Kalaiscript" />
+                    <InputField label="Full Name" value={name} onChange={setName} placeholder="John Doe" />
                     <InputField label="Location" value={location} onChange={setLocation} placeholder="City, Country" />
                   </div>
                   <InputField label="Headline" value={headline} onChange={setHeadline} placeholder="Your current LinkedIn headline" />

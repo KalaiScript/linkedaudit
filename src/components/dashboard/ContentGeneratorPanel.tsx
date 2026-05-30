@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { generateHeadlines, generateAboutSections, generateExperienceRewrites, generatePosts } from '@/lib/content-generator';
+import { generateHeadlines, generateAboutSections, generateExperienceRewrites, generatePosts, generateAISuggestions } from '@/lib/content-generator';
 import { LinkedInProfile } from '@/types';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
 }
 
-const tabs = ['Headlines', 'About Section', 'Experience', 'Posts'];
+const tabs = ['Headlines', 'About Section', 'Experience', 'Posts', 'AI Suggestions'];
 
 export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanelProps) {
   const [activeTab, setActiveTab] = useState(0);
@@ -21,6 +21,7 @@ export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanel
     ? generateExperienceRewrites(profile.experience[0].title, profile.experience[0].company, profile.experience[0].description, profile.skills)
     : [];
   const posts = generatePosts(profile.jobRoleTarget, profile.skills);
+  const aiSuggestions = generateAISuggestions(profile.jobRoleTarget, profile.skills, profile.experienceLevel);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -28,7 +29,7 @@ export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanel
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const items = [headlines, abouts, expRewrites, posts];
+  const items = [headlines, abouts, expRewrites, posts, aiSuggestions];
 
   return (
     <div>

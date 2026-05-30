@@ -35,7 +35,7 @@ export default function LandingPage() {
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24 }}>
             <span style={{ padding: '8px 20px', borderRadius: 100, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', color: '#a78bfa', fontSize: 13, fontWeight: 600, letterSpacing: 0.5 }}>
-              ✨ KalaiScript: The Future of LinkedIn Growth
+              ✨ ProfilePulse: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
@@ -44,7 +44,7 @@ export default function LandingPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
-            Generate viral posts, optimize your profile, and build a massive personal brand with KalaiScript's suite of AI tools.
+            Generate viral posts, optimize your profile, and build a massive personal brand with ProfilePulse&apos;s suite of AI tools.
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
