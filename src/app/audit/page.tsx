@@ -3,18 +3,22 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
+import { fetchLinkedInProfileAction } from '@/app/actions/linkedin-actions';
 
 const roles = ['Software Engineer', 'Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'UI/UX Designer', 'Data Analyst', 'Data Scientist', 'AI/ML Engineer', 'DevOps Engineer', 'Product Manager', 'Mobile Developer', 'Cybersecurity Analyst', 'Cloud Architect', 'QA Engineer', 'Other'];
 const industries = ['Technology', 'Finance', 'Healthcare', 'Education', 'E-commerce', 'Media', 'Consulting', 'Manufacturing', 'Government', 'Startup', 'Other'];
 const levels = ['Fresher', 'Junior (1-2 years)', 'Mid (3-5 years)', 'Senior (5-10 years)', 'Lead/Manager', 'Executive'];
 const countries = ['India', 'United States', 'United Kingdom', 'Canada', 'Germany', 'Australia', 'Singapore', 'UAE', 'Other'];
+const commonSkills = ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js', 'Python', 'Java', 'C++', 'Go', 'Rust', 'Swift', 'Kotlin', 'Flutter', 'React Native', 'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'SQL', 'NoSQL', 'MongoDB', 'PostgreSQL', 'GraphQL', 'REST API', 'Agile', 'DevOps', 'CI/CD', 'Machine Learning', 'Data Science', 'UI/UX', 'Figma'];
 
 export default function AuditPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [fetchingMinimal, setFetchingMinimal] = useState(false);
 
-  // Step 1: Target Goals
+  // Step 1: Target Goals & URL
+  const [url, setUrl] = useState('');
   const [role, setRole] = useState('');
   const [industry, setIndustry] = useState('');
   const [level, setLevel] = useState('');
@@ -25,26 +29,38 @@ export default function AuditPage() {
   const [headline, setHeadline] = useState('');
   const [about, setAbout] = useState('');
   const [location, setLocation] = useState('');
-  const [skillsText, setSkillsText] = useState('');
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [skillInput, setSkillInput] = useState('');
 
   // Step 3: Metrics & Activity
-  const [connections, setConnections] = useState('');
   const [followers, setFollowers] = useState('');
-  const [hasPhoto, setHasPhoto] = useState(true);
-  const [hasBanner, setHasBanner] = useState(false);
-  const [experienceCount, setExperienceCount] = useState('');
-  const [experienceDesc, setExperienceDesc] = useState('');
-  const [projectCount, setProjectCount] = useState('');
-  const [certCount, setCertCount] = useState('');
   const [postsPerWeek, setPostsPerWeek] = useState('');
   const [avgEngagement, setAvgEngagement] = useState('');
-  const [recommendations, setRecommendations] = useState('');
+  const [hasPhoto, setHasPhoto] = useState(true);
+  const [hasBanner, setHasBanner] = useState(false);
   const [creatorMode, setCreatorMode] = useState(false);
   const [customUrl, setCustomUrl] = useState(true);
-  const [featuredItems, setFeaturedItems] = useState('');
+  const [experienceDesc, setExperienceDesc] = useState('');
+  const [profilePicUrl, setProfilePicUrl] = useState('');
 
-  const handleNext = () => {
-    if (step < 3) {
+  const handleNext = async () => {
+    if (step === 1) {
+      if (url && url.includes('linkedin.com/in/')) {
+        setFetchingMinimal(true);
+        const res = await fetchLinkedInProfileAction(url);
+        if (res.success && res.data) {
+          if (res.data.name) setName(res.data.name);
+          if (res.data.headline) setHeadline(res.data.headline);
+          if (res.data.about) setAbout(res.data.about);
+          if (res.data.location) setLocation(res.data.location);
+          if (res.data.followers) setFollowers(res.data.followers.toString());
+          // Note: We are just pre-filling, user can still edit
+        }
+        setFetchingMinimal(false);
+      }
+      setStep(2);
+      window.scrollTo(0, 0);
+    } else if (step < 3) {
       setStep(step + 1);
       window.scrollTo(0, 0);
     } else {
@@ -61,40 +77,47 @@ export default function AuditPage() {
     }
   };
 
+  const toggleSkill = (skill: string) => {
+    if (selectedSkills.includes(skill)) {
+      setSelectedSkills(selectedSkills.filter(s => s !== skill));
+    } else {
+      setSelectedSkills([...selectedSkills, skill]);
+    }
+  };
+
   const handleAnalyze = async () => {
     setLoading(true);
 
-    // Use manually entered data
     const profileData = {
-      url: 'manual',
+      url: url || 'manual',
       name: name || 'User',
       headline: headline || `${role} | Tech Enthusiast`,
       about: about || `Passionate ${role} with expertise in tech.`,
       location: location || country || 'India',
-      connections: parseInt(connections) || 0,
+      connections: 500, // Defaulting to 500+ as it's common
       followers: parseInt(followers) || 0,
       profilePhoto: hasPhoto,
       customBanner: hasBanner,
       bannerDescription: 'Professional tech banner',
-      experience: Array.from({ length: parseInt(experienceCount) || 0 }).map((_, i) => ({
+      experience: [{
         title: role,
-        company: `Company ${i + 1}`,
+        company: 'Your Best Role',
         duration: 'Past - Present',
         description: experienceDesc || '',
         hasMetrics: /\d/.test(experienceDesc),
         hasActionVerbs: true,
-      })),
+      }],
       education: [{ school: 'University', degree: 'Degree', field: 'Field', year: '2024' }],
-      skills: skillsText.split(',').map(s => s.trim()).filter(Boolean),
-      certifications: Array.from({ length: parseInt(certCount) || 0 }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Organization', year: '2024' })),
-      projects: Array.from({ length: parseInt(projectCount) || 0 }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A project.' })),
-      featuredItems: parseInt(featuredItems) || 0,
+      skills: selectedSkills,
+      certifications: [],
+      projects: [],
+      featuredItems: 2,
       postsPerWeek: parseFloat(postsPerWeek) || 0,
       averageEngagement: parseInt(avgEngagement) || 0,
-      recommendations: parseInt(recommendations) || 0,
+      recommendations: 0,
       searchAppearances: 50,
       creatorMode,
-      seoKeywords: skillsText.split(',').slice(0, 5).map(s => s.trim().toLowerCase()).filter(Boolean),
+      seoKeywords: selectedSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
       customUrl,
       jobRoleTarget: role || 'Software Engineer',
@@ -105,14 +128,13 @@ export default function AuditPage() {
 
     localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
     
-    // Simulate a brief loading for AI processing feel
     setTimeout(() => {
       router.push('/dashboard');
     }, 1500);
   };
 
   const isStep1Valid = role && industry && level && country;
-  const isStep2Valid = name && headline && about && skillsText;
+  const isStep2Valid = name && headline && about && selectedSkills.length > 0;
 
   return (
     <>
@@ -129,7 +151,7 @@ export default function AuditPage() {
               Audit Your <span className="gradient-text">LinkedIn Profile</span>
             </h1>
             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 16 }}>
-              {step === 1 ? 'Step 1: Define your target goals' : step === 2 ? 'Step 2: Your professional identity' : 'Step 3: Your network and activity'}
+              {step === 1 ? 'Step 1: Define your target and profile URL' : step === 2 ? 'Step 2: Your professional identity & skills' : 'Step 3: Your LinkedIn activity'}
             </p>
             
             {/* Step indicator */}
@@ -154,7 +176,13 @@ export default function AuditPage() {
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>What are your career goals?</h3>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Target goals & LinkedIn URL</h3>
+                  
+                  <div style={{ marginBottom: 20 }}>
+                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>LinkedIn Profile URL (Optional - to pre-fill photo/name)</label>
+                    <input type="text" className="input-field" placeholder="https://linkedin.com/in/your-username" value={url} onChange={e => setUrl(e.target.value)} />
+                  </div>
+
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 32 }}>
                     <div>
                       <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Target Role</label>
@@ -186,15 +214,15 @@ export default function AuditPage() {
                     </div>
                   </div>
 
-                  <button onClick={handleNext} disabled={!isStep1Valid} className="glow-btn" style={{ width: '100%', padding: '16px', fontSize: 17, opacity: isStep1Valid ? 1 : 0.6 }}>
-                    Next: Professional Identity →
+                  <button onClick={handleNext} disabled={!isStep1Valid || fetchingMinimal} className="glow-btn" style={{ width: '100%', padding: '16px', fontSize: 17, opacity: isStep1Valid ? 1 : 0.6 }}>
+                    {fetchingMinimal ? '⚡ Pre-filling from LinkedIn...' : 'Next: Professional Identity →'}
                   </button>
                 </motion.div>
               )}
 
               {step === 2 && (
                 <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Tell us who you are</h3>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Professional Identity & Skills</h3>
                   
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
                     <InputField label="Full Name" value={name} onChange={setName} placeholder="John Doe" />
@@ -211,7 +239,30 @@ export default function AuditPage() {
                   </div>
 
                   <div style={{ marginBottom: 32 }}>
-                    <InputField label="Skills (comma-separated)" value={skillsText} onChange={setSkillsText} placeholder="React, Node.js, Python, TypeScript, AWS" />
+                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.5 }}>Skills Selector</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 150, overflowY: 'auto', padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
+                      {commonSkills.map(skill => (
+                        <button
+                          key={skill}
+                          onClick={() => toggleSkill(skill)}
+                          style={{
+                            padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                            background: selectedSkills.includes(skill) ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)' : 'rgba(255,255,255,0.05)',
+                            color: selectedSkills.includes(skill) ? 'white' : 'rgba(255,255,255,0.5)',
+                            border: '1px solid ' + (selectedSkills.includes(skill) ? 'transparent' : 'rgba(255,255,255,0.1)'),
+                            cursor: 'pointer', transition: 'all 0.2s'
+                          }}
+                        >
+                          {skill}
+                        </button>
+                      ))}
+                    </div>
+                    {selectedSkills.length > 0 && (
+                      <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        <span style={{ fontSize: 12, color: 'rgba(226,232,240,0.4)', alignSelf: 'center' }}>Selected:</span>
+                        {selectedSkills.map(s => <span key={s} style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>{s} •</span>)}
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ display: 'flex', gap: 12 }}>
@@ -219,7 +270,7 @@ export default function AuditPage() {
                       ← Back
                     </button>
                     <button onClick={handleNext} disabled={!isStep2Valid} className="glow-btn" style={{ flex: 1, padding: '14px', fontSize: 16, opacity: isStep2Valid ? 1 : 0.6 }}>
-                      Next: Network & Metrics →
+                      Next: Network & Activity →
                     </button>
                   </div>
                 </motion.div>
@@ -230,25 +281,14 @@ export default function AuditPage() {
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Your LinkedIn activity</h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 20 }}>
-                    <InputField label="Connections" value={connections} onChange={setConnections} placeholder="500+" type="number" />
                     <InputField label="Followers" value={followers} onChange={setFollowers} placeholder="2500" type="number" />
-                    <InputField label="Recommendations" value={recommendations} onChange={setRecommendations} placeholder="5" type="number" />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 20 }}>
-                    <InputField label="Experience Count" value={experienceCount} onChange={setExperienceCount} placeholder="3" type="number" />
-                    <InputField label="Projects Count" value={projectCount} onChange={setProjectCount} placeholder="4" type="number" />
-                    <InputField label="Featured Items" value={featuredItems} onChange={setFeaturedItems} placeholder="2" type="number" />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
                     <InputField label="Posts per Week" value={postsPerWeek} onChange={setPostsPerWeek} placeholder="2" type="number" />
                     <InputField label="Avg Engagement" value={avgEngagement} onChange={setAvgEngagement} placeholder="45" type="number" />
                   </div>
 
                   <div style={{ marginBottom: 24 }}>
                     <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Experience Description (Best Role)</label>
-                    <textarea className="input-field" rows={3} placeholder="Briefly describe your main achievements in your current or best role..." value={experienceDesc} onChange={e => setExperienceDesc(e.target.value)} style={{ resize: 'vertical' }} />
+                    <textarea className="input-field" rows={4} placeholder="Briefly describe your main achievements in your current or best role..." value={experienceDesc} onChange={e => setExperienceDesc(e.target.value)} style={{ resize: 'vertical' }} />
                   </div>
 
                   <div style={{ display: 'flex', gap: 20, marginBottom: 32, flexWrap: 'wrap' }}>

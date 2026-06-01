@@ -61,9 +61,10 @@ function analyzeHeadline(profile: LinkedInProfile): SectionScore {
   score = Math.min(score, 10);
   
   // Custom suggestion based on current headline and role
-  let suggestedHeadline = `${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')}\nHelping companies build impactful solutions through tech innovation 🚀`;
-  if (profile.headline.includes('Personal Brand')) {
-    suggestedHeadline = `${profile.jobRoleTarget} | Personal Brand Strategist | 3.5M+ Impressions\nTransforming professionals into authority figures and recruiter magnets 🎯`;
+  let suggestedHeadline = `${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')} | Helping companies build impactful solutions through tech innovation 🚀 | ${profile.followers > 0 ? profile.followers + '+ Followers' : 'Building in Public'}`;
+  
+  if (profile.jobRoleTarget.toLowerCase().includes('engineer') || profile.jobRoleTarget.toLowerCase().includes('developer')) {
+    suggestedHeadline = `${profile.jobRoleTarget} • ${profile.skills.slice(0, 4).join(' • ')} | Optimizing Scalable Systems & High-Performance Web Apps | 6K+ Reach & Growing 📈`;
   }
 
   suggestions.push({
@@ -91,6 +92,28 @@ function analyzeAbout(profile: LinkedInProfile): SectionScore {
     else { weaknesses.push('Missing achievement-oriented language'); }
   }
   score = Math.min(score, 10);
+
+  const suggestedAbout = `🚀 Passionate ${profile.jobRoleTarget} with expertise in ${profile.skills.slice(0, 3).join(', ')}.
+
+💡 What I Do:
+I specialize in building robust solutions that solve complex technical challenges and deliver business value.
+
+🏆 Key Achievements:
+• Spearheaded development of core features for ${profile.industry} projects
+• Optimized application performance, resulting in improved user engagement
+• Collaborated with cross-functional teams to deliver high-quality codebases
+
+🛠️ Technical Stack:
+${profile.skills.join(' • ')}
+
+📫 Let's connect and discuss how I can add value to your team!`;
+
+  suggestions.push({
+    type: 'rewrite', title: 'High-Impact About Section', impact: 'high', category: 'About',
+    current: profile.about,
+    suggested: suggestedAbout
+  });
+
   return { name: 'About Section', score, maxScore: 10, weight: 15, icon: '📝', color: '#10b981', strengths, weaknesses, suggestions };
 }
 

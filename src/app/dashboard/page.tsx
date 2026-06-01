@@ -23,7 +23,7 @@ function DashboardContent() {
   const [roastMode, setRoastMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingAi, setLoadingAi] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -43,32 +43,44 @@ function DashboardContent() {
   }, [isMounted]);
 
   useEffect(() => {
-    if (isMounted && !profile && !loading) {
+    if (isMounted && !profile) {
       router.push('/audit');
     }
-  }, [isMounted, profile, loading, router]);
+  }, [isMounted, profile, router]);
 
   useEffect(() => {
-    if (isMounted && profile) {
+    if (isMounted && profile && !aiAnalysis && !loadingAi) {
       const fetchAnalysis = async () => {
-        setLoading(true);
+        setLoadingAi(true);
         const result = await getFullAIAnalysisAction(profile);
         if (result.success) {
           setAiAnalysis(result.analysis);
         } else {
-          setError(result.error);
+          // Fallback or handle error silently if needed, or show a toast
+          console.error("AI Analysis failed:", result.error);
         }
-        setLoading(false);
+        setLoadingAi(false);
       };
       fetchAnalysis();
-    } else if (isMounted && !profile) {
-      setLoading(false);
     }
-  }, [isMounted, profile]);
+  }, [isMounted, profile, aiAnalysis, loadingAi]);
 
   const result: AuditResult | null = useMemo(() => {
     if (!profile) return null;
-    const baseResult = analyzeProfile(profile);
+    
+    // Ensure profile has default values for missing fields from simplified audit flow
+    const fullProfile: LinkedInProfile = {
+      ...profile,
+      connections: profile.connections || 500,
+      recommendations: profile.recommendations || 0,
+      experience: profile.experience || [],
+      education: profile.education || [],
+      certifications: profile.certifications || [],
+      projects: profile.projects || [],
+      featuredItems: profile.featuredItems || 0,
+    };
+
+    const baseResult = analyzeProfile(fullProfile);
     if (aiAnalysis) {
       return {
         ...baseResult,
@@ -85,12 +97,11 @@ function DashboardContent() {
     return baseResult;
   }, [profile, aiAnalysis]);
 
-  if (!isMounted || loading || !result) {
+  if (!isMounted || !result) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
-        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>ProfilePulse AI is working...</h2>
-        <p style={{ color: 'rgba(226,232,240,0.5)' }}>Analyzing your profile with live LLM intelligence.</p>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Initializing Dashboard...</h2>
       </div>
     );
   }
@@ -110,14 +121,14 @@ function DashboardContent() {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 0: return <OverviewTab result={result} />;
+      case 0: return <OverviewTab result={result} loadingAi={loadingAi} />;
       case 1: return <ScoreBreakdownTab result={result} roastMode={roastMode} />;
-      case 2: return <SuggestionsTab result={result} />;
-      case 3: return <ContentGeneratorPanel profile={result.profile} aiData={aiAnalysis} />;
+      case 2: return <SuggestionsTab result={result} loadingAi={loadingAi} />;
+      case 3: return <ContentGeneratorPanel profile={result.profile} aiData={aiAnalysis} loading={loadingAi} />;
       case 4: return <SEOTab result={result} />;
       case 5: return <NetworkingTab result={result} />;
       case 6: return <ActionPlanTab result={result} />;
-      case 7: return <RoastTab result={result} />;
+      case 7: return <RoastTab result={result} loadingAi={loadingAi} />;
       default: return null;
     }
   };
@@ -166,7 +177,7 @@ function DashboardContent() {
 }
 
 /* Overview Tab */
-function OverviewTab({ result }: { result: AuditResult }) {
+function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
   return (
     <div>
       {/* Score cards row */}
@@ -206,12 +217,18 @@ function OverviewTab({ result }: { result: AuditResult }) {
       {/* Career Positioning */}
       <div className="glass-card" style={{ padding: 24, marginTop: 24 }}>
         <h3 style={{ color: '#a78bfa', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🧭 AI Career Positioning</h3>
-        <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginBottom: 12 }}>Based on your profile, you are positioned as:</p>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {result.careerPositioning.map((c, i) => (
-            <span key={i} style={{ padding: '6px 16px', borderRadius: 8, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)', color: '#c4b5fd', fontSize: 13, fontWeight: 600 }}>{c}</span>
-          ))}
-        </div>
+        {loadingAi && result.careerPositioning.length <= 1 ? (
+          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, fontStyle: 'italic' }}>AI is calculating your career positioning... ⚡</p>
+        ) : (
+          <>
+            <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginBottom: 12 }}>Based on your profile, you are positioned as:</p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {result.careerPositioning.map((c, i) => (
+                <span key={i} style={{ padding: '6px 16px', borderRadius: 8, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)', color: '#c4b5fd', fontSize: 13, fontWeight: 600 }}>{c}</span>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -251,7 +268,7 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
 }
 
 /* AI Suggestions Tab */
-function SuggestionsTab({ result }: { result: AuditResult }) {
+function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
   // Use AI strategy tips if available, otherwise fallback to local suggestions
   const aiTips = (result as any).aiStrategyTips;
   
@@ -278,47 +295,56 @@ function SuggestionsTab({ result }: { result: AuditResult }) {
       {/* API Tech Stack Info */}
       <div className="glass-card" style={{ padding: 20, background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
         <h4 style={{ color: '#a78bfa', fontSize: 14, fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          🚀 Live AI Analysis Active
+          {loadingAi ? '⚡ Live AI Analysis in Progress...' : '🚀 Live AI Analysis Active'}
         </h4>
         <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13, lineHeight: 1.6 }}>
-          Your profile is being analyzed in real-time by our advanced AI model. These suggestions are unique to your brand and current market trends.
+          {loadingAi ? 'Our advanced AI model is currently generating high-impact strategies tailored specifically to your profile. This will only take a moment...' : 'Your profile has been analyzed by our advanced AI model. These suggestions are unique to your brand and current market trends.'}
         </p>
       </div>
 
-      <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, marginBottom: 8 }}>
-        {allSuggestions.length} personalized strategies for your career growth
-      </p>
-      {allSuggestions.map((sg: any, i: number) => (
-        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card" style={{ padding: 20 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{
-                padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700,
-                background: sg.impact === 'high' ? 'rgba(239,68,68,0.15)' : sg.impact === 'medium' ? 'rgba(245,158,11,0.15)' : 'rgba(59,130,246,0.15)',
-                color: sg.impact === 'high' ? '#fca5a5' : sg.impact === 'medium' ? '#fcd34d' : '#93c5fd',
-              }}>
-                {sg.impact.toUpperCase()}
-              </span>
-              <span style={{ color: 'rgba(226,232,240,0.3)', fontSize: 12 }}>{sg.category}</span>
-            </div>
-          </div>
-          <h4 style={{ color: '#f1f5f9', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>{sg.title}</h4>
-          {sg.current && <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 4 }}><strong>Current:</strong> {sg.current}</p>}
-          {sg.suggested && (
-            <div>
-              <p style={{ color: '#a5f3fc', fontSize: 13, whiteSpace: 'pre-line', marginTop: 4 }}>{sg.suggested}</p>
-              <button onClick={() => handleCopy(sg.suggested!, i)} style={{
-                marginTop: 10, padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                background: copied === i ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
-                border: '1px solid ' + (copied === i ? 'rgba(16,185,129,0.3)' : 'rgba(99,102,241,0.2)'),
-                color: copied === i ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
-              }}>
-                {copied === i ? '✓ Copied!' : '📋 Copy Suggestion'}
-              </button>
-            </div>
-          )}
-        </motion.div>
-      ))}
+      {loadingAi && !aiTips ? (
+        <div style={{ padding: 40, textAlign: 'center' }}>
+          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 32, marginBottom: 16 }}>🌀</motion.div>
+          <p style={{ color: 'rgba(226,232,240,0.4)' }}>Generating detailed strategy tips...</p>
+        </div>
+      ) : (
+        <>
+          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, marginBottom: 8 }}>
+            {allSuggestions.length} personalized strategies for your career growth
+          </p>
+          {allSuggestions.map((sg: any, i: number) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card" style={{ padding: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{
+                    padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                    background: sg.impact === 'high' ? 'rgba(239,68,68,0.15)' : sg.impact === 'medium' ? 'rgba(245,158,11,0.15)' : 'rgba(59,130,246,0.15)',
+                    color: sg.impact === 'high' ? '#fca5a5' : sg.impact === 'medium' ? '#fcd34d' : '#93c5fd',
+                  }}>
+                    {sg.impact.toUpperCase()}
+                  </span>
+                  <span style={{ color: 'rgba(226,232,240,0.3)', fontSize: 12 }}>{sg.category}</span>
+                </div>
+              </div>
+              <h4 style={{ color: '#f1f5f9', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>{sg.title}</h4>
+              {sg.current && <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 4 }}><strong>Current:</strong> {sg.current}</p>}
+              {sg.suggested && (
+                <div>
+                  <p style={{ color: '#a5f3fc', fontSize: 13, whiteSpace: 'pre-line', marginTop: 4 }}>{sg.suggested}</p>
+                  <button onClick={() => handleCopy(sg.suggested!, i)} style={{
+                    marginTop: 10, padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                    background: copied === i ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
+                    border: '1px solid ' + (copied === i ? 'rgba(16,185,129,0.3)' : 'rgba(99,102,241,0.2)'),
+                    color: copied === i ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
+                  }}>
+                    {copied === i ? '✓ Copied!' : '📋 Copy Suggestion'}
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </>
+      )}
     </div>
   );
 }
@@ -459,7 +485,7 @@ function ActionPlanTab({ result }: { result: AuditResult }) {
 }
 
 /* Roast Tab */
-function RoastTab({ result }: { result: AuditResult }) {
+function RoastTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
   return (
     <div>
       <div className="glass-card" style={{ padding: 24, marginBottom: 24, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)' }}>
@@ -468,20 +494,28 @@ function RoastTab({ result }: { result: AuditResult }) {
           Brutally honest (but helpful) feedback about your profile. Don&apos;t take it personally!
         </p>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {result.roastFeedback.map((roast, i) => (
-          <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }}
-            className="glass-card" style={{ padding: 24, borderLeft: '3px solid rgba(239,68,68,0.5)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <span style={{ fontSize: 28 }}>{roast.emoji}</span>
-              <span style={{ color: '#fca5a5', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>{roast.section}</span>
-            </div>
-            <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 16, lineHeight: 1.6, fontStyle: 'italic' }}>
-              &ldquo;{roast.roast}&rdquo;
-            </p>
-          </motion.div>
-        ))}
-      </div>
+
+      {loadingAi && result.roastFeedback.length <= 1 ? (
+        <div style={{ padding: 40, textAlign: 'center' }}>
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ fontSize: 32, marginBottom: 16 }}>🔥</motion.div>
+          <p style={{ color: 'rgba(226,232,240,0.4)' }}>AI is cooking up some brutal roasts... 🌶️</p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {result.roastFeedback.map((roast, i) => (
+            <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }}
+              className="glass-card" style={{ padding: 24, borderLeft: '3px solid rgba(239,68,68,0.5)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 28 }}>{roast.emoji}</span>
+                <span style={{ color: '#fca5a5', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>{roast.section}</span>
+              </div>
+              <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 16, lineHeight: 1.6, fontStyle: 'italic' }}>
+                &ldquo;{roast.roast}&rdquo;
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
