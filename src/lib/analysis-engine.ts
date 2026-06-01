@@ -59,10 +59,17 @@ function analyzeHeadline(profile: LinkedInProfile): SectionScore {
   }
 
   score = Math.min(score, 10);
+  
+  // Custom suggestion based on current headline and role
+  let suggestedHeadline = `${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')}\nHelping companies build impactful solutions through tech innovation 🚀`;
+  if (profile.headline.includes('Personal Brand')) {
+    suggestedHeadline = `${profile.jobRoleTarget} | Personal Brand Strategist | 3.5M+ Impressions\nTransforming professionals into authority figures and recruiter magnets 🎯`;
+  }
+
   suggestions.push({
     type: 'rewrite', title: 'AI-Optimized Headline', impact: 'high', category: 'Headline',
     current: profile.headline,
-    suggested: `Aspiring ${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')} | Open to Opportunities`
+    suggested: suggestedHeadline
   });
   return { name: 'Headline', score, maxScore: 10, weight: 15, icon: '✏️', color: '#f59e0b', strengths, weaknesses, suggestions };
 }
@@ -142,15 +149,25 @@ function analyzePosts(profile: LinkedInProfile): SectionScore {
 }
 
 function analyzeSEO(profile: LinkedInProfile): SectionScore {
-  let score = 3;
+  let score = 2;
   const strengths: string[] = [];
   const weaknesses: string[] = [];
   const suggestions: AISuggestion[] = [];
+  
   if (profile.customUrl) { score += 2; strengths.push('Custom profile URL set'); }
+  else { weaknesses.push('Default long URL is less searchable'); }
+
   if (profile.seoKeywords.length >= 5) { score += 2; strengths.push('Good keyword coverage'); }
+  
   const roleInHeadline = profile.headline.toLowerCase().includes(profile.jobRoleTarget.toLowerCase().split(' ')[0]);
-  if (roleInHeadline) { score += 3; strengths.push('Target role in headline'); }
-  if (profile.about.length > 200) { score += 1; }
+  if (roleInHeadline) { score += 2; strengths.push('Target role found in headline'); }
+  else { weaknesses.push('Target role missing from headline'); }
+
+  // Dynamic score based on search appearances (thresholds)
+  if (profile.searchAppearances > 100) { score += 2; strengths.push('High search frequency'); }
+  else if (profile.searchAppearances > 50) { score += 1; strengths.push('Moderate search frequency'); }
+  else { weaknesses.push('Low search appearances'); }
+
   score = Math.min(score, 10);
   return { name: 'SEO & Keywords', score, maxScore: 10, weight: 10, icon: '🔍', color: '#14b8a6', strengths, weaknesses, suggestions };
 }

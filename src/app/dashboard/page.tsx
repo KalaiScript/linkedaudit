@@ -11,51 +11,99 @@ import RadarChart from '@/components/dashboard/RadarChart';
 import ContentGeneratorPanel from '@/components/dashboard/ContentGeneratorPanel';
 import { analyzeProfile } from '@/lib/analysis-engine';
 import { demoProfile } from '@/lib/mock-data';
-import { AuditResult } from '@/types';
+import { AuditResult, LinkedInProfile } from '@/types';
 
-const dashTabs = ['Overview', 'Score Breakdown', 'AI Suggestions', 'Content Generator', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode 🔥'];
+import { getFullAIAnalysisAction } from '@/app/actions/ai-actions';
+
+const dashTabs = ['Overview', 'Score Breakdown', 'Personalized Tips', 'AI Suggestions', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode 🔥'];
 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
   const [roastMode, setRoastMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const result: AuditResult = useMemo(() => {
-    // Try to read user-entered profile data from localStorage
+  const profile: LinkedInProfile = useMemo(() => {
     if (typeof window !== 'undefined' && isMounted) {
       const stored = localStorage.getItem('profilepulse_profile');
       if (stored) {
         try {
-          const profile = JSON.parse(stored);
-          return analyzeProfile(profile);
-        } catch {
-          // Fall through to demo profile
-        }
+          return JSON.parse(stored);
+        } catch { }
       }
     }
-
-    // Fallback: use demo profile with URL params
-    const profile = { ...demoProfile };
+    const p = { ...demoProfile };
     const role = searchParams.get('role');
     const industry = searchParams.get('industry');
     const level = searchParams.get('level');
     const country = searchParams.get('country');
-    if (role) profile.jobRoleTarget = role;
-    if (industry) profile.industry = industry;
-    if (level) profile.experienceLevel = level;
-    if (country) profile.country = country;
-    return analyzeProfile(profile);
+    if (role) p.jobRoleTarget = role;
+    if (industry) p.industry = industry;
+    if (level) p.experienceLevel = level;
+    if (country) p.country = country;
+    return p;
   }, [searchParams, isMounted]);
 
-  if (!isMounted) {
+  useEffect(() => {
+    if (isMounted && profile) {
+      const fetchAnalysis = async () => {
+        setLoading(true);
+        const result = await getFullAIAnalysisAction(profile);
+        if (result.success) {
+          setAiAnalysis(result.analysis);
+        } else {
+          setError(result.error);
+        }
+        setLoading(false);
+      };
+      fetchAnalysis();
+    }
+  }, [isMounted, profile]);
+
+  const result: AuditResult = useMemo(() => {
+    const baseResult = analyzeProfile(profile);
+    if (aiAnalysis) {
+      return {
+        ...baseResult,
+        overallScore: aiAnalysis.overallScore || baseResult.overallScore,
+        recruiterReadiness: aiAnalysis.recruiterReadiness || baseResult.recruiterReadiness,
+        personalBrandScore: aiAnalysis.personalBrandScore || baseResult.personalBrandScore,
+        atsScore: aiAnalysis.atsScore || baseResult.atsScore,
+        topStrengths: aiAnalysis.topStrengths || baseResult.topStrengths,
+        topWeaknesses: aiAnalysis.topWeaknesses || baseResult.topWeaknesses,
+        roastFeedback: aiAnalysis.roasts || baseResult.roastFeedback,
+        aiStrategyTips: aiAnalysis.strategyTips,
+      };
+    }
+    return baseResult;
+  }, [profile, aiAnalysis]);
+
+  if (!isMounted || loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 48 }}>⚡</motion.div>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>ProfilePulse AI is working...</h2>
+        <p style={{ color: 'rgba(226,232,240,0.5)' }}>Analyzing your profile with live LLM intelligence.</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+        <div className="glass-card" style={{ padding: 40, textAlign: 'center', maxWidth: 500 }}>
+          <div style={{ fontSize: 48, marginBottom: 20 }}>⚠️</div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#f1f5f9', marginBottom: 12 }}>Analysis Failed</h2>
+          <p style={{ color: 'rgba(226,232,240,0.5)', marginBottom: 24 }}>{error}</p>
+          <button onClick={() => window.location.reload()} className="glow-btn" style={{ padding: '12px 32px' }}>Try Again</button>
+        </div>
       </div>
     );
   }
@@ -65,7 +113,7 @@ function DashboardContent() {
       case 0: return <OverviewTab result={result} />;
       case 1: return <ScoreBreakdownTab result={result} roastMode={roastMode} />;
       case 2: return <SuggestionsTab result={result} />;
-      case 3: return <ContentGeneratorPanel profile={result.profile} />;
+      case 3: return <ContentGeneratorPanel profile={result.profile} aiData={aiAnalysis} />;
       case 4: return <SEOTab result={result} />;
       case 5: return <NetworkingTab result={result} />;
       case 6: return <ActionPlanTab result={result} />;
@@ -204,10 +252,21 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
 
 /* AI Suggestions Tab */
 function SuggestionsTab({ result }: { result: AuditResult }) {
-  const allSuggestions = result.sections.flatMap(s => s.suggestions).sort((a, b) => {
-    const order = { high: 0, medium: 1, low: 2 };
-    return order[a.impact] - order[b.impact];
-  });
+  // Use AI strategy tips if available, otherwise fallback to local suggestions
+  const aiTips = (result as any).aiStrategyTips;
+  
+  const allSuggestions = aiTips 
+    ? aiTips.map((tip: any, i: number) => ({
+        title: tip.style || tip.title,
+        suggested: tip.content || tip.suggested,
+        impact: tip.impact || 'high',
+        category: 'Live AI Strategy'
+      }))
+    : result.sections.flatMap(s => s.suggestions).sort((a, b) => {
+        const order = { high: 0, medium: 1, low: 2 };
+        return order[a.impact] - order[b.impact];
+      });
+
   const [copied, setCopied] = useState<number | null>(null);
   const handleCopy = (text: string, i: number) => {
     navigator.clipboard.writeText(text);
@@ -216,10 +275,20 @@ function SuggestionsTab({ result }: { result: AuditResult }) {
   };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* API Tech Stack Info */}
+      <div className="glass-card" style={{ padding: 20, background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
+        <h4 style={{ color: '#a78bfa', fontSize: 14, fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+          🚀 Live AI Analysis Active
+        </h4>
+        <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13, lineHeight: 1.6 }}>
+          Your profile is being analyzed in real-time by our advanced AI model. These suggestions are unique to your brand and current market trends.
+        </p>
+      </div>
+
       <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, marginBottom: 8 }}>
-        {allSuggestions.length} suggestions sorted by impact — highest first
+        {allSuggestions.length} personalized strategies for your career growth
       </p>
-      {allSuggestions.map((sg, i) => (
+      {allSuggestions.map((sg: any, i: number) => (
         <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card" style={{ padding: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -268,7 +337,7 @@ function SEOTab({ result }: { result: AuditResult }) {
           <ScoreCircle score={seoSection?.score || 5} maxScore={10} size={140} label="SEO Index" />
         </div>
         <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, textAlign: 'center' }}>
-          Your profile appears in approx. <strong style={{ color: '#5eead4' }}>45</strong> searches per week.
+          Your profile appeared in <strong style={{ color: '#5eead4' }}>{result.profile.searchAppearances}</strong> searches this week.
         </p>
       </div>
 

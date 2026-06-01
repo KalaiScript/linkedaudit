@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
+import { fetchLinkedInProfileAction } from '@/app/actions/linkedin-actions';
 
 const roles = ['Software Engineer', 'Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'UI/UX Designer', 'Data Analyst', 'Data Scientist', 'AI/ML Engineer', 'DevOps Engineer', 'Product Manager', 'Mobile Developer', 'Cybersecurity Analyst', 'Cloud Architect', 'QA Engineer', 'Other'];
 const industries = ['Technology', 'Finance', 'Healthcare', 'Education', 'E-commerce', 'Media', 'Consulting', 'Manufacturing', 'Government', 'Startup', 'Other'];
@@ -42,7 +43,7 @@ export default function AuditPage() {
   const [customUrl, setCustomUrl] = useState(true);
   const [featuredItems, setFeaturedItems] = useState('');
 
-  const handleNext = () => {
+  const handleNext = async () => {
     let extractedName = name;
     if (url) {
       const match = url.match(/\/in\/([^/]+)/);
@@ -54,8 +55,8 @@ export default function AuditPage() {
     }
 
     if (url && url.includes('linkedin.com/in/')) {
-      // If URL is provided, skip manual entry and go straight to analysis
-      handleAnalyze(extractedName);
+      // If URL is provided, skip manual entry and try to fetch real data
+      await handleAnalyze(url, extractedName);
     } else {
       setStep(2);
     }
@@ -69,96 +70,71 @@ export default function AuditPage() {
     }
   };
 
-  const handleAnalyze = async (passedName?: string) => {
+  const handleAnalyze = async (profileUrl?: string, passedName?: string) => {
     setLoading(true);
 
-    // If we skip step 2 (URL provided), we generate realistic simulated data
-    const isFastTrack = !!(url && url.includes('linkedin.com/in/') && step === 1);
-    
-    let finalName = passedName || name || 'User';
-    const finalRole = role || 'Software Engineer';
-    const finalLevel = level || 'Fresher';
+    let profileData: any = null;
 
-    // SPECIAL CASE: Detect Kalaiyarasan P from URL or name for accurate fetching as requested
-    const isKalai = finalName.toLowerCase().includes('kalai') || url.toLowerCase().includes('kalaiscript');
-    
-    if (isKalai) {
-      finalName = 'Kalaiyarasan P';
+    if (profileUrl) {
+      // Attempt live fetch
+      const fetchRes = await fetchLinkedInProfileAction(profileUrl);
+      if (fetchRes.success && fetchRes.data) {
+        profileData = {
+          ...fetchRes.data,
+          jobRoleTarget: role || fetchRes.data.headline || 'Software Engineer',
+          industry: industry || 'Technology',
+          experienceLevel: level || 'Mid',
+          country: country || 'United States',
+          seoKeywords: fetchRes.data.skills?.slice(0, 5).map(s => s.toLowerCase()) || [],
+        };
+      } else {
+        alert(fetchRes.error || "Failed to fetch LinkedIn profile");
+        setLoading(false);
+        setStep(2); // Fallback to manual entry if API fails
+        return;
+      }
+    } else {
+      // Use manually entered data
+      profileData = {
+        url: 'manual',
+        name: name || passedName || 'User',
+        headline: headline || `${role} | Tech Enthusiast`,
+        about: about || `Passionate ${role} with expertise in tech.`,
+        location: location || country || 'India',
+        connections: parseInt(connections) || 0,
+        followers: parseInt(followers) || 0,
+        profilePhoto: hasPhoto,
+        customBanner: hasBanner,
+        bannerDescription: 'Professional tech banner',
+        experience: Array.from({ length: parseInt(experienceCount) || 0 }).map((_, i) => ({
+          title: role,
+          company: `Company ${i + 1}`,
+          duration: 'Past - Present',
+          description: experienceDesc || '',
+          hasMetrics: /\d/.test(experienceDesc),
+          hasActionVerbs: true,
+        })),
+        education: [{ school: 'University', degree: 'Degree', field: 'Field', year: '2024' }],
+        skills: skillsText.split(',').map(s => s.trim()).filter(Boolean),
+        certifications: Array.from({ length: parseInt(certCount) || 0 }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Organization', year: '2024' })),
+        projects: Array.from({ length: parseInt(projectCount) || 0 }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A project.' })),
+        featuredItems: parseInt(featuredItems) || 0,
+        postsPerWeek: parseFloat(postsPerWeek) || 0,
+        averageEngagement: parseInt(avgEngagement) || 0,
+        recommendations: parseInt(recommendations) || 0,
+        searchAppearances: 50,
+        creatorMode,
+        seoKeywords: skillsText.split(',').slice(0, 5).map(s => s.trim().toLowerCase()).filter(Boolean),
+        contactInfo: true,
+        customUrl,
+        jobRoleTarget: role || 'Software Engineer',
+        industry: industry || 'Technology',
+        experienceLevel: level || 'Mid',
+        country: country || 'India',
+      };
     }
-    
-    // Simulated skills based on role if none provided
-    let finalSkills = skillsText.split(',').map(s => s.trim()).filter(Boolean);
-    if (isFastTrack && finalSkills.length === 0) {
-      if (isKalai) finalSkills = ['DSA', 'AI', 'Cloud', 'Personal Branding', 'Profile Optimization', 'Technical Writing'];
-      else if (finalRole.includes('Frontend')) finalSkills = ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'JavaScript'];
-      else if (finalRole.includes('Backend')) finalSkills = ['Node.js', 'Python', 'PostgreSQL', 'Docker', 'AWS'];
-      else finalSkills = ['React', 'Node.js', 'TypeScript', 'Git', 'System Design'];
-    }
-
-    // Realistic random numbers for "Fetched" data
-    const getRand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
-    
-    let finalConnections = isFastTrack ? getRand(300, 500) : (parseInt(connections) || 0);
-    let finalFollowers = isFastTrack ? getRand(800, 2500) : (parseInt(followers) || 0);
-    let finalPosts = isFastTrack ? (Math.random() * 3).toFixed(1) : (postsPerWeek || '0');
-    let finalEngagement = isFastTrack ? getRand(20, 150) : (parseInt(avgEngagement) || 0);
-
-    // Apply real data for Kalaiyarasan
-    if (isKalai && isFastTrack) {
-      finalConnections = 500;
-      finalFollowers = 6014;
-      finalPosts = '5.0';
-      finalEngagement = 450;
-    }
-
-    const expCount = isFastTrack ? (isKalai ? 3 : (finalLevel === 'Fresher' ? 1 : getRand(2, 4))) : (parseInt(experienceCount) || 0);
-    const experience = [];
-    for (let i = 0; i < expCount; i++) {
-      experience.push({
-        title: i === 0 ? (isKalai ? 'Tech Content Creator' : finalRole) : `Junior ${finalRole}`,
-        company: isKalai && i === 0 ? 'InAmigos Foundation (IAF)' : `TopTech ${i + 1}`,
-        duration: '2022 - Present',
-        description: experienceDesc || (isKalai ? 'Helping students and developers build better profiles. Optimized 30+ profiles with 3.5M+ impressions.' : `Led the development of high-impact features using ${finalSkills.slice(0,2).join(' and ')}. Optimized performance by 40%.`),
-        hasMetrics: true,
-        hasActionVerbs: true,
-      });
-    }
-
-    const profileData = {
-      url: url || 'demo',
-      name: finalName,
-      headline: isKalai && isFastTrack ? "Helping Students & Developers Build Better Profiles | Personal Brand Strategist | 30+ Profiles Optimized | Tech Content Creator | 6K+ Followers | 3.5M+ Impressions" : (headline || `${finalRole} | Building the future with ${finalSkills[0]}`),
-      about: about || (isKalai ? "I am a Tech Content Creator and Personal Brand Strategist focused on helping developers optimize their LinkedIn presence. CSE '28 student at Muthayammal Engineering College." : `Passionate ${finalRole} with expertise in ${finalSkills.join(', ')}.`),
-      location: isKalai ? 'Rasipuram, Tamil Nadu, India' : (location || country || 'India'),
-      connections: finalConnections,
-      followers: finalFollowers,
-      profilePhoto: true,
-      customBanner: true,
-      bannerDescription: isKalai ? 'Tech Content Creator banner' : 'Professional tech banner',
-      experience,
-      education: [{ school: isKalai ? 'Muthayammal Engineering College' : 'University', degree: 'Bachelor of Engineering', field: 'Computer Science', year: '2028' }],
-      skills: finalSkills,
-      certifications: Array.from({ length: isFastTrack ? (isKalai ? 5 : getRand(1, 3)) : (parseInt(certCount) || 0) }, (_, i) => ({ name: `Certified ${i + 1}`, issuer: 'Top Organization', year: '2024' })),
-      projects: Array.from({ length: isFastTrack ? (isKalai ? 6 : getRand(2, 5)) : (parseInt(projectCount) || 0) }, (_, i) => ({ name: `Project ${i + 1}`, description: 'A high-impact project.' })),
-      featuredItems: isFastTrack ? (isKalai ? 4 : getRand(1, 3)) : (parseInt(featuredItems) || 0),
-      postsPerWeek: parseFloat(finalPosts as string),
-      averageEngagement: finalEngagement,
-      recommendations: isFastTrack ? (isKalai ? 12 : getRand(2, 8)) : (parseInt(recommendations) || 0),
-      creatorMode: true,
-      seoKeywords: finalSkills.slice(0, 5).map(s => s.toLowerCase()),
-      contactInfo: true,
-      customUrl: true,
-      jobRoleTarget: finalRole,
-      industry: industry || 'Technology',
-      experienceLevel: finalLevel,
-      country: country || 'India',
-    };
 
     localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
-
-    // Simulate AI analysis delay
-    await new Promise(r => setTimeout(r, 3000));
-
     router.push('/dashboard');
   };
 
@@ -233,13 +209,13 @@ export default function AuditPage() {
                     </div>
                   </div>
 
-                  <button onClick={handleNext} disabled={loading} className="glow-btn" style={{ width: '100%', padding: '16px', fontSize: 17 }}>
+                  <button onClick={handleNext} disabled={loading || (step === 1 && !url && (!role || !industry || !level || !country))} className="glow-btn" style={{ width: '100%', padding: '16px', fontSize: 17, opacity: (step === 1 && !url && (!role || !industry || !level || !country)) ? 0.6 : 1 }}>
                     {loading ? (
                       <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                         <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ display: 'inline-block' }}>⚡</motion.span>
                         Analyzing with AI...
                       </span>
-                    ) : (url.includes('linkedin.com/in/') ? 'Start AI Analysis 🚀' : 'Next → Enter Profile Details')}
+                    ) : 'Start AI Analysis 🚀'}
                   </button>
                 </motion.div>
               ) : (

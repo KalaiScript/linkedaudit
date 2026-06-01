@@ -18,6 +18,7 @@ export interface LinkedInProfile {
   postsPerWeek: number;
   averageEngagement: number;
   recommendations: number;
+  searchAppearances: number;
   creatorMode: boolean;
   seoKeywords: string[];
   contactInfo: boolean;

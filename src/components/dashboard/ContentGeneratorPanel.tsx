@@ -1,27 +1,24 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { generateHeadlines, generateAboutSections, generateExperienceRewrites, generatePosts, generateAISuggestions } from '@/lib/content-generator';
 import { LinkedInProfile } from '@/types';
-import Link from 'next/link';
 
 interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
+  aiData?: any;
 }
 
-const tabs = ['Headlines', 'About Section', 'Experience', 'Posts', 'AI Suggestions'];
+const tabs = ['Headlines', 'About Section', 'Experience', 'Posts', 'Strategy Tips'];
 
-export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanelProps) {
+export default function ContentGeneratorPanel({ profile, aiData }: ContentGeneratorPanelProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const headlines = generateHeadlines(profile.jobRoleTarget, profile.skills, profile.experienceLevel);
-  const abouts = generateAboutSections(profile.jobRoleTarget, profile.skills, profile.experienceLevel, profile.industry);
-  const expRewrites = profile.experience.length > 0
-    ? generateExperienceRewrites(profile.experience[0].title, profile.experience[0].company, profile.experience[0].description, profile.skills)
-    : [];
-  const posts = generatePosts(profile.jobRoleTarget, profile.skills);
-  const aiSuggestions = generateAISuggestions(profile.jobRoleTarget, profile.skills, profile.experienceLevel);
+  const headlines = aiData?.headlines || [];
+  const abouts = aiData?.abouts || [];
+  const expRewrites = aiData?.experienceRewrites || [];
+  const posts = aiData?.posts || [];
+  const strategyTips = aiData?.strategyTips || [];
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -29,7 +26,7 @@ export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanel
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const items = [headlines, abouts, expRewrites, posts, aiSuggestions];
+  const items = [headlines, abouts, expRewrites, posts, strategyTips];
 
   return (
     <div>
@@ -42,19 +39,16 @@ export default function ContentGeneratorPanel({ profile }: ContentGeneratorPanel
         ))}
       </div>
 
-      <div className="glass-card" style={{ padding: 24, marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(to right, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
+      <div className="glass-card" style={{ padding: 24, marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'linear-gradient(to right, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
         <div>
-          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>✍️ New: AI Post Generator & Editor</h3>
-          <p style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>Craft, style, and preview your perfect LinkedIn posts with AI assistance.</p>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>✍️ Profile Rewrite Suggestions</h3>
+          <p style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>Optimized content for your LinkedIn sections based on your target role and current profile.</p>
         </div>
-        <Link href="/post-generator" className="glow-btn" style={{ padding: '10px 20px', fontSize: 14, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-          Open Post Editor →
-        </Link>
       </div>
 
       {/* Content */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {items[activeTab].map((item, i) => (
+        {items[activeTab].map((item: any, i: number) => (
           <motion.div
             key={`${activeTab}-${i}`}
             initial={{ opacity: 0, y: 10 }}

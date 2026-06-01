@@ -4,6 +4,19 @@ export function generateHeadlines(role: string, skills: string[], level: string)
   const s = skills.slice(0, 3).join(' • ');
   const majorSkills = skills.slice(0, 4).join(' | ');
   
+  // Detect if the user is a Brand Creator/Strategist based on role
+  const isBrandOriented = role.toLowerCase().includes('brand') || role.toLowerCase().includes('creator') || role.toLowerCase().includes('strategist');
+
+  if (isBrandOriented) {
+    return [
+      { type: 'headline', style: 'Authority-Boosted', content: `${role} | Helping 30+ Professionals Dominate LinkedIn 🚀 | 3.5M+ Impressions | ${skills[0]} • ${skills[1]}` },
+      { type: 'headline', style: 'Metric-Heavy', content: `${role} & Tech Enthusiast | 6K+ Followers | Building High-Impact Personal Brands | Expert in ${s}` },
+      { type: 'headline', style: 'Strategic-Flow', content: `Personal Brand Strategist | ${role} | ${majorSkills} | Transforming Profiles into Recruiter Magnets 🎯` },
+      { type: 'headline', style: 'Mission-Driven', content: `Empowering Students & Developers to Scale their Careers through Branded Content | ${role} | ${skills[0]} Specialist` },
+      { type: 'headline', style: 'The Closer', content: `${role} | 30+ Profiles Optimized | Content Strategy & Growth | Let's build your legacy.` },
+    ];
+  }
+  
   return [
     { type: 'headline', style: 'Professional', content: `${level === 'Fresher' ? 'Aspiring' : 'Results-Driven'} ${role} | ${s} | Building Scalable & Impactful Solutions` },
     { type: 'headline', style: 'Keyword-Rich', content: `${role} | ${majorSkills} | Open to ${level === 'Fresher' ? 'Internships' : 'Strategic Opportunities'} | Problem Solver` },
