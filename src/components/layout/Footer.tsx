@@ -23,7 +23,7 @@ export default function Footer() {
             <h4 style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 600, marginBottom: 16, textTransform: 'uppercase', letterSpacing: 1 }}>Product</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <Link href="/audit" style={{ color: 'rgba(226,232,240,0.5)', textDecoration: 'none', fontSize: 14 }}>Profile Audit</Link>
-              <Link href="/pricing" style={{ color: 'rgba(226,232,240,0.5)', textDecoration: 'none', fontSize: 14 }}>Pricing</Link>
+              
               <Link href="/demo" style={{ color: 'rgba(226,232,240,0.5)', textDecoration: 'none', fontSize: 14 }}>Demo Report</Link>
             </div>
           </div>

@@ -14,23 +14,18 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
       Target Role: ${profile.jobRoleTarget}
       Industry: ${profile.industry}
       Headline: ${profile.headline}
-      About: ${profile.about}
+      About: ${profile.about || 'EMPTY - PLEASE GENERATE A HIGH-IMPACT ABOUT SECTION BASED ON HEADLINE AND SKILLS'}
       Skills: ${profile.skills.join(', ')}
       Followers: ${profile.followers}
       Connections: ${profile.connections}
-      Search Appearances: ${profile.searchAppearances}
+      Years of Experience: ${(profile as any).yearsOfExperience || 'N/A'}
+      Is Fresher: ${(profile as any).isFresher ? 'Yes' : 'No'}
 
-      REQUIREMENTS FOR CONTENT GENERATION:
-      1. Headlines: Provide 3 distinct styles (e.g., "Keyword Optimized", "Storytelling", "Metric-Driven"). Each headline should be 160-220 characters, using separators (| or •), and include a clear value proposition + social proof.
-      2. About Sections: Provide 2 comprehensive versions. Structure each with:
-         - A "Hook" (1-2 lines to grab attention)
-         - "What I Do" (Value proposition)
-         - "Key Achievements" (3-5 bullet points with QUANTIFIABLE METRICS like %, $, or #)
-         - "Core Expertise" (Tech stack or skills)
-         - "Call to Action" (How to reach out)
-         Each version should be 1000-1500 characters.
-      3. Strategy Tips: Provide 5 detailed, multi-line actionable strategies. Don't give simple advice; provide specific steps on HOW to execute.
-      4. Experience Rewrites: Take their "Experience Description" and rewrite it into a high-impact, results-oriented format using the STAR method.
+      REQUIREMENTS:
+      1. Headlines: 3 distinct multi-line styles (160-220 chars).
+      2. About Sections: 2 comprehensive versions (1000-1500 chars). IF input About was EMPTY, craft these from scratch using the brand identity provided.
+      3. Strategy Tips: 5 specific, multi-step execution plans.
+      4. Experience: Rewrite the provided experience or craft a "Fresher/Aspiring" summary if they are a fresher.
 
       EXPECTED JSON STRUCTURE:
       {

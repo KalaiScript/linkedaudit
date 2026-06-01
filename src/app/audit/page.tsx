@@ -30,10 +30,11 @@ export default function AuditPage() {
   const [about, setAbout] = useState('');
   const [location, setLocation] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [skillInput, setSkillInput] = useState('');
+  const [yearsExp, setYearsExp] = useState('');
 
   // Step 3: Metrics & Activity
   const [followers, setFollowers] = useState('');
+  const [connections, setConnections] = useState('');
   const [postsPerWeek, setPostsPerWeek] = useState('');
   const [avgEngagement, setAvgEngagement] = useState('');
   const [hasPhoto, setHasPhoto] = useState(true);
@@ -41,10 +42,13 @@ export default function AuditPage() {
   const [creatorMode, setCreatorMode] = useState(false);
   const [customUrl, setCustomUrl] = useState(true);
   const [experienceDesc, setExperienceDesc] = useState('');
-  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [isFresher, setIsFresher] = useState(false);
 
   const handleNext = async () => {
     if (step === 1) {
+      if (level.includes('Fresher')) setIsFresher(true);
+      else setIsFresher(false);
+
       if (url && url.includes('linkedin.com/in/')) {
         setFetchingMinimal(true);
         const res = await fetchLinkedInProfileAction(url);
@@ -54,7 +58,7 @@ export default function AuditPage() {
           if (res.data.about) setAbout(res.data.about);
           if (res.data.location) setLocation(res.data.location);
           if (res.data.followers) setFollowers(res.data.followers.toString());
-          // Note: We are just pre-filling, user can still edit
+          if (res.data.connections) setConnections(res.data.connections.toString());
         }
         setFetchingMinimal(false);
       }
@@ -92,14 +96,14 @@ export default function AuditPage() {
       url: url || 'manual',
       name: name || 'User',
       headline: headline || `${role} | Tech Enthusiast`,
-      about: about || `Passionate ${role} with expertise in tech.`,
+      about: about || '', // AI will generate this if empty
       location: location || country || 'India',
-      connections: 500, // Defaulting to 500+ as it's common
+      connections: parseInt(connections) || 500,
       followers: parseInt(followers) || 0,
       profilePhoto: hasPhoto,
       customBanner: hasBanner,
       bannerDescription: 'Professional tech banner',
-      experience: [{
+      experience: isFresher ? [] : [{
         title: role,
         company: 'Your Best Role',
         duration: 'Past - Present',
@@ -107,6 +111,7 @@ export default function AuditPage() {
         hasMetrics: /\d/.test(experienceDesc),
         hasActionVerbs: true,
       }],
+      yearsOfExperience: yearsExp || (isFresher ? '0' : '1'),
       education: [{ school: 'University', degree: 'Degree', field: 'Field', year: '2024' }],
       skills: selectedSkills,
       certifications: [],
@@ -124,6 +129,7 @@ export default function AuditPage() {
       industry: industry || 'Technology',
       experienceLevel: level || 'Mid',
       country: country || 'India',
+      isFresher
     };
 
     localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
@@ -134,7 +140,7 @@ export default function AuditPage() {
   };
 
   const isStep1Valid = role && industry && level && country;
-  const isStep2Valid = name && headline && about && selectedSkills.length > 0;
+  const isStep2Valid = name && headline && selectedSkills.length > 0;
 
   return (
     <>
@@ -229,13 +235,14 @@ export default function AuditPage() {
                     <InputField label="Current Location" value={location} onChange={setLocation} placeholder="City, Country" />
                   </div>
 
-                  <div style={{ marginBottom: 20 }}>
-                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React • Node.js | Ex-Google" />
+                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20, marginBottom: 20 }}>
+                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React • Node.js" />
+                    <InputField label="Years of Experience" value={yearsExp} onChange={setYearsExp} placeholder={isFresher ? '0' : '3'} type="number" />
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
-                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>About / Summary</label>
-                    <textarea className="input-field" rows={5} placeholder="Paste your LinkedIn About section here..." value={about} onChange={e => setAbout(e.target.value)} style={{ resize: 'vertical' }} />
+                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>About / Summary (Optional)</label>
+                    <textarea className="input-field" rows={4} placeholder="Paste your LinkedIn About section here... (or leave blank for AI to generate one)" value={about} onChange={e => setAbout(e.target.value)} style={{ resize: 'vertical' }} />
                   </div>
 
                   <div style={{ marginBottom: 32 }}>
@@ -280,16 +287,22 @@ export default function AuditPage() {
                 <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Your LinkedIn activity</h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 20 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
                     <InputField label="Followers" value={followers} onChange={setFollowers} placeholder="2500" type="number" />
+                    <InputField label="Connections" value={connections} onChange={setConnections} placeholder="500+" type="number" />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
                     <InputField label="Posts per Week" value={postsPerWeek} onChange={setPostsPerWeek} placeholder="2" type="number" />
                     <InputField label="Avg Engagement" value={avgEngagement} onChange={setAvgEngagement} placeholder="45" type="number" />
                   </div>
 
-                  <div style={{ marginBottom: 24 }}>
-                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Experience Description (Best Role)</label>
-                    <textarea className="input-field" rows={4} placeholder="Briefly describe your main achievements in your current or best role..." value={experienceDesc} onChange={e => setExperienceDesc(e.target.value)} style={{ resize: 'vertical' }} />
-                  </div>
+                  {!isFresher && (
+                    <div style={{ marginBottom: 24 }}>
+                      <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Experience Description (Best Role)</label>
+                      <textarea className="input-field" rows={4} placeholder="Briefly describe your main achievements..." value={experienceDesc} onChange={e => setExperienceDesc(e.target.value)} style={{ resize: 'vertical' }} />
+                    </div>
+                  )}
 
                   <div style={{ display: 'flex', gap: 20, marginBottom: 32, flexWrap: 'wrap' }}>
                     <ToggleField label="Profile Photo" checked={hasPhoto} onChange={setHasPhoto} />

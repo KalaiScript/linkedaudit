@@ -30,7 +30,16 @@ export default function PostGeneratorPage() {
   }, []);
 
   const handleTemplateSelect = (content: string) => {
-    setPostText(content);
+    let replaced = content;
+    if (profile) {
+      replaced = content
+        .replace(/\[Topic\]/g, profile.skills[0] || 'Modern Tech')
+        .replace(/\[Story Introduction\]/g, `I started my journey as a ${profile.jobRoleTarget}`)
+        .replace(/\[Key Lesson\]/g, `perseverance and mastering ${profile.skills.slice(0, 2).join(' & ')} are the keys to growth`)
+        .replace(/\[Context\]/g, `the ${profile.industry} industry`)
+        .replace(/\[People\]/g, 'my mentors and network');
+    }
+    setPostText(replaced);
   };
 
   const runAssistant = (action: string) => {
