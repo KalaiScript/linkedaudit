@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -10,7 +10,6 @@ import SectionCard from '@/components/dashboard/SectionCard';
 import RadarChart from '@/components/dashboard/RadarChart';
 import ContentGeneratorPanel from '@/components/dashboard/ContentGeneratorPanel';
 import { analyzeProfile } from '@/lib/analysis-engine';
-import { demoProfile } from '@/lib/mock-data';
 import { AuditResult, LinkedInProfile } from '@/types';
 
 import { getFullAIAnalysisAction } from '@/app/actions/ai-actions';
@@ -18,6 +17,7 @@ import { getFullAIAnalysisAction } from '@/app/actions/ai-actions';
 const dashTabs = ['Overview', 'Score Breakdown', 'Personalized Tips', 'AI Suggestions', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode 🔥'];
 
 function DashboardContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
   const [roastMode, setRoastMode] = useState(false);
@@ -30,7 +30,7 @@ function DashboardContent() {
     setIsMounted(true);
   }, []);
 
-  const profile: LinkedInProfile = useMemo(() => {
+  const profile: LinkedInProfile | null = useMemo(() => {
     if (typeof window !== 'undefined' && isMounted) {
       const stored = localStorage.getItem('profilepulse_profile');
       if (stored) {
@@ -39,17 +39,14 @@ function DashboardContent() {
         } catch { }
       }
     }
-    const p = { ...demoProfile };
-    const role = searchParams.get('role');
-    const industry = searchParams.get('industry');
-    const level = searchParams.get('level');
-    const country = searchParams.get('country');
-    if (role) p.jobRoleTarget = role;
-    if (industry) p.industry = industry;
-    if (level) p.experienceLevel = level;
-    if (country) p.country = country;
-    return p;
-  }, [searchParams, isMounted]);
+    return null;
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (isMounted && !profile && !loading) {
+      router.push('/audit');
+    }
+  }, [isMounted, profile, loading, router]);
 
   useEffect(() => {
     if (isMounted && profile) {
@@ -64,10 +61,13 @@ function DashboardContent() {
         setLoading(false);
       };
       fetchAnalysis();
+    } else if (isMounted && !profile) {
+      setLoading(false);
     }
   }, [isMounted, profile]);
 
-  const result: AuditResult = useMemo(() => {
+  const result: AuditResult | null = useMemo(() => {
+    if (!profile) return null;
     const baseResult = analyzeProfile(profile);
     if (aiAnalysis) {
       return {
@@ -85,7 +85,7 @@ function DashboardContent() {
     return baseResult;
   }, [profile, aiAnalysis]);
 
-  if (!isMounted || loading) {
+  if (!isMounted || loading || !result) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>

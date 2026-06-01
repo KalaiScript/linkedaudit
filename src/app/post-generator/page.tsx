@@ -1,9 +1,10 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
+import { LinkedInProfile } from '@/types';
 
 const templates = [
   { id: 'tips', label: 'Value Tips', content: "💡 5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
@@ -17,6 +18,16 @@ export default function PostGeneratorPage() {
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeAssistant, setActiveAssistant] = useState<string | null>(null);
+  const [profile, setProfile] = useState<LinkedInProfile | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('profilepulse_profile');
+    if (stored) {
+      try {
+        setProfile(JSON.parse(stored));
+      } catch { }
+    }
+  }, []);
 
   const handleTemplateSelect = (content: string) => {
     setPostText(content);
@@ -157,10 +168,12 @@ export default function PostGeneratorPage() {
                 }}>
                   {/* LinkedIn Mock Header */}
                   <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#eee', flexShrink: 0 }} />
+                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800 }}>
+                      {profile?.name ? profile.name[0] : 'U'}
+                    </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, fontSize: 14 }}>User Name</div>
-                      <div style={{ fontSize: 12, color: '#666' }}>Full Stack Developer @ TechCorp</div>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: '#111' }}>{profile?.name || 'User Name'}</div>
+                      <div style={{ fontSize: 12, color: '#666', lineHeight: 1.2 }}>{profile?.headline || 'Your Professional Headline'}</div>
                       <div style={{ fontSize: 12, color: '#666' }}>12h • 🌐</div>
                     </div>
                   </div>

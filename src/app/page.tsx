@@ -16,9 +16,9 @@ const features = [
 ];
 
 const steps = [
-  { num: '01', title: 'Enter Your Profile', desc: 'Paste your LinkedIn URL and select your target role and industry.' },
-  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section — photo, headline, about, skills, and more.' },
-  { num: '03', title: 'Get Your Audit Report', desc: 'Receive scores, suggestions, AI rewrites, and a 7-day action plan.' },
+  { num: '01', title: 'Enter Your Profile', desc: 'Provide your headline, about section, and career goals directly in our secure auditor.' },
+  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section — photo impact, headline strength, about storytelling, and more.' },
+  { num: '03', title: 'Get Your Audit Report', desc: 'Receive scores, suggestions, AI rewrites, and a personalized 7-day action plan.' },
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
