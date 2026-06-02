@@ -27,14 +27,14 @@ export default function Navbar() {
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10,
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 18, fontWeight: 800, color: 'white',
+            fontSize: 20, fontWeight: 800, color: 'white',
           }}>
-            PP
+            🐝
           </div>
           <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0' }}>
-            Profile<span style={{ color: '#8b5cf6' }}>Pulse</span>
+            Link<span style={{ color: '#fbbf24' }}>Hive</span>
           </span>
         </Link>
 

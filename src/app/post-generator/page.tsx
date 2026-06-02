@@ -21,7 +21,7 @@ export default function PostGeneratorPage() {
   const [profile, setProfile] = useState<LinkedInProfile | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('profilepulse_profile');
+    const stored = localStorage.getItem('linkhive_profile');
     if (stored) {
       try {
         setProfile(JSON.parse(stored));

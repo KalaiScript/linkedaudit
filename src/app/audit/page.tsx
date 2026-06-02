@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
@@ -16,6 +16,7 @@ export default function AuditPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [fetchingMinimal, setFetchingMinimal] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Step 1: Target Goals & URL
   const [url, setUrl] = useState('');
@@ -48,7 +49,7 @@ export default function AuditPage() {
 
   // Persistence: Load on mount
   useEffect(() => {
-    const saved = localStorage.getItem('profilepulse_audit_draft');
+    const saved = localStorage.getItem('linkhive_audit_draft');
     if (saved) {
       try {
         const data = JSON.parse(saved);
@@ -78,18 +79,20 @@ export default function AuditPage() {
         console.error("Failed to load draft", e);
       }
     }
+    setIsLoaded(true);
   }, []);
 
   // Persistence: Save on change
   useEffect(() => {
+    if (!isLoaded) return;
     const draft = {
       url, role, industry, level, country,
       name, headline, about, location, selectedSkills, yearsExp,
       followers, connections, postsPerWeek, avgEngagement, searchAppearances,
       hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step
     };
-    localStorage.setItem('profilepulse_audit_draft', JSON.stringify(draft));
-  }, [url, role, industry, level, country, name, headline, about, location, selectedSkills, yearsExp, followers, connections, postsPerWeek, avgEngagement, searchAppearances, hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step]);
+    localStorage.setItem('linkhive_audit_draft', JSON.stringify(draft));
+  }, [url, role, industry, level, country, name, headline, about, location, selectedSkills, yearsExp, followers, connections, postsPerWeek, avgEngagement, searchAppearances, hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step, isLoaded]);
 
   const handleNext = async () => {
     if (step === 1) {
@@ -106,6 +109,9 @@ export default function AuditPage() {
           if (res.data.location) setLocation(res.data.location);
           if (res.data.followers) setFollowers(res.data.followers.toString());
           if (res.data.connections) setConnections(res.data.connections.toString());
+          // Auto-calculate search appearances based on followers/activity if not provided
+          if (res.data.searchAppearances) setSearchAppearances(res.data.searchAppearances.toString());
+          else if (res.data.followers) setSearchAppearances(Math.round(res.data.followers / 20).toString());
         }
         setFetchingMinimal(false);
       }
@@ -167,7 +173,7 @@ export default function AuditPage() {
       postsPerWeek: parseFloat(postsPerWeek) || 0,
       averageEngagement: parseInt(avgEngagement) || 0,
       recommendations: 0,
-      searchAppearances: parseInt(searchAppearances) || 50,
+      searchAppearances: parseInt(searchAppearances) || Math.round((parseInt(followers) || 0) / 20) || 50,
       creatorMode,
       seoKeywords: selectedSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
@@ -179,8 +185,8 @@ export default function AuditPage() {
       isFresher
     };
 
-    localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
-    localStorage.removeItem('profilepulse_audit_draft');
+    localStorage.setItem('linkhive_profile', JSON.stringify(profileData));
+    localStorage.removeItem('linkhive_audit_draft');
     
     setTimeout(() => {
       router.push('/dashboard');
@@ -209,7 +215,7 @@ export default function AuditPage() {
         >
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 12 }}>
-              Audit Your <span className="gradient-text">LinkedIn Profile</span>
+              Audit Your <span className="gradient-text">LinkHive Profile</span> <span style={{ fontSize: 32 }}>🐝</span>
             </h1>
             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 16 }}>
               {step === 1 ? 'Step 1: Define your target and profile URL' : step === 2 ? 'Step 2: Your professional identity & skills' : 'Step 3: Your LinkedIn activity'}
@@ -222,7 +228,7 @@ export default function AuditPage() {
                   width: 36, height: 36, borderRadius: '50%', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
                   fontSize: 14, fontWeight: 700, 
-                  background: step >= s ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)' : 'rgba(255,255,255,0.05)',
+                  background: step >= s ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(255,255,255,0.05)',
                   border: step >= s ? 'none' : '1px solid rgba(255,255,255,0.1)',
                   color: step >= s ? 'white' : 'rgba(255,255,255,0.3)',
                   transition: 'all 0.3s ease'
@@ -237,7 +243,9 @@ export default function AuditPage() {
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Target goals & LinkedIn URL</h3>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>🐝</span> Target goals & LinkedIn URL
+                  </h3>
                   
                   <div style={{ marginBottom: 20 }}>
                     <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>LinkedIn Profile URL (Optional - to pre-fill photo/name)</label>
@@ -283,7 +291,9 @@ export default function AuditPage() {
 
               {step === 2 && (
                 <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Professional Identity & Skills</h3>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>🐝</span> Professional Identity & Skills
+                  </h3>
                   
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
                     <InputField label="Full Name" value={name} onChange={setName} placeholder="John Doe" />
@@ -325,7 +335,7 @@ export default function AuditPage() {
                           onClick={() => toggleSkill(skill)}
                           style={{
                             padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                            background: selectedSkills.includes(skill) ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)' : 'rgba(255,255,255,0.05)',
+                            background: selectedSkills.includes(skill) ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(255,255,255,0.05)',
                             color: selectedSkills.includes(skill) ? 'white' : 'rgba(255,255,255,0.5)',
                             border: '1px solid ' + (selectedSkills.includes(skill) ? 'transparent' : 'rgba(255,255,255,0.1)'),
                             cursor: 'pointer', transition: 'all 0.2s'
@@ -356,7 +366,9 @@ export default function AuditPage() {
 
               {step === 3 && (
                 <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24 }}>Your LinkedIn activity</h3>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 24 }}>🐝</span> Your LinkedIn activity
+                  </h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
                     <InputField label="Followers" value={followers} onChange={setFollowers} placeholder="2500" type="number" />
@@ -366,11 +378,6 @@ export default function AuditPage() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
                     <InputField label="Posts per Week" value={postsPerWeek} onChange={setPostsPerWeek} placeholder="2" type="number" />
                     <InputField label="Avg Engagement" value={avgEngagement} onChange={setAvgEngagement} placeholder="45" type="number" />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
-                    <InputField label="Search Appearances" value={searchAppearances} onChange={setSearchAppearances} placeholder="50" type="number" />
-                    <div /> {/* Empty div for grid alignment */}
                   </div>
 
                   {!isFresher && (
@@ -422,7 +429,7 @@ function ToggleField({ label, checked, onChange }: { label: string; checked: boo
         onClick={() => onChange(!checked)}
         style={{
           width: 40, height: 22, borderRadius: 11, padding: 2, cursor: 'pointer', border: 'none',
-          background: checked ? 'linear-gradient(135deg, #8b5cf6, #3b82f6)' : 'rgba(99,102,241,0.2)',
+          background: checked ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(251,191,36,0.1)',
           transition: 'all 0.3s', position: 'relative',
         }}
       >

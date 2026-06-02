@@ -32,7 +32,7 @@ function DashboardContent() {
 
   const profile: LinkedInProfile | null = useMemo(() => {
     if (typeof window !== 'undefined' && isMounted) {
-      const stored = localStorage.getItem('profilepulse_profile');
+      const stored = localStorage.getItem('linkhive_profile');
       if (stored) {
         try {
           return JSON.parse(stored);

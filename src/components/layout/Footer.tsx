@@ -12,10 +12,9 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, color: 'white' }}>PP</div>
-              <span style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Profile<span style={{ color: '#8b5cf6' }}>Pulse</span></span>
-            </div>
-            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, color: 'white' }}>🐝</div>
+              <span style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Link<span style={{ color: '#fbbf24' }}>Hive</span></span>
+            </div>            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
               AI-powered LinkedIn profile analyzer and post generator.
             </p>
           </div>
@@ -46,7 +45,7 @@ export default function Footer() {
         </div>
         <div style={{ borderTop: '1px solid rgba(99,102,241,0.1)', paddingTop: 24, textAlign: 'center' }}>
           <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13 }}>
-            © 2026 ProfilePulse. Built with AI. All rights reserved.
+            © 2026 LinkHive. Built with AI. All rights reserved.
           </p>
         </div>
       </div>
