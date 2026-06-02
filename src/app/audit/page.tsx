@@ -31,18 +31,65 @@ export default function AuditPage() {
   const [location, setLocation] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [yearsExp, setYearsExp] = useState('');
+  const [customSkill, setCustomSkill] = useState('');
 
   // Step 3: Metrics & Activity
   const [followers, setFollowers] = useState('');
   const [connections, setConnections] = useState('');
   const [postsPerWeek, setPostsPerWeek] = useState('');
   const [avgEngagement, setAvgEngagement] = useState('');
+  const [searchAppearances, setSearchAppearances] = useState('');
   const [hasPhoto, setHasPhoto] = useState(true);
   const [hasBanner, setHasBanner] = useState(false);
   const [creatorMode, setCreatorMode] = useState(false);
   const [customUrl, setCustomUrl] = useState(true);
   const [experienceDesc, setExperienceDesc] = useState('');
   const [isFresher, setIsFresher] = useState(false);
+
+  // Persistence: Load on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('profilepulse_audit_draft');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.url) setUrl(data.url);
+        if (data.role) setRole(data.role);
+        if (data.industry) setIndustry(data.industry);
+        if (data.level) setLevel(data.level);
+        if (data.country) setCountry(data.country);
+        if (data.name) setName(data.name);
+        if (data.headline) setHeadline(data.headline);
+        if (data.about) setAbout(data.about);
+        if (data.location) setLocation(data.location);
+        if (data.selectedSkills) setSelectedSkills(data.selectedSkills);
+        if (data.yearsExp) setYearsExp(data.yearsExp);
+        if (data.followers) setFollowers(data.followers);
+        if (data.connections) setConnections(data.connections);
+        if (data.postsPerWeek) setPostsPerWeek(data.postsPerWeek);
+        if (data.avgEngagement) setAvgEngagement(data.avgEngagement);
+        if (data.searchAppearances) setSearchAppearances(data.searchAppearances);
+        if (data.hasPhoto !== undefined) setHasPhoto(data.hasPhoto);
+        if (data.hasBanner !== undefined) setHasBanner(data.hasBanner);
+        if (data.creatorMode !== undefined) setCreatorMode(data.creatorMode);
+        if (data.customUrl !== undefined) setCustomUrl(data.customUrl);
+        if (data.experienceDesc) setExperienceDesc(data.experienceDesc);
+        if (data.step) setStep(data.step);
+      } catch (e) {
+        console.error("Failed to load draft", e);
+      }
+    }
+  }, []);
+
+  // Persistence: Save on change
+  useEffect(() => {
+    const draft = {
+      url, role, industry, level, country,
+      name, headline, about, location, selectedSkills, yearsExp,
+      followers, connections, postsPerWeek, avgEngagement, searchAppearances,
+      hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step
+    };
+    localStorage.setItem('profilepulse_audit_draft', JSON.stringify(draft));
+  }, [url, role, industry, level, country, name, headline, about, location, selectedSkills, yearsExp, followers, connections, postsPerWeek, avgEngagement, searchAppearances, hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step]);
 
   const handleNext = async () => {
     if (step === 1) {
@@ -120,7 +167,7 @@ export default function AuditPage() {
       postsPerWeek: parseFloat(postsPerWeek) || 0,
       averageEngagement: parseInt(avgEngagement) || 0,
       recommendations: 0,
-      searchAppearances: 50,
+      searchAppearances: parseInt(searchAppearances) || 50,
       creatorMode,
       seoKeywords: selectedSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
@@ -133,6 +180,7 @@ export default function AuditPage() {
     };
 
     localStorage.setItem('profilepulse_profile', JSON.stringify(profileData));
+    localStorage.removeItem('profilepulse_audit_draft');
     
     setTimeout(() => {
       router.push('/dashboard');
@@ -141,6 +189,13 @@ export default function AuditPage() {
 
   const isStep1Valid = role && industry && level && country;
   const isStep2Valid = name && headline && selectedSkills.length > 0;
+
+  const addCustomSkill = () => {
+    if (customSkill.trim() && !selectedSkills.includes(customSkill.trim())) {
+      setSelectedSkills([...selectedSkills, customSkill.trim()]);
+      setCustomSkill('');
+    }
+  };
 
   return (
     <>
@@ -241,12 +296,28 @@ export default function AuditPage() {
                   </div>
 
                   <div style={{ marginBottom: 20 }}>
-                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>About / Summary (Optional)</label>
+                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>About / Summary</label>
                     <textarea className="input-field" rows={4} placeholder="Paste your LinkedIn About section here... (or leave blank for AI to generate one)" value={about} onChange={e => setAbout(e.target.value)} style={{ resize: 'vertical' }} />
                   </div>
 
                   <div style={{ marginBottom: 32 }}>
-                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.5 }}>Skills Selector</label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                      <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>Skills Selector</label>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        <input 
+                          type="text" 
+                          placeholder="Add custom skill..." 
+                          value={customSkill} 
+                          onChange={e => setCustomSkill(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && addCustomSkill()}
+                          style={{ 
+                            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', 
+                            borderRadius: 6, padding: '4px 10px', fontSize: 12, color: '#fff', width: 140
+                          }}
+                        />
+                        <button onClick={addCustomSkill} style={{ background: '#4f46e5', border: 'none', borderRadius: 6, color: '#fff', padding: '4px 8px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>ADD</button>
+                      </div>
+                    </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxHeight: 150, overflowY: 'auto', padding: 12, background: 'rgba(0,0,0,0.2)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
                       {commonSkills.map(skill => (
                         <button
@@ -295,6 +366,11 @@ export default function AuditPage() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
                     <InputField label="Posts per Week" value={postsPerWeek} onChange={setPostsPerWeek} placeholder="2" type="number" />
                     <InputField label="Avg Engagement" value={avgEngagement} onChange={setAvgEngagement} placeholder="45" type="number" />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
+                    <InputField label="Search Appearances" value={searchAppearances} onChange={setSearchAppearances} placeholder="50" type="number" />
+                    <div /> {/* Empty div for grid alignment */}
                   </div>
 
                   {!isFresher && (

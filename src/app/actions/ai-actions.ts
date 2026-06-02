@@ -6,47 +6,38 @@ import { LinkedInProfile } from '@/types';
 export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
   try {
     const prompt = `
-      You are a world-class LinkedIn Profile Auditor and Career Brand Strategist. 
-      Analyze the following profile data and provide a comprehensive, high-impact audit in JSON format.
-
-      PROFILE DATA:
-      Name: ${profile.name}
+      Analyze this LinkedIn profile and provide a high-impact audit in JSON.
       Target Role: ${profile.jobRoleTarget}
-      Industry: ${profile.industry}
       Headline: ${profile.headline}
-      About: ${profile.about || 'EMPTY - PLEASE GENERATE A HIGH-IMPACT ABOUT SECTION BASED ON HEADLINE AND SKILLS'}
+      About: ${profile.about || 'N/A'}
       Skills: ${profile.skills.join(', ')}
       Followers: ${profile.followers}
       Connections: ${profile.connections}
-      Years of Experience: ${(profile as any).yearsOfExperience || 'N/A'}
-      Is Fresher: ${(profile as any).isFresher ? 'Yes' : 'No'}
 
       REQUIREMENTS:
-      1. Headlines: 3 distinct multi-line styles (160-220 chars).
-      2. About Sections: 2 comprehensive versions (1000-1500 chars). IF input About was EMPTY, craft these from scratch using the brand identity provided.
-      3. Strategy Tips: 5 specific, multi-step execution plans.
-      4. Experience: Rewrite the provided experience or craft a "Fresher/Aspiring" summary if they are a fresher.
+      1. Headlines: 3 styles (160-220 chars).
+      2. About: 2 versions (800-1200 chars).
+      3. Strategy: 5 specific tips.
+      4. Roasts: 3 brutal but helpful roasts.
 
-      EXPECTED JSON STRUCTURE:
+      RETURN JSON ONLY:
       {
-        "overallScore": number (0-100),
-        "recruiterReadiness": number (0-100),
-        "personalBrandScore": number (0-100),
-        "atsScore": number (0-100),
+        "overallScore": number,
+        "recruiterReadiness": number,
+        "personalBrandScore": number,
+        "atsScore": number,
         "topStrengths": string[],
         "topWeaknesses": string[],
-        "headlines": { style: string, content: string }[],
-        "abouts": { style: string, content: string }[],
-        "experienceRewrites": { style: string, content: string }[],
-        "posts": { style: string, content: string }[],
-        "strategyTips": { style: string, content: string }[],
-        "roasts": { section: string, roast: string, emoji: string }[]
+        "headlines": { "style": string, "content": string }[],
+        "abouts": { "style": string, "content": string }[],
+        "experienceRewrites": { "style": string, "content": string }[],
+        "posts": { "style": string, "content": string }[],
+        "strategyTips": { "style": string, "content": string }[],
+        "roasts": { "section": string, "roast": string, "emoji": string }[]
       }
-
-      CRITICAL: Return ONLY valid JSON. Be professional, metrics-oriented, and sophisticated. The "abouts" and "strategyTips" MUST be detailed, not one-liners.
     `;
 
-    const response = await callAI(prompt, "You are a professional LinkedIn API analyst. Return ONLY a valid JSON object.");
+    const response = await callAI(prompt, "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON.");
     
     // Attempt to parse JSON from the response
     let analysis;
