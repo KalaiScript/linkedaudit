@@ -89,6 +89,19 @@ export function generatePosts(role: string, skills: string[]): ContentRewrite[] 
   ];
 }
 
+export function generateViralHooks(role: string, skills: string[]): string[] {
+  const topSkill = skills[0] || 'Software Development';
+  return [
+    `I used to think ${topSkill} was just about writing code. I was wrong.`,
+    `Unpopular opinion: Most ${role}s are doing ${topSkill} completely backwards.`,
+    `How I built a ${skills[1] || 'high-impact'} system in 30 days (without burning out).`,
+    `Stop using [Old Method]. Here's why ${topSkill} in 2025 is different.`,
+    `The 5 secrets senior ${role}s don't tell you about ${skills[0]}.`,
+    `I analyzed 100+ LinkedIn profiles for ${role}s. Here's the #1 mistake I found.`,
+    `Why your ${topSkill} skills are worthless without this one soft skill.`,
+  ];
+}
+
 export function generateAISuggestions(role: string, skills: string[], level: string): ContentRewrite[] {
   return [
     {

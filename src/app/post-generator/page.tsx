@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { LinkedInProfile } from '@/types';
+import { generateViralHooks } from '@/lib/content-generator';
 
 const templates = [
   { id: 'tips', label: 'Value Tips', content: "💡 5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
@@ -19,6 +20,7 @@ export default function PostGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeAssistant, setActiveAssistant] = useState<string | null>(null);
   const [profile, setProfile] = useState<LinkedInProfile | null>(null);
+  const [hooks, setHooks] = useState<string[]>([]);
 
   useEffect(() => {
     const stored = localStorage.getItem('linkhive_profile');
@@ -28,6 +30,12 @@ export default function PostGeneratorPage() {
       } catch { }
     }
   }, []);
+
+  const handleGenerateHooks = () => {
+    if (!profile) return;
+    const newHooks = generateViralHooks(profile.jobRoleTarget, profile.skills);
+    setHooks(newHooks);
+  };
 
   const handleTemplateSelect = (content: string) => {
     let replaced = content;
@@ -93,6 +101,44 @@ export default function PostGeneratorPage() {
             
             {/* Editor Side */}
             <div>
+              {/* Viral Hooks Section */}
+              <div className="glass-card" style={{ padding: 24, marginBottom: 24, border: '1px solid rgba(251,191,36,0.1)' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fbbf24', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  🪝 Viral Hook Generator
+                </h3>
+                <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 16 }}>
+                  Get catchy opening lines to stop the scroll.
+                </p>
+                <button 
+                  onClick={handleGenerateHooks} 
+                  className="tab-btn" 
+                  disabled={!profile}
+                  style={{ width: '100%', marginBottom: 16, background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.2)', color: '#fbbf24' }}
+                >
+                  Generate Hooks
+                </button>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {hooks.map((hook, i) => (
+                    <motion.div 
+                      key={i} 
+                      initial={{ opacity: 0, x: -5 }} 
+                      animate={{ opacity: 1, x: 0 }}
+                      style={{ 
+                        padding: '8px 12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(251,191,36,0.05)', 
+                        borderRadius: 8, fontSize: 12, color: '#e2e8f0', cursor: 'pointer'
+                      }}
+                      onClick={() => { setPostText(hook + '\n\n' + postText); }}
+                      title="Click to add to editor"
+                    >
+                      "{hook}"
+                    </motion.div>
+                  ))}
+                  {profile && hooks.length === 0 && <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 11, textAlign: 'center' }}>Click the button above to generate hooks!</p>}
+                  {!profile && <p style={{ color: '#fca5a5', fontSize: 11, textAlign: 'center' }}>Complete an audit first to use this feature.</p>}
+                </div>
+              </div>
+
               <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
                   <button onClick={() => runAssistant('improve')} className="action-pill" disabled={isGenerating}>✨ Improve</button>

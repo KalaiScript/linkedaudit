@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AIChatbot from "@/components/layout/AIChatbot";
 
 export const metadata: Metadata = {
   title: "LinkHive — AI-Powered LinkedIn Profile Analyzer",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="noise-overlay" />
         <div className="page-content">
           {children}
+          <AIChatbot />
         </div>
       </body>
     </html>
