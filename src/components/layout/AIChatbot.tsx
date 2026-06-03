@@ -101,13 +101,15 @@ export default function AIChatbot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
               position: 'fixed', 
-              bottom: 'clamp(70px, 15vh, 100px)', 
-              right: 'clamp(10px, 4vw, 24px)', 
+              bottom: 'clamp(80px, 15vh, 100px)', 
+              right: 'clamp(12px, 4vw, 24px)', 
               zIndex: 9999,
-              width: 'min(400px, 94vw)', 
-              height: 'min(600px, 75vh)',
+              width: 'min(400px, 92vw)', 
+              height: 'min(500px, 65vh)',
               display: 'flex', 
-              flexDirection: 'column'
+              flexDirection: 'column',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+              pointerEvents: 'auto'
             }}
             className="glass-card"
           >

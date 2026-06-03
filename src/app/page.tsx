@@ -66,16 +66,15 @@ export default function LandingPage() {
             </Link>
           </motion.div>
 
-          {/* Stats */}
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center', gap: '24px 48px', marginTop: 60, flexWrap: 'wrap' }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(20px, 5vw, 48px)', marginTop: 60, flexWrap: 'wrap' }}>
             {[
               { val: '10K+', label: 'Profiles Analyzed' },
               { val: '95%', label: 'User Satisfaction' },
               { val: '3x', label: 'More Recruiter Views' },
             ].map((s) => (
-              <div key={s.label} style={{ textAlign: 'center' }}>
-                <div className="gradient-text" style={{ fontSize: 32, fontWeight: 800 }}>{s.val}</div>
-                <div style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginTop: 4 }}>{s.label}</div>
+              <div key={s.label} style={{ textAlign: 'center', minWidth: '120px' }}>
+                <div className="gradient-text" style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 800 }}>{s.val}</div>
+                <div style={{ color: 'rgba(226,232,240,0.4)', fontSize: 'clamp(11px, 2.5vw, 13px)', marginTop: 4 }}>{s.label}</div>
               </div>
             ))}
           </motion.div>

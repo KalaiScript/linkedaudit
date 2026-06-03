@@ -49,29 +49,31 @@ export default function AuditPage() {
 
   // Persistence: Load on mount
   useEffect(() => {
-    const saved = localStorage.getItem('linkhive_audit_draft');
-    if (saved) {
+    const savedDraft = localStorage.getItem('linkhive_audit_draft');
+    const savedProfile = localStorage.getItem('linkhive_profile');
+    
+    if (savedDraft || savedProfile) {
       try {
-        const data = JSON.parse(saved);
+        const data = savedDraft ? JSON.parse(savedDraft) : JSON.parse(savedProfile!);
         /* eslint-disable react-hooks/set-state-in-effect */
         if (data.url) setUrl(data.url);
-        if (data.role) setRole(data.role);
+        if (data.role || data.jobRoleTarget) setRole(data.role || data.jobRoleTarget);
         if (data.industry) setIndustry(data.industry);
-        if (data.level) setLevel(data.level);
+        if (data.level || data.experienceLevel) setLevel(data.level || data.experienceLevel);
         if (data.country) setCountry(data.country);
         if (data.name) setName(data.name);
         if (data.headline) setHeadline(data.headline);
         if (data.about) setAbout(data.about);
         if (data.location) setLocation(data.location);
-        if (data.selectedSkills) setSelectedSkills(data.selectedSkills);
-        if (data.yearsExp) setYearsExp(data.yearsExp);
-        if (data.followers) setFollowers(data.followers);
-        if (data.connections) setConnections(data.connections);
-        if (data.postsPerWeek) setPostsPerWeek(data.postsPerWeek);
-        if (data.avgEngagement) setAvgEngagement(data.avgEngagement);
-        if (data.searchAppearances) setSearchAppearances(data.searchAppearances);
-        if (data.hasPhoto !== undefined) setHasPhoto(data.hasPhoto);
-        if (data.hasBanner !== undefined) setHasBanner(data.hasBanner);
+        if (data.selectedSkills || data.skills) setSelectedSkills(data.selectedSkills || data.skills);
+        if (data.yearsExp || data.yearsOfExperience) setYearsExp(data.yearsExp || data.yearsOfExperience);
+        if (data.followers) setFollowers(data.followers.toString());
+        if (data.connections) setConnections(data.connections.toString());
+        if (data.postsPerWeek) setPostsPerWeek(data.postsPerWeek.toString());
+        if (data.avgEngagement || data.averageEngagement) setAvgEngagement((data.avgEngagement || data.averageEngagement).toString());
+        if (data.searchAppearances) setSearchAppearances(data.searchAppearances.toString());
+        if (data.hasPhoto !== undefined || data.profilePhoto !== undefined) setHasPhoto(data.hasPhoto !== undefined ? data.hasPhoto : data.profilePhoto);
+        if (data.hasBanner !== undefined || data.customBanner !== undefined) setHasBanner(data.hasBanner !== undefined ? data.hasBanner : data.customBanner);
         if (data.creatorMode !== undefined) setCreatorMode(data.creatorMode);
         if (data.customUrl !== undefined) setCustomUrl(data.customUrl);
         if (data.experienceDesc) setExperienceDesc(data.experienceDesc);

@@ -2,7 +2,7 @@
 
 LinkHive is a cutting-edge platform designed to help professionals dominate LinkedIn. Using advanced AI models, LinkHive analyzes your profile, generates viral content, and provides a personalized strategy to build a massive personal brand.
 
-![LinkHive Banner](https://images.unsplash.com/photo-1611926653458-09294b3142bf?auto=format&fit=crop&q=80&w=1200&h=400)
+![LinkHive Banner](https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=1200&h=400)
 
 ## 🚀 Key Features
 
