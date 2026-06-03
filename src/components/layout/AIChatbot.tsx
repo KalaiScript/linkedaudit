@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -8,6 +9,7 @@ interface Message {
 }
 
 export default function AIChatbot() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -41,7 +43,20 @@ export default function AIChatbot() {
 
       const data = await response.json();
       if (data.success) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+        let reply = data.reply;
+        
+        // Check for navigation command
+        const navMatch = reply.match(/\[ACTION:NAVIGATE:(.*?)\]/);
+        if (navMatch) {
+          const path = navMatch[1];
+          router.push(path);
+          // Remove the command from the displayed message
+          reply = reply.replace(navMatch[0], '').trim();
+          // If the message becomes empty, use a default confirmation
+          if (!reply) reply = `Heading over to ${path} now! 🚀`;
+        }
+
+        setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
       } else {
         setMessages(prev => [...prev, { role: 'assistant', content: `Snag: ${data.error || 'The hive is busy. Try again!'} 🐝` }]);
       }
@@ -60,12 +75,18 @@ export default function AIChatbot() {
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
         style={{
-          position: 'fixed', bottom: 24, right: 24, zIndex: 100,
-          width: 60, height: 60, borderRadius: '50%',
+          position: 'fixed', 
+          bottom: 'clamp(16px, 4vw, 24px)', 
+          right: 'clamp(16px, 4vw, 24px)', 
+          zIndex: 9999,
+          width: 'clamp(50px, 12vw, 60px)', 
+          height: 'clamp(50px, 12vw, 60px)', 
+          borderRadius: '50%',
           background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
           border: 'none', cursor: 'pointer',
           boxShadow: '0 10px 25px rgba(245, 158, 11, 0.4)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30
+          display: 'flex', alignItems: 'center', justifyContent: 'center', 
+          fontSize: 'clamp(24px, 6vw, 30px)'
         }}
       >
         {isOpen ? '✕' : '🐝'}
@@ -80,10 +101,10 @@ export default function AIChatbot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
               position: 'fixed', 
-              bottom: 'clamp(80px, 12vh, 100px)', 
-              right: 'clamp(12px, 4vw, 24px)', 
-              zIndex: 100,
-              width: 'min(400px, 92vw)', 
+              bottom: 'clamp(70px, 15vh, 100px)', 
+              right: 'clamp(10px, 4vw, 24px)', 
+              zIndex: 9999,
+              width: 'min(400px, 94vw)', 
               height: 'min(600px, 75vh)',
               display: 'flex', 
               flexDirection: 'column'
@@ -98,7 +119,10 @@ export default function AIChatbot() {
               <div style={{ fontSize: 24 }}>🐝</div>
               <div>
                 <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>HiveMind AI</h4>
-                <p style={{ margin: 0, fontSize: 11, color: '#fbbf24' }}>Online • Expert Assistant</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} className="animate-online" />
+                  <p style={{ margin: 0, fontSize: 11, color: '#fbbf24' }}>Online • Expert Assistant</p>
+                </div>
               </div>
             </div>
 

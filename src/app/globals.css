@@ -270,6 +270,16 @@ body::before {
   }
 }
 
+/* Pulse animation for online indicator */
+@keyframes online-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.animate-online {
+  animation: online-pulse 2s ease-in-out infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

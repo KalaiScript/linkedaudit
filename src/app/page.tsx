@@ -35,8 +35,19 @@ export default function LandingPage() {
         <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24 }}>
-            <span style={{ padding: '8px 20px', borderRadius: 100, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', color: '#a78bfa', fontSize: 13, fontWeight: 600, letterSpacing: 0.5 }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24, display: 'flex', justifyContent: 'center' }}>
+            <span style={{ 
+              padding: '8px 20px', 
+              borderRadius: 100, 
+              background: 'rgba(139,92,246,0.12)', 
+              border: '1px solid rgba(139,92,246,0.25)', 
+              color: '#a78bfa', 
+              fontSize: 'clamp(11px, 3vw, 13px)', 
+              fontWeight: 600, 
+              letterSpacing: 0.5,
+              maxWidth: '90vw',
+              textAlign: 'center'
+            }}>
               ✨ LinkHive: The Future of LinkedIn Growth
             </span>
           </motion.div>

@@ -35,24 +35,24 @@ export function generateAboutSections(role: string, skills: string[], level: str
   return [
     {
       type: 'about', style: 'Executive Summary',
-      content: `🚀 ${level === 'Fresher' ? 'Aspiring' : 'Dedicated'} ${role} with a deep passion for ${industry} innovation. My focus is on leveraging ${topSkill} to solve real-world problems and drive user engagement.\n\n🛠 Technical Arsenal:\n• Languages: ${skills.slice(0, 3).join(', ')}\n• Frameworks: ${skills.slice(3, 6).join(', ')}\n• Tools: Git, Docker, AWS, CI/CD\n\n🎯 What I Bring to the Table:\n- High-quality, maintainable code standards\n- Agile mindset and collaborative spirit\n- Proven ability to learn and adapt to new tech stacks quickly\n\n📫 I'm always open to discussing ${level === 'Fresher' ? 'internships and entry-level roles' : 'innovative projects and leadership opportunities'}. Let's build the future together!`
+      content: `🚀 ${level === 'Fresher' ? 'Aspiring' : 'Dedicated'} ${role} with a deep passion for ${industry} innovation.\n\nMy focus is on leveraging ${topSkill} to solve real-world problems and drive user engagement.\n\n🛠 Technical Arsenal:\n• Languages: ${skills.slice(0, 3).join(', ')}\n• Frameworks: ${skills.slice(3, 6).join(', ')}\n• Tools: Git, Docker, AWS, CI/CD\n\n🎯 What I Bring to the Table:\n- High-quality, maintainable code standards\n- Agile mindset and collaborative spirit\n- Proven ability to learn and adapt to new tech stacks quickly\n\n📫 I'm always open to discussing ${level === 'Fresher' ? 'internships and entry-level roles' : 'innovative projects and leadership opportunities'}. Let's build the future together!`
     },
     {
       type: 'about', style: 'Story-Based',
-      content: `My journey into ${industry} started with a single line of code and an insatiable curiosity about how things work.\n\nToday, as a ${role}, I specialize in ${s}, building solutions that bridge the gap between complex backend logic and seamless user experiences. I don't just write code; I build products that matter.\n\nKey Philosophy:\n✅ Code is for humans, not just machines\n✅ User experience is the ultimate metric of success\n✅ Continuous iteration beats delayed perfection\n\nWhen I'm not coding, you'll find me exploring ${skills[skills.length-1] || 'new tech'} or contributing to open-source projects. Let's connect!`
+      content: `My journey into ${industry} started with a single line of code and an insatiable curiosity about how things work.\n\nToday, as a ${role}, I specialize in ${s}, building solutions that bridge the gap between complex backend logic and seamless user experiences.\n\nI don't just write code; I build products that matter.\n\nKey Philosophy:\n✅ Code is for humans, not just machines\n✅ User experience is the ultimate metric of success\n✅ Continuous iteration beats delayed perfection\n\nWhen I'm not coding, you'll find me exploring ${skills[skills.length-1] || 'new tech'} or contributing to open-source projects.\n\nLet's connect!`
     },
     {
       type: 'about', style: 'Value-Focused',
-      content: `I help companies in ${industry} optimize their technical infrastructure and deliver superior digital products.\n\nAs a ${role}, I've focused my career on mastering ${topSkill}. Whether it's architecting a new system or refactoring legacy code, my goal is always the same: efficiency, scalability, and reliability.\n\n📊 Key Highlights:\n- Optimized performance in multiple high-impact projects\n- Integrated modern tech stacks to reduce system latency\n- Collaborated with design teams to improve UI responsiveness\n\nCurrently exploring the intersection of ${skills[0]} and AI. Open to networking with fellow ${role}s and industry leaders.`
+      content: `I help companies in ${industry} optimize their technical infrastructure and deliver superior digital products.\n\nAs a ${role}, I've focused my career on mastering ${topSkill}. Whether it's architecting a new system or refactoring legacy code, my goal is always the same: efficiency, scalability, and reliability.\n\n📊 Key Highlights:\n- Optimized performance in multiple high-impact projects\n- Integrated modern tech stacks to reduce system latency\n- Collaborated with design teams to improve UI responsiveness\n\nCurrently exploring the intersection of ${skills[0]} and AI.\n\nOpen to networking with fellow ${role}s and industry leaders.`
     },
     {
       type: 'about', style: 'Modern & Minimal',
-      content: `${role} | ${skills.slice(0, 4).join(' • ')}\n\nPassionate about building clean, efficient, and user-centric applications. \n\nFocus: ${skills[0]}, ${skills[1]}, ${skills[2]}\nInterest: ${industry}, Open Source, Tech Mentorship\n\n"Simplicity is the ultimate sophistication."\n\nLet's connect. 📧`
+      content: `${role} | ${skills.slice(0, 4).join(' • ')}\n\nPassionate about building clean, efficient, and user-centric applications. \n\nFocus: ${skills[0]}, ${skills[1]}, ${skills[2]}\n\nInterest: ${industry}, Open Source, Tech Mentorship\n\n"Simplicity is the ultimate sophistication."\n\nLet's connect. 📧`
     },
   ];
 }
 
-export function generateExperienceRewrites(title: string, compunknown: string, description: string, skills: string[]): ContentRewrite[] {
+export function generateExperienceRewrites(title: string, company: string, description: string, skills: string[]): ContentRewrite[] {
   return [
     {
       type: 'experience', style: 'Impact-Focused',
@@ -84,7 +84,7 @@ export function generatePosts(role: string, skills: string[]): ContentRewrite[] 
     },
     {
       type: 'post', style: 'Thought Leadership',
-      content: `📝 Post: 'Why Every Software Engineer Needs to Understand Cloud Infrastructure in 2025'\n\nThe days of a developer just "writing code" are over. In 2025, the most valuable engineers are those who understand where that code lives and how it scales.\n\nWe're seeing a massive shift towards cloud-native development. If you're a ${role} who doesn't understand VPCs, IAM roles, or container orchestration, you're building on a shaky foundation.\n\nMy experience with AWS has taught me that infrastructure IS part of the application. Optimizing a database query is great, but choosing the right instance type or serverless strategy can save thousands of dollars and prevent critical downtime.\n\nWhere to start your cloud journey:\n🔹 Learn the Big Three: AWS, Azure, or GCP.\n🔹 Master Docker: Containerization is the entry point for modern cloud apps.\n🔹 Understand Serverless: Know when to go FaaS vs. K8s.\n\nI've curated a list of my favorite learning resources for unknownone looking to level up their cloud game this year: [Link]\n\nThe barrier to entry for cloud is high, but the rewards—in terms of salary, impact, and job security—are even higher. Don't get left behind in the "code-only" era.\n\nQuick Poll: Are you cloud-certified or learning cloud now? \n1. Already Certified ✅\n2. Currently Learning 📚\n3. On my roadmap 🗺️\n4. Not interested ❌\n\nLet's discuss! 👇\n\n#CloudNative #AWS #FutureOfTech #LinkHive #SoftwareArchitecture #DevOps #TechTrends #CloudComputing`
+      content: `📝 Post: 'Why Every Software Engineer Needs to Understand Cloud Infrastructure in 2025'\n\nThe days of a developer just "writing code" are over. In 2025, the most valuable engineers are those who understand where that code lives and how it scales.\n\nWe're seeing a massive shift towards cloud-native development. If you're a ${role} who doesn't understand VPCs, IAM roles, or container orchestration, you're building on a shaky foundation.\n\nMy experience with AWS has taught me that infrastructure IS part of the application. Optimizing a database query is great, but choosing the right instance type or serverless strategy can save thousands of dollars and prevent critical downtime.\n\nWhere to start your cloud journey:\n🔹 Learn the Big Three: AWS, Azure, or GCP.\n🔹 Master Docker: Containerization is the entry point for modern cloud apps.\n🔹 Understand Serverless: Know when to go FaaS vs. K8s.\n\nI've curated a list of my favorite learning resources for anyone looking to level up their cloud game this year: [Link]\n\nThe barrier to entry for cloud is high, but the rewards—in terms of salary, impact, and job security—are even higher. Don't get left behind in the "code-only" era.\n\nQuick Poll: Are you cloud-certified or learning cloud now? \n1. Already Certified ✅\n2. Currently Learning 📚\n3. On my roadmap 🗺️\n4. Not interested ❌\n\nLet's discuss! 👇\n\n#CloudNative #AWS #FutureOfTech #LinkHive #SoftwareArchitecture #DevOps #TechTrends #CloudComputing`
     },
   ];
 }
@@ -105,20 +105,20 @@ export function generateViralHooks(role: string, skills: string[]): string[] {
 export function generateAISuggestions(role: string, skills: string[], level: string): ContentRewrite[] {
   return [
     {
-      type: 'about' as unknown, style: 'Profile Strategy',
-      content: `💡 AI Suggestion: Your headline should focus on the *value* you provide, not just your job title. Instead of "${role}", try "Helping companies build ${skills[0] || 'scalable'} solutions as a ${role}". This makes you stand out to recruiters immediately.`
+      type: 'about' as any, style: 'Profile Strategy',
+      content: `Your headline should focus on the *value* you provide, not just your job title. Instead of "${role}", try "Helping companies build ${skills[0] || 'scalable'} solutions as a ${role}". This makes you stand out to recruiters immediately.`
     },
     {
-      type: 'about' as unknown, style: 'Content Strategy',
-      content: `💡 AI Suggestion: You have great expertise in ${skills.slice(0, 2).join(' and ')}. Start sharing weekly insights about these. Engagement increases by 40% when you post consistent, value-driven content rather than just personal updates.`
+      type: 'about' as any, style: 'Content Strategy',
+      content: `You have great expertise in ${skills.slice(0, 2).join(' and ')}. Start sharing weekly insights about these topics. Engagement increases by 40% when you post consistent, value-driven content rather than just personal updates.`
     },
     {
-      type: 'about' as unknown, style: 'Experience Strategy',
-      content: `💡 AI Suggestion: In your experience section, use "Action Verbs" like "Spearheaded", "Architected", and "Optimized". Ensure every bullet point follows the X-Y-Z formula: "Accomplished [X] as measured by [Y], by doing [Z]".`
+      type: 'about' as any, style: 'Experience Strategy',
+      content: `In your experience section, use "Action Verbs" like "Spearheaded", "Architected", and "Optimized". Ensure every bullet point follows the X-Y-Z formula: "Accomplished [X] as measured by [Y], by doing [Z]".`
     },
     {
-      type: 'about' as unknown, style: 'Networking Strategy',
-      content: `💡 AI Suggestion: Since you are a ${level} ${role}, focus on connecting with senior engineers and tech leads in the ${skills[0] || 'tech'} space. Personalized connection requests mentioning their recent work can lead to a 3x higher acceptance rate.`
+      type: 'about' as any, style: 'Networking Strategy',
+      content: `Since you are a ${level} ${role}, focus on connecting with senior engineers and tech leads in the ${skills[0] || 'tech'} space. Personalized connection requests mentioning their recent work can lead to a 3x higher acceptance rate.`
     },
   ];
 }

@@ -15,11 +15,11 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const headlines = aiData?.headlines || [];
-  const abouts = aiData?.abouts || [];
-  const expRewrites = aiData?.experienceRewrites || [];
-  const posts = aiData?.posts || [];
-  const strategyTips = aiData?.strategyTips || [];
+  const headlines =  (aiData as any)?.headlines || [];
+  const abouts =  (aiData as any)?.abouts || [];
+  const expRewrites =  (aiData as any)?.experienceRewrites || [];
+  const posts =  (aiData as any)?.posts || [];
+  const strategyTips =  (aiData as any)?.strategyTips || [];
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -62,7 +62,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
              <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>The AI might still be processing or encountered a formatting issue.</p>
           </div>
         ) : (
-          currentItems.map((item: unknown, i: number) => (
+          currentItems.map((item: any, i: number) => (
             <motion.div
               key={`${activeTab}-${i}`}
               initial={{ opacity: 0, y: 10 }}
@@ -76,10 +76,10 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
                   padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
                   background: 'rgba(139,92,246,0.12)', color: '#c4b5fd',
                 }}>
-                  {item.style || 'Suggested'}
+                  { (item as any).style || 'Suggested'}
                 </span>
                 <button
-                  onClick={() => handleCopy(item.content || item, `${activeTab}-${i}`)}
+                  onClick={() => handleCopy( (item as any).content || item, `${activeTab}-${i}`)}
                   style={{
                     padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
                     background: copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
@@ -91,7 +91,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
                 </button>
               </div>
               <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
-                {item.content || item}
+                { (item as any).content || item}
               </p>
             </motion.div>
           ))

@@ -43,9 +43,7 @@ function DashboardContent() {
   }, [isMounted]);
 
   useEffect(() => {
-    if (isMounted && !profile) {
-      router.push('/audit');
-    }
+    // Missing profile will be handled in the render phase for better UX
   }, [isMounted, profile, router]);
 
   useEffect(() => {
@@ -54,7 +52,7 @@ function DashboardContent() {
         setLoadingAi(true);
         const result = await getFullAIAnalysisAction(profile);
         if (result.success) {
-          setAiAnalysis(result.analysis  as unknown as AuditResult);
+          setAiAnalysis(result.analysis as any);
         } else {
           // Fallback or handle error silently if needed, or show a toast
           console.error("AI Analysis failed:", result.error);
@@ -82,7 +80,8 @@ function DashboardContent() {
 
     const baseResult = analyzeProfile(fullProfile);
     if (aiAnalysis) {
-      const aiData = aiAnalysis  as unknown as AuditResult;
+      // Use any here to map the custom AI response structure to our AuditResult
+      const aiData = aiAnalysis as any;
       return {
         ...baseResult,
         overallScore: aiData.overallScore || baseResult.overallScore,
@@ -98,11 +97,39 @@ function DashboardContent() {
     return baseResult;
   }, [profile, aiAnalysis]);
 
-  if (!isMounted || !result) {
+  if (!isMounted) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
         <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Initializing Dashboard...</h2>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: '#06060e' }}>
+        <Navbar />
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card" style={{ padding: 60, textAlign: 'center', maxWidth: 600 }}>
+          <div style={{ fontSize: 80, marginBottom: 32 }}>🐝</div>
+          <h2 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', marginBottom: 16 }}>No Audit Data Found</h2>
+          <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 18, lineHeight: 1.6, marginBottom: 40 }}>
+            It looks like you haven&apos;t analyzed your profile yet. Start your free AI audit to unlock your dashboard and growth insights!
+          </p>
+          <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 18, textDecoration: 'none', display: 'inline-block' }}>
+            🚀 Start My AI Audit
+          </Link>
+        </motion.div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Analyzing Profile Data...</h2>
       </div>
     );
   }
@@ -258,7 +285,7 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
 /* AI Suggestions Tab */
 function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
   // Use AI strategy tips if available, otherwise fallback to local suggestions
-  const aiTips = (result  as unknown as AuditResult).aiStrategyTips;
+  const aiTips = (result as any).aiStrategyTips;
   
   const allSuggestions = aiTips 
     ? aiTips.map((tip: { style?: string; title?: string; content?: string; suggested?: string; impact?: 'high' | 'medium' | 'low' }) => ({
