@@ -1,10 +1,14 @@
-export async function callAI(prompt: string, systemPrompt: string = "You are a LinkedIn personal branding expert.") {
+export async function callAI(messages: { role: string; content: string }[], systemPrompt?: string) {
   const apiKey = process.env.OPENAI_API_KEY;
   const apiBase = process.env.OPENAI_API_BASE?.replace(/\/$/, ""); // Remove trailing slash
 
   if (!apiKey || !apiBase) {
     throw new Error("AI API credentials not configured");
   }
+
+  const finalMessages = systemPrompt 
+    ? [{ role: "system", content: systemPrompt }, ...messages]
+    : messages;
 
   const response = await fetch(`${apiBase}/chat/completions`, {
     method: "POST",
@@ -13,11 +17,8 @@ export async function callAI(prompt: string, systemPrompt: string = "You are a L
       "Authorization": `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "deepseek-v4-flash-free", // Confirmed available free model
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt },
-      ],
+      model: process.env.OPENAI_MODEL || "deepseek-v4-flash-free", 
+      messages: finalMessages,
       temperature: 0.7,
     }),
   });

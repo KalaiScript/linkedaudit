@@ -53,6 +53,7 @@ export default function AuditPage() {
     if (saved) {
       try {
         const data = JSON.parse(saved);
+        /* eslint-disable react-hooks/set-state-in-effect */
         if (data.url) setUrl(data.url);
         if (data.role) setRole(data.role);
         if (data.industry) setIndustry(data.industry);
@@ -75,6 +76,7 @@ export default function AuditPage() {
         if (data.customUrl !== undefined) setCustomUrl(data.customUrl);
         if (data.experienceDesc) setExperienceDesc(data.experienceDesc);
         if (data.step) setStep(data.step);
+        /* eslint-enable react-hooks/set-state-in-effect */
       } catch (e) {
         console.error("Failed to load draft", e);
       }
@@ -252,7 +254,7 @@ export default function AuditPage() {
                     <input type="text" className="input-field" placeholder="https://linkedin.com/in/your-username" value={url} onChange={e => setUrl(e.target.value)} />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 32 }}>
+                  <div className="responsive-grid-2" style={{ marginBottom: 32 }}>
                     <div>
                       <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Target Role</label>
                       <select className="select-field" value={role} onChange={e => setRole(e.target.value)}>
@@ -295,12 +297,12 @@ export default function AuditPage() {
                     <span style={{ fontSize: 24 }}>🐝</span> Professional Identity & Skills
                   </h3>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+                  <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
                     <InputField label="Full Name" value={name} onChange={setName} placeholder="John Doe" />
                     <InputField label="Current Location" value={location} onChange={setLocation} placeholder="City, Country" />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20, marginBottom: 20 }}>
+                  <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
                     <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React • Node.js" />
                     <InputField label="Years of Experience" value={yearsExp} onChange={setYearsExp} placeholder={isFresher ? '0' : '3'} type="number" />
                   </div>
@@ -370,12 +372,12 @@ export default function AuditPage() {
                     <span style={{ fontSize: 24 }}>🐝</span> Your LinkedIn activity
                   </h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
+                  <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
                     <InputField label="Followers" value={followers} onChange={setFollowers} placeholder="2500" type="number" />
                     <InputField label="Connections" value={connections} onChange={setConnections} placeholder="500+" type="number" />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 20 }}>
+                  <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
                     <InputField label="Posts per Week" value={postsPerWeek} onChange={setPostsPerWeek} placeholder="2" type="number" />
                     <InputField label="Avg Engagement" value={avgEngagement} onChange={setAvgEngagement} placeholder="45" type="number" />
                   </div>

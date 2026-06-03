@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐝 LinkHive: AI-Powered LinkedIn Audit & Growth Suite
 
-## Getting Started
+LinkHive is a cutting-edge platform designed to help professionals dominate LinkedIn. Using advanced AI models, LinkHive analyzes your profile, generates viral content, and provides a personalized strategy to build a massive personal brand.
 
-First, run the development server:
+![LinkHive Banner](https://images.unsplash.com/photo-1611926653458-09294b3142bf?auto=format&fit=crop&q=80&w=1200&h=400)
 
+## 🚀 Key Features
+
+### 📊 AI Profile Audit
+Get a comprehensive 0-100 score for your LinkedIn profile. Our AI evaluates your headline, about section, skills, and activity to provide actionable feedback.
+- **Section-wise Breakdown:** Analysis of Photo, Headline, About, Experience, and SEO.
+- **Recruiter Readiness:** See how you rank in the eyes of hiring managers.
+- **ATS Compatibility:** Ensure your profile is optimized for automated tracking systems.
+
+### ✍️ Viral Post Generator
+Stop the scroll with high-impact LinkedIn content.
+- **Template Library:** Choose from various styles like Personal Stories, Value Tips, or Announcements.
+- **AI Hook Generator:** Get catchy opening lines designed to drive engagement.
+- **AI Assistant:** Improve, rephrase, or shorten your drafts with a single click.
+
+### 📈 Dynamic Dashboard
+Track your progress with a centralized view of your LinkedIn presence.
+- **Radar Charts:** Visualize your strengths and weaknesses across all sections.
+- **7-Day Action Plan:** A daily guide to improving your profile and reach.
+- **Roast Mode 🔥:** Brutally honest feedback to help you identify blind spots.
+
+### 🤖 HiveMind AI Chatbot
+Your 24/7 expert assistant for LinkedIn optimization. Ask anything about career branding, networking, or how to use the platform.
+
+## 📱 Fully Responsive
+LinkHive is built with a mobile-first approach. Whether you're on a desktop or on the go, the experience is seamless and optimized for all screen sizes.
+
+## 🛠️ Tech Stack
+- **Framework:** [Next.js 15+](https://nextjs.org/) (App Router)
+- **Styling:** Tailwind CSS + Framer Motion
+- **AI Integration:** DeepSeek / OpenAI API
+- **Charts:** Chart.js
+- **Animations:** Framer Motion
+
+## ⚙️ Getting Started
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/linkedaudit.git
+cd linkedaudit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure Environment Variables
+Create a `.env.local` file in the root directory:
+```env
+OPENAI_API_KEY=your_api_key
+OPENAI_API_BASE=https://api.your-provider.com/v1
+OPENAI_MODEL=deepseek-chat # Optional, defaults to deepseek-v4-flash-free
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the development server
+```bash
+npm run dev
+```
 
-## Learn More
+## 📸 Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+| Desktop Dashboard | Mobile View | Post Generator |
+| :---: | :---: | :---: |
+| ![Dashboard](https://via.placeholder.com/400x250?text=Dashboard) | ![Mobile](https://via.placeholder.com/150x250?text=Mobile+View) | ![Generator](https://via.placeholder.com/400x250?text=Post+Generator) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 License
+This project is licensed under the MIT License.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Built with 🐝 by the LinkHive Team.

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -9,9 +9,9 @@ import { generateViralHooks } from '@/lib/content-generator';
 
 const templates = [
   { id: 'tips', label: 'Value Tips', content: "💡 5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
-  { id: 'story', label: 'Personal Story', content: "I'll never forget the day [Story Introduction]...\n\nIt taught me that [Key Lesson].\n\nSometimes we need to [Actionable Advice].\n\nHow has your journey been? 👇" },
-  { id: 'announcement', label: 'Announcement', content: "🚀 Big news! I'm excited to share that [Event/Project]...\n\nThis is a huge milestone for [Context].\n\nThank you to [People] for the support!\n\n#BuildingInPublic #Milestone" },
-  { id: 'debate', label: 'Engagement/Debate', content: "Hot Take: [Topic] is overrated. Here's why:\n\n1. [Reason 1]\n2. [Reason 2]\n\nAgree or disagree? Let's discuss in the comments. 🤝" },
+  { id: 'story', label: 'Personal Story', content: "I&apos;ll never forget the day [Story Introduction]...\n\nIt taught me that [Key Lesson].\n\nSometimes we need to [Actionable Advice].\n\nHow has your journey been? 👇" },
+  { id: 'announcement', label: 'Announcement', content: "🚀 Big news! I&apos;m excited to share that [Event/Project]...\n\nThis is a huge milestone for [Context].\n\nThank you to [People] for the support!\n\n#BuildingInPublic #Milestone" },
+  { id: 'debate', label: 'Engagement/Debate', content: "Hot Take: [Topic] is overrated. Here&apos;s why:\n\n1. [Reason 1]\n2. [Reason 2]\n\nAgree or disagree? Let&apos;s discuss in the comments. 🤝" },
 ];
 
 export default function PostGeneratorPage() {
@@ -26,7 +26,9 @@ export default function PostGeneratorPage() {
     const stored = localStorage.getItem('linkhive_profile');
     if (stored) {
       try {
+        /* eslint-disable react-hooks/set-state-in-effect */
         setProfile(JSON.parse(stored));
+        /* eslint-enable react-hooks/set-state-in-effect */
       } catch { }
     }
   }, []);
@@ -97,7 +99,7 @@ export default function PostGeneratorPage() {
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start' }}>
+          <div className="responsive-grid-2" style={{ alignItems: 'start' }}>
             
             {/* Editor Side */}
             <div>
@@ -131,7 +133,7 @@ export default function PostGeneratorPage() {
                       onClick={() => { setPostText(hook + '\n\n' + postText); }}
                       title="Click to add to editor"
                     >
-                      "{hook}"
+                      &quot;{hook}&quot;
                     </motion.div>
                   ))}
                   {profile && hooks.length === 0 && <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 11, textAlign: 'center' }}>Click the button above to generate hooks!</p>}

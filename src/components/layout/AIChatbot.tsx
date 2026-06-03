@@ -43,10 +43,10 @@ export default function AIChatbot() {
       if (data.success) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
       } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I hit a snag. Please try again!' }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: `Snag: ${data.error || 'The hive is busy. Try again!'} 🐝` }]);
       }
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Is the hive offline?' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Check your hive connectivity! 🐝' }]);
     } finally {
       setLoading(false);
     }
@@ -79,9 +79,14 @@ export default function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
-              position: 'fixed', bottom: 100, right: 24, zIndex: 100,
-              width: 'min(400px, 90vw)', height: 'min(600px, 70vh)',
-              display: 'flex', flexDirection: 'column'
+              position: 'fixed', 
+              bottom: 'clamp(80px, 12vh, 100px)', 
+              right: 'clamp(12px, 4vw, 24px)', 
+              zIndex: 100,
+              width: 'min(400px, 92vw)', 
+              height: 'min(600px, 75vh)',
+              display: 'flex', 
+              flexDirection: 'column'
             }}
             className="glass-card"
           >

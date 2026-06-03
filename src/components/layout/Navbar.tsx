@@ -79,10 +79,10 @@ export default function Navbar() {
               marginTop: 16,
             }}
           >
-            <Link href="/#features" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>Features</Link>
-            <Link href="/post-generator" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>Post Generator</Link>
+            <Link href="/#features" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Features</Link>
+            <Link href="/post-generator" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Post Generator</Link>
             
-            <Link href="/audit" onClick={() => setMenuOpen(false)} className="glow-btn" style={{ padding: '10px 24px', fontSize: 14, textDecoration: 'none', textAlign: 'center' }}>
+            <Link href="/audit" onClick={() => setMenuOpen(false)} className="glow-btn" style={{ padding: '14px 24px', fontSize: 16, textDecoration: 'none', textAlign: 'center', marginTop: 8 }}>
               Analyze Profile
             </Link>
           </motion.div>

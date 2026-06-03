@@ -5,7 +5,7 @@ import { LinkedInProfile } from '@/types';
 
 interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
-  aiData?: any;
+  aiData?: unknown;
   loading?: boolean;
 }
 
@@ -62,7 +62,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
              <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>The AI might still be processing or encountered a formatting issue.</p>
           </div>
         ) : (
-          currentItems.map((item: any, i: number) => (
+          currentItems.map((item: unknown, i: number) => (
             <motion.div
               key={`${activeTab}-${i}`}
               initial={{ opacity: 0, y: 10 }}

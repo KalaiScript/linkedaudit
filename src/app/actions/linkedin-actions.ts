@@ -40,7 +40,7 @@ export async function fetchLinkedInProfileAction(url: string): Promise<{ success
         followers: data.follower_count || 0,
         profilePhoto: !!data.profile_pic_url,
         customBanner: !!data.background_cover_image_url,
-        experience: data.experiences?.map((exp: any) => ({
+        experience: data.experiences?.map((exp: { title: string; company: string; starts_at?: { year?: number }; ends_at?: { year?: number }; description?: string }) => ({
           title: exp.title,
           company: exp.company,
           duration: `${exp.starts_at?.year || ''} - ${exp.ends_at?.year || 'Present'}`,
@@ -49,7 +49,7 @@ export async function fetchLinkedInProfileAction(url: string): Promise<{ success
           hasActionVerbs: true
         })) || [],
         skills: data.skills || [],
-        certifications: data.certifications?.map((cert: any) => ({
+        certifications: data.certifications?.map((cert: { name: string; authority: string; starts_at?: { year?: number } }) => ({
           name: cert.name,
           issuer: cert.authority,
           year: cert.starts_at?.year ? cert.starts_at.year.toString() : '2024'
@@ -65,8 +65,9 @@ export async function fetchLinkedInProfileAction(url: string): Promise<{ success
       }
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("LinkedIn Fetch Error:", error);
-    return { success: false, error: error.message };
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, error: message };
   }
 }

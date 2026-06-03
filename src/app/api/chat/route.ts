@@ -13,14 +13,17 @@ export async function POST(req: Request) {
       Keep your answers concise and actionable. Use emojis occasionally (especially 🐝).
     `;
 
-    const chatHistory = history.map((m: any) => `${m.role.toUpperCase()}: ${m.content}`).join('\n');
-    const fullPrompt = `${chatHistory}\nUSER: ${message}\nASSISTANT:`;
+    const messages: { role: 'user' | 'assistant' | 'system'; content: string }[] = [
+      ...history,
+      { role: 'user', content: message }
+    ];
 
-    const reply = await callAI(fullPrompt, systemPrompt);
+    const reply = await callAI(messages, systemPrompt);
 
     return NextResponse.json({ success: true, reply });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Chat API Error:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

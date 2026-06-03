@@ -37,7 +37,7 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
       }
     `;
 
-    const response = await callAI(prompt, "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON.");
+    const response = await callAI([{ role: 'user', content: prompt }], "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON.");
     
     // Attempt to parse JSON from the response
     let analysis;
@@ -51,8 +51,9 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
     }
     
     return { success: true, analysis };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("AI Action Error:", error);
-    return { success: false, error: error.message };
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, error: message };
   }
 }

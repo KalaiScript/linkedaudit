@@ -56,7 +56,7 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Stats */}
-          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center', gap: 48, marginTop: 60, flexWrap: 'wrap' }}>
+          <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center', gap: '24px 48px', marginTop: 60, flexWrap: 'wrap' }}>
             {[
               { val: '10K+', label: 'Profiles Analyzed' },
               { val: '95%', label: 'User Satisfaction' },
@@ -105,7 +105,7 @@ export default function LandingPage() {
           </motion.div>
 
           {steps.map((step, i) => (
-            <motion.div key={i} variants={fadeUp} transition={{ duration: 0.5 }} style={{ display: 'flex', gap: 24, marginBottom: 40, alignItems: 'flex-start' }}>
+            <motion.div key={i} variants={fadeUp} transition={{ duration: 0.5 }} className="responsive-flex" style={{ display: 'flex', gap: 24, marginBottom: 40, alignItems: 'flex-start' }}>
               <div style={{
                 minWidth: 56, height: 56, borderRadius: 14,
                 background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',

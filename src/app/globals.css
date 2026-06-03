@@ -238,6 +238,38 @@ body::before {
   border-color: rgba(245, 158, 11, 0.3);
 }
 
+/* Responsive Grids */
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .responsive-grid-2, .responsive-grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-padding {
+    padding: 80px 16px 40px !important;
+  }
+  
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  .responsive-flex {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
