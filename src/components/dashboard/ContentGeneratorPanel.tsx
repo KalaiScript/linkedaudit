@@ -9,7 +9,7 @@ interface ContentGeneratorPanelProps {
   loading?: boolean;
 }
 
-const tabs = ['Headlines', 'About Section', 'Experience', 'Posts', 'Strategy Tips'];
+const tabs = ['Headlines', 'About Section', 'Experience', 'Posts'];
 
 export default function ContentGeneratorPanel({ profile, aiData, loading }: ContentGeneratorPanelProps) {
   const [activeTab, setActiveTab] = useState(0);
@@ -19,7 +19,6 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
   const abouts =  (aiData as any)?.abouts || [];
   const expRewrites =  (aiData as any)?.experienceRewrites || [];
   const posts =  (aiData as any)?.posts || [];
-  const strategyTips =  (aiData as any)?.strategyTips || [];
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -27,7 +26,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const currentItems = [headlines, abouts, expRewrites, posts, strategyTips][activeTab] || [];
+  const currentItems = [headlines, abouts, expRewrites, posts][activeTab] || [];
 
   return (
     <div>

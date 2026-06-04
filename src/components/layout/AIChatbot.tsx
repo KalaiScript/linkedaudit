@@ -13,7 +13,7 @@ export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I\'m HiveMind 🐝. Ask me anything about LinkedIn optimization, career branding, or how to use LinkHive!' }
+    { role: 'assistant', content: 'Hi! I\'m HiveMind 🐝. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
   ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);

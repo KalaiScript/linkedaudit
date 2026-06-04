@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
 import { fetchLinkedInProfileAction } from '@/app/actions/linkedin-actions';
 
+const userTypes = ['Student', 'Developer', 'Working Professional', 'Other'];
 const roles = ['Software Engineer', 'Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'UI/UX Designer', 'Data Analyst', 'Data Scientist', 'AI/ML Engineer', 'DevOps Engineer', 'Product Manager', 'Mobile Developer', 'Cybersecurity Analyst', 'Cloud Architect', 'QA Engineer', 'Other'];
 const industries = ['Technology', 'Finance', 'Healthcare', 'Education', 'E-commerce', 'Media', 'Consulting', 'Manufacturing', 'Government', 'Startup', 'Other'];
 const levels = ['Fresher', 'Junior (1-2 years)', 'Mid (3-5 years)', 'Senior (5-10 years)', 'Lead/Manager', 'Executive'];
-const countries = ['India', 'United States', 'United Kingdom', 'Canada', 'Germany', 'Australia', 'Singapore', 'UAE', 'Other'];
 const commonSkills = ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js', 'Python', 'Java', 'C++', 'Go', 'Rust', 'Swift', 'Kotlin', 'Flutter', 'React Native', 'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'SQL', 'NoSQL', 'MongoDB', 'PostgreSQL', 'GraphQL', 'REST API', 'Agile', 'DevOps', 'CI/CD', 'Machine Learning', 'Data Science', 'UI/UX', 'Figma'];
 
 export default function AuditPage() {
@@ -20,10 +20,10 @@ export default function AuditPage() {
 
   // Step 1: Target Goals & URL
   const [url, setUrl] = useState('');
+  const [userType, setUserType] = useState('');
   const [role, setRole] = useState('');
   const [industry, setIndustry] = useState('');
   const [level, setLevel] = useState('');
-  const [country, setCountry] = useState('');
 
   // Step 2: Professional Identity
   const [name, setName] = useState('');
@@ -57,10 +57,10 @@ export default function AuditPage() {
         const data = savedDraft ? JSON.parse(savedDraft) : JSON.parse(savedProfile!);
         /* eslint-disable react-hooks/set-state-in-effect */
         if (data.url) setUrl(data.url);
+        if (data.userType) setUserType(data.userType);
         if (data.role || data.jobRoleTarget) setRole(data.role || data.jobRoleTarget);
         if (data.industry) setIndustry(data.industry);
         if (data.level || data.experienceLevel) setLevel(data.level || data.experienceLevel);
-        if (data.country) setCountry(data.country);
         if (data.name) setName(data.name);
         if (data.headline) setHeadline(data.headline);
         if (data.about) setAbout(data.about);
@@ -90,13 +90,13 @@ export default function AuditPage() {
   useEffect(() => {
     if (!isLoaded) return;
     const draft = {
-      url, role, industry, level, country,
+      url, userType, role, industry, level,
       name, headline, about, location, selectedSkills, yearsExp,
       followers, connections, postsPerWeek, avgEngagement, searchAppearances,
       hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step
     };
     localStorage.setItem('linkhive_audit_draft', JSON.stringify(draft));
-  }, [url, role, industry, level, country, name, headline, about, location, selectedSkills, yearsExp, followers, connections, postsPerWeek, avgEngagement, searchAppearances, hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step, isLoaded]);
+  }, [url, userType, role, industry, level, name, headline, about, location, selectedSkills, yearsExp, followers, connections, postsPerWeek, avgEngagement, searchAppearances, hasPhoto, hasBanner, creatorMode, customUrl, experienceDesc, step, isLoaded]);
 
   const handleNext = async () => {
     if (step === 1) {
@@ -152,16 +152,16 @@ export default function AuditPage() {
     const profileData = {
       url: url || 'manual',
       name: name || 'User',
-      headline: headline || `${role} | Tech Enthusiast`,
+      headline: headline || (userType === 'Student' ? `${role} | Tech Enthusiast` : 'Experienced Professional'),
       about: about || '', // AI will generate this if empty
-      location: location || country || 'India',
+      location: location || 'India',
       connections: parseInt(connections) || 500,
       followers: parseInt(followers) || 0,
       profilePhoto: hasPhoto,
       customBanner: hasBanner,
       bannerDescription: 'Professional tech banner',
       experience: isFresher ? [] : [{
-        title: role,
+        title: userType === 'Student' ? role : 'Professional',
         company: 'Your Best Role',
         duration: 'Past - Present',
         description: experienceDesc || '',
@@ -182,10 +182,10 @@ export default function AuditPage() {
       seoKeywords: selectedSkills.slice(0, 5).map(s => s.toLowerCase()),
       contactInfo: true,
       customUrl,
-      jobRoleTarget: role || 'Software Engineer',
+      jobRoleTarget: userType === 'Student' ? role : 'Professional',
       industry: industry || 'Technology',
       experienceLevel: level || 'Mid',
-      country: country || 'India',
+      userType,
       isFresher
     };
 
@@ -197,7 +197,7 @@ export default function AuditPage() {
     }, 1500);
   };
 
-  const isStep1Valid = role && industry && level && country;
+  const isStep1Valid = userType && (userType === 'Student' ? role : true) && industry && level;
   const isStep2Valid = name && headline && selectedSkills.length > 0;
 
   const addCustomSkill = () => {
@@ -219,7 +219,7 @@ export default function AuditPage() {
         >
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 12 }}>
-              Audit Your <span className="gradient-text">LinkHive Profile</span> <span style={{ fontSize: 32 }}>🐝</span>
+              Audit Your <span className="gradient-text">LinkedAudit Profile</span> <span style={{ fontSize: 32 }}>🐝</span>
             </h1>
             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 16 }}>
               {step === 1 ? 'Step 1: Define your target and profile URL' : step === 2 ? 'Step 2: Your professional identity & skills' : 'Step 3: Your LinkedIn activity'}
@@ -258,12 +258,21 @@ export default function AuditPage() {
 
                   <div className="responsive-grid-2" style={{ marginBottom: 32 }}>
                     <div>
-                      <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Target Role</label>
-                      <select className="select-field" value={role} onChange={e => setRole(e.target.value)}>
-                        <option value="">Select Role</option>
-                        {roles.map(r => <option key={r} value={r}>{r}</option>)}
+                      <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>I am a...</label>
+                      <select className="select-field" value={userType} onChange={e => setUserType(e.target.value)}>
+                        <option value="">Select User Type</option>
+                        {userTypes.map(ut => <option key={ut} value={ut}>{ut}</option>)}
                       </select>
                     </div>
+                    {userType === 'Student' && (
+                      <div>
+                        <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Target Role</label>
+                        <select className="select-field" value={role} onChange={e => setRole(e.target.value)}>
+                          <option value="">Select Role</option>
+                          {roles.map(r => <option key={r} value={r}>{r}</option>)}
+                        </select>
+                      </div>
+                    )}
                     <div>
                       <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Industry</label>
                       <select className="select-field" value={industry} onChange={e => setIndustry(e.target.value)}>
@@ -276,13 +285,6 @@ export default function AuditPage() {
                       <select className="select-field" value={level} onChange={e => setLevel(e.target.value)}>
                         <option value="">Select Level</option>
                         {levels.map(l => <option key={l} value={l}>{l}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Country</label>
-                      <select className="select-field" value={country} onChange={e => setCountry(e.target.value)}>
-                        <option value="">Select Country</option>
-                        {countries.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
                   </div>

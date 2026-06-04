@@ -34,7 +34,7 @@ export default function Navbar() {
             🐝
           </div>
           <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0' }}>
-            Link<span style={{ color: '#fbbf24' }}>Hive</span>
+            Linked<span style={{ color: '#fbbf24' }}>Audit</span>
           </span>
         </Link>
 

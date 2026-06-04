@@ -48,7 +48,7 @@ export default function LandingPage() {
               maxWidth: '90vw',
               textAlign: 'center'
             }}>
-              ✨ LinkHive: The Future of LinkedIn Growth
+              ✨ LinkedAudit: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
@@ -57,7 +57,7 @@ export default function LandingPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
-            Generate viral posts, optimize your profile, and build a massive personal brand with LinkHive&apos;s suite of AI tools.
+            Generate viral posts, optimize your profile, and build a massive personal brand with LinkedAudit&apos;s suite of AI tools.
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>

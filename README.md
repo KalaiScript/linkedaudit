@@ -1,8 +1,8 @@
-# 🐝 LinkHive: AI-Powered LinkedIn Audit & Growth Suite
+# 🐝 LinkedAudit: AI-Powered LinkedIn Audit & Growth Suite
 
-LinkHive is a cutting-edge platform designed to help professionals dominate LinkedIn. Using advanced AI models, LinkHive analyzes your profile, generates viral content, and provides a personalized strategy to build a massive personal brand.
+LinkedAudit is a cutting-edge platform designed to help professionals dominate LinkedIn. Using advanced AI models, LinkedAudit analyzes your profile, generates viral content, and provides a personalized strategy to build a massive personal brand.
 
-![LinkHive Banner](https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=1200&h=400)
+![LinkedAudit Banner](https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=1200&h=400)
 
 ## 🚀 Key Features
 
@@ -28,7 +28,7 @@ Track your progress with a centralized view of your LinkedIn presence.
 Your 24/7 expert assistant for LinkedIn optimization. Ask anything about career branding, networking, or how to use the platform.
 
 ## 📱 Fully Responsive
-LinkHive is built with a mobile-first approach. Whether you're on a desktop or on the go, the experience is seamless and optimized for all screen sizes.
+LinkedAudit is built with a mobile-first approach. Whether you're on a desktop or on the go, the experience is seamless and optimized for all screen sizes.
 
 ## 🛠️ Tech Stack
 - **Framework:** [Next.js 15+](https://nextjs.org/) (App Router)
@@ -76,4 +76,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is licensed under the MIT License.
 
 ---
-Built with 🐝 by the LinkHive Team.
+Built with 🐝 by the LinkedAudit Team.

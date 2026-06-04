@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { LinkedInProfile } from '@/types';
 import { generateViralHooks } from '@/lib/content-generator';
+import { generatePostAction } from '@/app/actions/ai-actions';
 
 const templates = [
   { id: 'tips', label: 'Value Tips', content: "💡 5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
@@ -50,6 +51,22 @@ export default function PostGeneratorPage() {
         .replace(/\[People\]/g, 'my mentors and network');
     }
     setPostText(replaced);
+  };
+
+  const handleGeneratePost = async () => {
+    if (!postText.trim()) return;
+    setIsGenerating(true);
+    setActiveAssistant('generating');
+    
+    const result = await generatePostAction(postText, profile);
+    if (result.success && result.content) {
+      setPostText(result.content);
+    } else {
+      alert('Failed to generate post: ' + result.error);
+    }
+    
+    setIsGenerating(false);
+    setActiveAssistant(null);
   };
 
   const runAssistant = (action: string) => {
@@ -143,6 +160,7 @@ export default function PostGeneratorPage() {
 
               <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+                  <button onClick={handleGeneratePost} className="action-pill" disabled={isGenerating} style={{ background: 'rgba(251,191,36,0.15)', borderColor: '#fbbf24', color: '#fbbf24' }}>🚀 Generate with AI</button>
                   <button onClick={() => runAssistant('improve')} className="action-pill" disabled={isGenerating}>✨ Improve</button>
                   <button onClick={() => runAssistant('rephrase')} className="action-pill" disabled={isGenerating}>🔄 Rephrase</button>
                   <button onClick={() => runAssistant('shorten')} className="action-pill" disabled={isGenerating}>📏 Shorten</button>
