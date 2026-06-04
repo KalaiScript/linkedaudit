@@ -219,7 +219,7 @@ export default function AuditPage() {
         >
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 12 }}>
-              Audit Your <span className="gradient-text">LinkedAudit Profile</span> <span style={{ fontSize: 32 }}>🐝</span>
+              Audit Your <span className="gradient-text">LinkedAudit Profile</span>
             </h1>
             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 16 }}>
               {step === 1 ? 'Step 1: Define your target and profile URL' : step === 2 ? 'Step 2: Your professional identity & skills' : 'Step 3: Your LinkedIn activity'}
@@ -243,12 +243,12 @@ export default function AuditPage() {
             </div>
           </div>
 
-          <div className="glass-card" style={{ padding: 40, position: 'relative' }}>
+          <div className="glass-card" style={{ padding: 'clamp(20px, 6vw, 40px)', position: 'relative' }}>
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 24 }}>🐝</span> Target goals & LinkedIn URL
+                    Target goals & LinkedIn URL
                   </h3>
                   
                   <div style={{ marginBottom: 20 }}>
@@ -290,7 +290,7 @@ export default function AuditPage() {
                   </div>
 
                   <button onClick={handleNext} disabled={!isStep1Valid || fetchingMinimal} className="glow-btn" style={{ width: '100%', padding: '16px', fontSize: 17, opacity: isStep1Valid ? 1 : 0.6 }}>
-                    {fetchingMinimal ? '⚡ Pre-filling from LinkedIn...' : 'Next: Professional Identity →'}
+                    {fetchingMinimal ? 'Pre-filling from LinkedIn...' : 'Next: Professional Identity'}
                   </button>
                 </motion.div>
               )}
@@ -298,7 +298,7 @@ export default function AuditPage() {
               {step === 2 && (
                 <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 24 }}>🐝</span> Professional Identity & Skills
+                    Professional Identity & Skills
                   </h3>
                   
                   <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
@@ -307,7 +307,7 @@ export default function AuditPage() {
                   </div>
 
                   <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
-                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React • Node.js" />
+                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React  Node.js" />
                     <InputField label="Years of Experience" value={yearsExp} onChange={setYearsExp} placeholder={isFresher ? '0' : '3'} type="number" />
                   </div>
 
@@ -354,17 +354,17 @@ export default function AuditPage() {
                     {selectedSkills.length > 0 && (
                       <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                         <span style={{ fontSize: 12, color: 'rgba(226,232,240,0.4)', alignSelf: 'center' }}>Selected:</span>
-                        {selectedSkills.map(s => <span key={s} style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>{s} •</span>)}
+                        {selectedSkills.map(s => <span key={s} style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>{s} </span>)}
                       </div>
                     )}
                   </div>
 
                   <div style={{ display: 'flex', gap: 12 }}>
                     <button onClick={handleBack} style={{ flex: '0 0 auto', padding: '14px 24px', borderRadius: 12, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a5b4fc', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
-                      ← Back
+                      Back
                     </button>
                     <button onClick={handleNext} disabled={!isStep2Valid} className="glow-btn" style={{ flex: 1, padding: '14px', fontSize: 16, opacity: isStep2Valid ? 1 : 0.6 }}>
-                      Next: Network & Activity →
+                      Next: Network & Activity
                     </button>
                   </div>
                 </motion.div>
@@ -373,7 +373,7 @@ export default function AuditPage() {
               {step === 3 && (
                 <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 24 }}>🐝</span> Your LinkedIn activity
+                    Your LinkedIn activity
                   </h3>
 
                   <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
@@ -402,10 +402,10 @@ export default function AuditPage() {
 
                   <div style={{ display: 'flex', gap: 12 }}>
                     <button onClick={handleBack} disabled={loading} style={{ flex: '0 0 auto', padding: '14px 24px', borderRadius: 12, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a5b4fc', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
-                      ← Back
+                      Back
                     </button>
                     <button onClick={handleAnalyze} disabled={loading} className="glow-btn" style={{ flex: 1, padding: '14px', fontSize: 16, opacity: loading ? 0.7 : 1 }}>
-                      {loading ? '⚡ Processing with AI...' : '🚀 Start AI Audit'}
+                      {loading ? 'Processing with AI...' : 'Start AI Audit'}
                     </button>
                   </div>
                 </motion.div>

@@ -69,13 +69,13 @@ export default function SectionCard({ section, index, roastMode, roast }: Sectio
           >
             {roastMode && roast && (
               <div style={{ padding: 16, borderRadius: 12, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', marginBottom: 16 }}>
-                <p style={{ color: '#fca5a5', fontSize: 14 }}>🔥 {roast}</p>
+                <p style={{ color: '#fca5a5', fontSize: 14 }}>{roast}</p>
               </div>
             )}
 
             {section.strengths.length > 0 && (
               <div style={{ marginBottom: 16 }}>
-                <h4 style={{ color: '#10b981', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>✅ Strengths</h4>
+                <h4 style={{ color: '#10b981', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Strengths</h4>
                 {section.strengths.map((s, i) => (
                   <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 4, paddingLeft: 16 }}>• {s}</p>
                 ))}
@@ -84,7 +84,7 @@ export default function SectionCard({ section, index, roastMode, roast }: Sectio
 
             {section.weaknesses.length > 0 && (
               <div style={{ marginBottom: 16 }}>
-                <h4 style={{ color: '#ef4444', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>❌ Needs Improvement</h4>
+                <h4 style={{ color: '#ef4444', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Needs Improvement</h4>
                 {section.weaknesses.map((w, i) => (
                   <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 4, paddingLeft: 16 }}>• {w}</p>
                 ))}
@@ -93,7 +93,7 @@ export default function SectionCard({ section, index, roastMode, roast }: Sectio
 
             {section.suggestions.length > 0 && (
               <div>
-                <h4 style={{ color: '#8b5cf6', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>💡 AI Suggestions</h4>
+                <h4 style={{ color: '#8b5cf6', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>AI Suggestions</h4>
                 {section.suggestions.map((sg, i) => (
                   <div key={i} style={{ padding: 14, borderRadius: 10, background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.12)', marginBottom: 10 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -125,7 +125,7 @@ export default function SectionCard({ section, index, roastMode, roast }: Sectio
                             color: copied === i ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
                           }}
                         >
-                          {copied === i ? '✓ Copied!' : '📋 Copy'}
+                          {copied === i ? '✓ Copied!' : 'Copy'}
                         </button>
                       </div>
                     )}

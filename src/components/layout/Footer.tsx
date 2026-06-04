@@ -12,7 +12,7 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, color: 'white' }}>🐝</div>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, color: 'white' }}></div>
               <span style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0' }}>Linked<span style={{ color: '#fbbf24' }}>Audit</span></span>
             </div>            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
               AI-powered LinkedIn profile analyzer and post generator.
@@ -45,7 +45,7 @@ export default function Footer() {
         </div>
         <div style={{ borderTop: '1px solid rgba(99,102,241,0.1)', paddingTop: 24, textAlign: 'center' }}>
           <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13 }}>
-            © 2026 LinkedAudit. Built with AI. All rights reserved.
+             2026 LinkedAudit. Built with AI. All rights reserved.
           </p>
         </div>
       </div>

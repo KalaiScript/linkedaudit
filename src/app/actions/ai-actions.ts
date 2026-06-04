@@ -17,9 +17,12 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
       REQUIREMENTS:
       1. Headlines: 4 diverse styles (160-220 chars). Include one starting with "Aspiring" if they are a student or fresher.
       2. About Section: 3 distinct versions (800-1200 chars). 
-         IMPORTANT: Do NOT return one long paragraph. Use double newlines (\n\n) every 2-3 sentences to create clear, readable spacing between sections.
+         IMPORTANT: Use double newlines (\n\n) every 2-3 sentences.
       3. Strategy: 5 specific high-impact tips.
       4. Roasts: 3 brutal but helpful roasts.
+      5. SEO Analysis: Identify 5 "Essential Keywords" for their role that are MISSING or UNDERUSED in their current profile.
+      6. Recruiter Simulation: Write a 1-sentence internal "Recruiter Verdict" on their profile (e.g., "High potential, but lacks technical depth in About section").
+      7. Emojis: DO NOT use any emojis in any part of the response.
 
       RETURN JSON ONLY:
       {
@@ -33,8 +36,9 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
         "abouts": { "style": string, "content": string }[],
         "experienceRewrites": { "style": string, "content": string }[],
         "posts": { "style": string, "content": string }[],
-        "strategyTips": { "style": string, "content": string }[],
-        "roasts": { "section": string, "roast": string, "emoji": string }[]
+        "seoKeywords": { "keyword": string, "importance": "high" | "medium", "reason": string }[],
+        "recruiterVerdict": string,
+        "roasts": { "section": string, "roast": string }[]
       }
     `;
 
@@ -75,7 +79,7 @@ export async function generatePostAction(topic: string, profile: LinkedInProfile
       3. Structure: Use short sentences, bullet points, and clear spacing (line breaks).
       4. Value: Provide actionable insights or a compelling story.
       5. Tone: Professional yet engaging and authentic.
-      6. Emojis: Use emojis strategically but not excessively.
+      6. Emojis: DO NOT use any emojis.
       7. Hashtags: Include 3-5 relevant hashtags at the end.
 
       The post should feel like it was written by a top 1% LinkedIn creator.

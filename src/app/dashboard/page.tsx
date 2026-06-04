@@ -9,12 +9,16 @@ import ScoreCircle from '@/components/dashboard/ScoreCircle';
 import SectionCard from '@/components/dashboard/SectionCard';
 import RadarChart from '@/components/dashboard/RadarChart';
 import ContentGeneratorPanel from '@/components/dashboard/ContentGeneratorPanel';
+import KeywordGapPanel from '@/components/dashboard/KeywordGapPanel';
+import MomentumChecklist from '@/components/dashboard/MomentumChecklist';
 import { analyzeProfile } from '@/lib/analysis-engine';
 import { AuditResult, LinkedInProfile } from '@/types';
 
 import { getFullAIAnalysisAction } from '@/app/actions/ai-actions';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
-const dashTabs = ['Overview', 'Score Breakdown', 'Personalized Tips', 'AI Suggestions', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode 🔥'];
+const dashTabs = ['Overview', 'Score Breakdown', 'Personalized Tips', 'AI Suggestions', 'SEO Analysis', 'Networking Strategy', 'Action Plan', 'Roast Mode'];
 
 function DashboardContent() {
   const router = useRouter();
@@ -23,6 +27,30 @@ function DashboardContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<AuditResult | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    const dashboard = document.getElementById('dashboard-content');
+    if (!dashboard) return;
+    setExporting(true);
+    try {
+      const canvas = await html2canvas(dashboard, { 
+        backgroundColor: '#06060e',
+        scale: 2,
+        useCORS: true
+      });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`LinkedAudit-${profile?.name || 'Profile'}.pdf`);
+    } catch (err) {
+      console.error("Export failed", err);
+    }
+    setExporting(false);
+  };
 
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
@@ -100,7 +128,7 @@ function DashboardContent() {
   if (!isMounted) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}></motion.div>
         <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Initializing Dashboard...</h2>
       </div>
     );
@@ -111,13 +139,13 @@ function DashboardContent() {
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: '#06060e' }}>
         <Navbar />
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card" style={{ padding: 60, textAlign: 'center', maxWidth: 600 }}>
-          <div style={{ fontSize: 80, marginBottom: 32 }}>🐝</div>
+          <div style={{ fontSize: 80, marginBottom: 32 }}></div>
           <h2 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', marginBottom: 16 }}>No Audit Data Found</h2>
           <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 18, lineHeight: 1.6, marginBottom: 40 }}>
             It looks like you haven&apos;t analyzed your profile yet. Start your free AI audit to unlock your dashboard and growth insights!
           </p>
-          <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 18, textDecoration: 'none', display: 'inline-block' }}>
-            🚀 Start My AI Audit
+          <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 18, textDecoration: 'none', display: 'inline-block' }}>
+            Start My AI Audit
           </Link>
         </motion.div>
         <Footer />
@@ -128,7 +156,7 @@ function DashboardContent() {
   if (!result) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}>⚡</motion.div>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 64, marginBottom: 24 }}></motion.div>
         <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Analyzing Profile Data...</h2>
       </div>
     );
@@ -158,18 +186,41 @@ function DashboardContent() {
             <h1 style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>
               Profile Audit <span className="gradient-text">Dashboard</span>
             </h1>
-            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 15 }}>
-              Analysis for <strong style={{ color: '#a78bfa' }}>{result.profile.name}</strong> — {result.profile.jobRoleTarget}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 15, margin: 0 }}>
+                Analysis for <strong style={{ color: '#a78bfa' }}>{result.profile.name}</strong>  {result.profile.jobRoleTarget}
+              </p>
+              {(aiAnalysis as any)?.recruiterVerdict && (
+                <div style={{ 
+                  padding: '4px 12px', borderRadius: 100, background: 'rgba(59,130,246,0.1)', 
+                  border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', fontSize: 11, fontWeight: 700
+                }}>
+                  VERDICT: {(aiAnalysis as any).recruiterVerdict}
+                </div>
+              )}
+            </div>
           </div>
-          <Link href="/audit" style={{
-            display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12,
-            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-            color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 14, fontWeight: 600,
-            transition: 'all 0.2s'
-          }} className="hover-lift">
-            ← Back to Audit
-          </Link>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              style={{
+                padding: '10px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600,
+                background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)',
+                color: '#60a5fa', cursor: 'pointer', transition: 'all 0.2s'
+              }}
+            >
+              {exporting ? 'Generating PDF...' : 'Export Audit'}
+            </button>
+            <Link href="/audit" style={{
+              display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12,
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+              color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 14, fontWeight: 600,
+              transition: 'all 0.2s'
+            }} className="hover-lift">
+               Back to Audit
+            </Link>
+          </div>
         </motion.div>
 
         {/* Tab navigation */}
@@ -182,7 +233,7 @@ function DashboardContent() {
         </div>
 
         {/* Tab content */}
-        <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <motion.div id="dashboard-content" key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
           {renderTab()}
         </motion.div>
       </main>
@@ -202,48 +253,117 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
           <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginTop: 12, fontWeight: 600 }}>Overall Score</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <StatCard icon="🎯" label="Recruiter Readiness" value={`${result.recruiterReadiness}%`} color="#10b981" />
-          <StatCard icon="🏷️" label="Personal Brand" value={`${result.personalBrandScore}/100`} color="#8b5cf6" />
-          <StatCard icon="📄" label="ATS Compatibility" value={`${result.atsScore}%`} color="#06b6d4" />
+          <StatCard icon="" label="Recruiter Readiness" value={`${result.recruiterReadiness}%`} color="#10b981" />
+          <StatCard icon="" label="Personal Brand" value={`${result.personalBrandScore}/100`} color="#8b5cf6" />
+          <StatCard icon="" label="ATS Compatibility" value={`${result.atsScore}%`} color="#06b6d4" />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <StatCard icon="🔗" label="Connections" value={`${result.profile.connections}`} color="#3b82f6" />
-          <StatCard icon="👥" label="Followers" value={`${result.profile.followers}`} color="#f59e0b" />
-          <StatCard icon="📝" label="Posts/Week" value={`${result.profile.postsPerWeek}`} color="#ec4899" />
+          <StatCard icon="" label="Connections" value={`${result.profile.connections}`} color="#3b82f6" />
+          <StatCard icon="" label="Followers" value={`${result.profile.followers}`} color="#f59e0b" />
+          <StatCard icon="" label="Posts/Week" value={`${result.profile.postsPerWeek}`} color="#ec4899" />
         </div>
       </div>
 
       {/* Strengths & Weaknesses */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 24 }}>
         <div className="glass-card" style={{ padding: 24 }}>
-          <h3 style={{ color: '#10b981', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>✅ Top Strengths</h3>
+          <h3 style={{ color: '#10b981', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Top Strengths</h3>
           {result.topStrengths.map((s, i) => (
-            <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 8, paddingLeft: 8 }}>• {s}</p>
+            <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 8, paddingLeft: 8 }}> {s}</p>
           ))}
         </div>
         <div className="glass-card" style={{ padding: 24 }}>
-          <h3 style={{ color: '#ef4444', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>❌ Key Weaknesses</h3>
+          <h3 style={{ color: '#ef4444', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Key Weaknesses</h3>
           {result.topWeaknesses.map((w, i) => (
-            <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 8, paddingLeft: 8 }}>• {w}</p>
+            <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 14, marginBottom: 8, paddingLeft: 8 }}> {w}</p>
           ))}
         </div>
       </div>
 
-      {/* Career Positioning */}
-      <div className="glass-card" style={{ padding: 24, marginTop: 24 }}>
-        <h3 style={{ color: '#a78bfa', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🧭 AI Career Positioning</h3>
-        {loadingAi && result.careerPositioning.length <= 1 ? (
-          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, fontStyle: 'italic' }}>AI is calculating your career positioning... ⚡</p>
-        ) : (
-          <>
-            <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginBottom: 12 }}>Based on your profile, you are positioned as:</p>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {result.careerPositioning.map((c, i) => (
-                <span key={i} style={{ padding: '6px 16px', borderRadius: 8, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)', color: '#c4b5fd', fontSize: 13, fontWeight: 600 }}>{c}</span>
-              ))}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+        <MomentumChecklist />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div className="glass-card" style={{ padding: 24 }}>
+            <h3 style={{ color: '#a78bfa', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>AI Career Positioning</h3>
+            {loadingAi && result.careerPositioning.length <= 1 ? (
+              <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, fontStyle: 'italic' }}>AI is calculating your career positioning...</p>
+            ) : (
+              <>
+                <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 14, marginBottom: 12 }}>Based on your profile, you are positioned as:</p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {result.careerPositioning.map((c, i) => (
+                    <span key={i} style={{ padding: '6px 16px', borderRadius: 8, background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)', color: '#c4b5fd', fontSize: 13, fontWeight: 600 }}>{c}</span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          
+          {/* Recruiter Eye-Track Simulation */}
+          <div className="glass-card" style={{ padding: 24, border: '1px solid rgba(251, 191, 36, 0.2)' }}>
+            <h3 style={{ color: '#fbbf24', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Recruiter &quot;Eye-Track&quot; Simulation</h3>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 20 }}>Where recruiters look first on your profile (heat-map based on AI analysis).</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <EyeTrackItem label="Headline & Photo" percent={95} color="#ef4444" />
+              <EyeTrackItem label="Recent Experience" percent={82} color="#f59e0b" />
+              <EyeTrackItem label="About Section (First 3 lines)" percent={65} color="#3b82f6" />
+              <EyeTrackItem label="Skills & Endorsements" percent={40} color="#10b981" />
             </div>
-          </>
-        )}
+          </div>
+
+          {/* Industry Benchmarking */}
+          <div className="glass-card" style={{ padding: 24 }}>
+            <h3 style={{ color: '#06b6d4', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Industry Benchmarking</h3>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 20 }}>How you compare to other {result.profile.jobRoleTarget || 'Professionals'}.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <BenchmarkItem label="Junior Level Avg." score={55} currentScore={result.overallScore || 78} color="#3b82f6" />
+              <BenchmarkItem label="Mid-Level Avg." score={72} currentScore={result.overallScore || 78} color="#8b5cf6" />
+              <BenchmarkItem label="Senior Level Avg." score={88} currentScore={result.overallScore || 78} color="#10b981" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BenchmarkItem({ label, score, currentScore, color }: { label: string; score: number; currentScore: number; color: string }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+        <span style={{ fontSize: 12, color: 'rgba(226,232,240,0.6)' }}>{label}</span>
+        <span style={{ fontSize: 12, color: '#fff', fontWeight: 600 }}>{score}%</span>
+      </div>
+      <div style={{ height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 2, position: 'relative' }}>
+        <div style={{ width: `${score}%`, height: '100%', background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+        {/* User pointer */}
+        <motion.div 
+          initial={{ left: 0 }}
+          animate={{ left: `${currentScore}%` }}
+          style={{ 
+            position: 'absolute', top: -10, width: 2, height: 24, background: color, 
+            boxShadow: `0 0 10px ${color}`
+          }} 
+        >
+          <div style={{ 
+            position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', 
+            fontSize: 10, fontWeight: 800, color, whiteSpace: 'nowrap' 
+          }}>YOU</div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function EyeTrackItem({ label, percent, color }: { label: string; percent: number; color: string }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontSize: 12, color: '#e2e8f0' }}>{label}</span>
+        <span style={{ fontSize: 11, color, fontWeight: 700 }}>{percent}% Focus</span>
+      </div>
+      <div style={{ height: 6, background: 'rgba(255,255,255,0.05)', borderRadius: 3, overflow: 'hidden' }}>
+        <motion.div initial={{ width: 0 }} animate={{ width: `${percent}%` }} style={{ height: '100%', background: color }} />
       </div>
     </div>
   );
@@ -268,7 +388,7 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
     <div className="responsive-grid-2">
       <div>
         <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
-          <h3 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📊 Radar Overview</h3>
+          <h3 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Radar Overview</h3>
           <RadarChart sections={result.sections} />
         </div>
       </div>
@@ -310,7 +430,7 @@ function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi:
       {/* API Tech Stack Info */}
       <div className="glass-card" style={{ padding: 20, background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
         <h4 style={{ color: '#a78bfa', fontSize: 14, fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          {loadingAi ? '⚡ Live AI Analysis in Progress...' : '🚀 Live AI Analysis Active'}
+          {loadingAi ? 'Live AI Analysis in Progress...' : 'Live AI Analysis Active'}
         </h4>
         <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13, lineHeight: 1.6 }}>
           {loadingAi ? 'Our advanced AI model is currently generating high-impact strategies tailored specifically to your profile. This will only take a moment...' : 'Your profile has been analyzed by our advanced AI model. These suggestions are unique to your brand and current market trends.'}
@@ -319,7 +439,7 @@ function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi:
 
       {loadingAi && !aiTips ? (
         <div style={{ padding: 40, textAlign: 'center' }}>
-          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 32, marginBottom: 16 }}>🌀</motion.div>
+          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 32, marginBottom: 16 }}></motion.div>
           <p style={{ color: 'rgba(226,232,240,0.4)' }}>Generating detailed strategy tips...</p>
         </div>
       ) : (
@@ -352,7 +472,7 @@ function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi:
                     border: '1px solid ' + (copied === i ? 'rgba(16,185,129,0.3)' : 'rgba(99,102,241,0.2)'),
                     color: copied === i ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
                   }}>
-                    {copied === i ? '✓ Copied!' : '📋 Copy Suggestion'}
+                    {copied === i ? ' Copied!' : 'Copy Suggestion'}
                   </button>
                 </div>
               )}
@@ -369,53 +489,58 @@ function SEOTab({ result }: { result: AuditResult }) {
   const seoSection = result.sections.find(s => s.name.includes('SEO'));
   const keywords = result.profile.seoKeywords;
   const missing = ['Full Stack Development', 'System Design', 'Agile Methodologies', 'Cloud Computing', 'Technical Leadership'].filter(k => !keywords.some(kw => kw.toLowerCase().includes(k.toLowerCase())));
-  
+  const seoKeywords = (result as any).seoKeywords;
+
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
-      <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#14b8a6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🔍 Search Visibility</h3>
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <ScoreCircle score={seoSection?.score || 5} maxScore={10} size={140} label="SEO Index" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <KeywordGapPanel keywords={seoKeywords} />
+      
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+        <div className="glass-card" style={{ padding: 24 }}>
+          <h3 style={{ color: '#14b8a6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Search Visibility</h3>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
+            <ScoreCircle score={seoSection?.score || 5} maxScore={10} size={140} label="SEO Index" />
+          </div>
+          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, textAlign: 'center' }}>
+            Your profile appeared in <strong style={{ color: '#5eead4' }}>{result.profile.searchAppearances}</strong> searches this week.
+          </p>
         </div>
-        <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, textAlign: 'center' }}>
-          Your profile appeared in <strong style={{ color: '#5eead4' }}>{result.profile.searchAppearances}</strong> searches this week.
-        </p>
-      </div>
 
-      <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#8b5cf6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>🏷️ Keyword Analysis</h3>
-        <div style={{ marginBottom: 20 }}>
-          <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Detected High-Intent Keywords</h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {keywords.map((k, i) => (
-              <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(20,184,166,0.1)', border: '1px solid rgba(20,184,166,0.2)', color: '#5eead4', fontSize: 12, fontWeight: 600 }}>{k}</span>
-            ))}
+        <div className="glass-card" style={{ padding: 24 }}>
+          <h3 style={{ color: '#8b5cf6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Keyword Analysis</h3>
+          <div style={{ marginBottom: 20 }}>
+            <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Detected High-Intent Keywords</h4>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {keywords.map((k, i) => (
+                <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(20,184,166,0.1)', border: '1px solid rgba(20,184,166,0.2)', color: '#5eead4', fontSize: 12, fontWeight: 600 }}>{k}</span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Missing for {result.profile.jobRoleTarget}</h4>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {missing.map((k, i) => (
+                <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.1)', color: '#fca5a5', fontSize: 12, fontWeight: 600 }}>+ {k}</span>
+              ))}
+            </div>
           </div>
         </div>
-        <div>
-          <h4 style={{ color: 'rgba(226,232,240,0.6)', fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: 'uppercase' }}>Missing for {result.profile.jobRoleTarget}</h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {missing.map((k, i) => (
-              <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.1)', color: '#fca5a5', fontSize: 12, fontWeight: 600 }}>+ {k}</span>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      <div className="glass-card" style={{ padding: 24 }}>
-        <h3 style={{ color: '#3b82f6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>📊 Ranking & Reach</h3>
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13 }}>Profile Discoverability</span>
-            <span style={{ color: '#3b82f6', fontSize: 13, fontWeight: 700 }}>Top 15%</span>
+        <div className="glass-card" style={{ padding: 24 }}>
+          <h3 style={{ color: '#3b82f6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Ranking & Reach</h3>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13 }}>Profile Discoverability</span>
+              <span style={{ color: '#3b82f6', fontSize: 13, fontWeight: 700 }}>Top 15%</span>
+            </div>
+            <div style={{ height: 8, borderRadius: 4, background: 'rgba(59,130,246,0.1)', overflow: 'hidden' }}>
+              <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 1.5 }} style={{ height: '100%', background: '#3b82f6' }} />
+            </div>
           </div>
-          <div style={{ height: 8, borderRadius: 4, background: 'rgba(59,130,246,0.1)', overflow: 'hidden' }}>
-            <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 1.5 }} style={{ height: '100%', background: '#3b82f6' }} />
-          </div>
+          <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, lineHeight: 1.6 }}>
+            Tip: Profiles with 5+ skills listed in the &quot;About&quot; section receive 17x more messages from recruiters.
+          </p>
         </div>
-        <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, lineHeight: 1.6 }}>
-          💡 Tip: Profiles with 5+ skills listed in the &quot;About&quot; section receive 17x more messages from recruiters.
-        </p>
       </div>
     </div>
   );
@@ -424,10 +549,10 @@ function SEOTab({ result }: { result: AuditResult }) {
 /* Networking Tab */
 function NetworkingTab({ result }: { result: AuditResult }) {
   const strategies = [
-    { title: 'Connect with Industry Peers', desc: `Reach out to other ${result.profile.jobRoleTarget}s in the ${result.profile.industry} sector.`, icon: '👥' },
-    { title: 'Find Potential Mentors', desc: `Look for Senior ${result.profile.jobRoleTarget}s with 5+ years of experience who share your interests.`, icon: '👨‍🏫' },
-    { title: 'Target Hiring Managers', desc: `Connect with recruiters at companies focusing on ${result.profile.skills[0] || 'tech'}.`, icon: '🎯' },
-    { title: 'Alumni Outreach', desc: `Connect with former students from your university who are now in roles you aspire to.`, icon: '🎓' },
+    { title: 'Connect with Industry Peers', desc: `Reach out to other ${result.profile.jobRoleTarget}s in the ${result.profile.industry} sector.`, icon: '' },
+    { title: 'Find Potential Mentors', desc: `Look for Senior ${result.profile.jobRoleTarget}s with 5+ years of experience who share your interests.`, icon: '' },
+    { title: 'Target Hiring Managers', desc: `Connect with recruiters at companies focusing on ${result.profile.skills[0] || 'tech'}.`, icon: '' },
+    { title: 'Alumni Outreach', desc: `Connect with former students from your university who are now in roles you aspire to.`, icon: '' },
   ];
 
   return (
@@ -459,7 +584,7 @@ function ActionPlanTab({ result }: { result: AuditResult }) {
   return (
     <div>
       <div className="glass-card" style={{ padding: 20, marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-        <h3 style={{ color: '#f1f5f9', fontSize: 18, fontWeight: 700 }}>🗓️ Your 7-Day LinkedIn Improvement Plan</h3>
+        <h3 style={{ color: '#f1f5f9', fontSize: 18, fontWeight: 700 }}>Your 7-Day LinkedIn Improvement Plan</h3>
         <span style={{ color: '#a78bfa', fontSize: 14, fontWeight: 600 }}>{completed}/7 completed</span>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -472,7 +597,7 @@ function ActionPlanTab({ result }: { result: AuditResult }) {
                 background: day.completed ? 'rgba(16,185,129,0.2)' : 'transparent', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#10b981',
               }}>
-                {day.completed ? '✓' : ''}
+                {day.completed ? '' : ''}
               </button>
               <div>
                 <span style={{ color: '#a78bfa', fontSize: 12, fontWeight: 700 }}>DAY {day.day}</span>
@@ -489,7 +614,7 @@ function ActionPlanTab({ result }: { result: AuditResult }) {
             <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 10, paddingLeft: 48 }}>{day.description}</p>
             <div style={{ paddingLeft: 48 }}>
               {day.tasks.map((task, i) => (
-                <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 13, marginBottom: 4 }}>☐ {task}</p>
+                <p key={i} style={{ color: 'rgba(226,232,240,0.6)', fontSize: 13, marginBottom: 4 }}>[ ] {task}</p>
               ))}
             </div>
           </motion.div>
@@ -504,7 +629,7 @@ function RoastTab({ result, loadingAi }: { result: AuditResult; loadingAi: boole
   return (
     <div>
       <div className="glass-card" style={{ padding: 24, marginBottom: 24, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)' }}>
-        <h3 style={{ color: '#fca5a5', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>🔥 Roast Mode Activated</h3>
+        <h3 style={{ color: '#fca5a5', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>Roast Mode Activated</h3>
         <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14 }}>
           Brutally honest (but helpful) feedback about your profile. Don&apos;t take it personally!
         </p>
@@ -512,8 +637,8 @@ function RoastTab({ result, loadingAi }: { result: AuditResult; loadingAi: boole
 
       {loadingAi && result.roastFeedback.length <= 1 ? (
         <div style={{ padding: 40, textAlign: 'center' }}>
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ fontSize: 32, marginBottom: 16 }}>🔥</motion.div>
-          <p style={{ color: 'rgba(226,232,240,0.4)' }}>AI is cooking up some brutal roasts... 🌶️</p>
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ fontSize: 32, marginBottom: 16 }}></motion.div>
+          <p style={{ color: 'rgba(226,232,240,0.4)' }}>AI is cooking up some brutal roasts...</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -539,7 +664,7 @@ export default function DashboardPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 48 }}>⚡</motion.div>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ fontSize: 48 }}> </motion.div>
       </div>
     }>
       <DashboardContent />

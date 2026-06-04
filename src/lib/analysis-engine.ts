@@ -12,7 +12,7 @@ function analyzePhoto(profile: LinkedInProfile): SectionScore {
     weaknesses.push('No profile photo detected');
     suggestions.push({ type: 'warning', title: 'Add a professional headshot', impact: 'high', category: 'Photo', suggested: 'Use a well-lit photo with a clean background and professional attire' });
   }
-  return { name: 'Profile Photo', score, maxScore: 10, weight: 10, icon: '📸', color: '#8b5cf6', strengths, weaknesses, suggestions };
+  return { name: 'Profile Photo', score, maxScore: 10, weight: 10, icon: '', color: '#8b5cf6', strengths, weaknesses, suggestions };
 }
 
 function analyzeBanner(profile: LinkedInProfile): SectionScore {
@@ -26,7 +26,7 @@ function analyzeBanner(profile: LinkedInProfile): SectionScore {
     weaknesses.push('Default LinkedIn banner detected');
     suggestions.push({ type: 'rewrite', title: 'Create a custom banner', impact: 'high', category: 'Banner', current: 'Default LinkedIn banner', suggested: 'Design a custom banner featuring your role, key skills, and personal brand' });
   }
-  return { name: 'Banner', score, maxScore: 10, weight: 5, icon: '🖼️', color: '#06b6d4', strengths, weaknesses, suggestions };
+  return { name: 'Banner', score, maxScore: 10, weight: 5, icon: '', color: '#06b6d4', strengths, weaknesses, suggestions };
 }
 
 function isHighImpact(h: string): boolean {
@@ -61,10 +61,10 @@ function analyzeHeadline(profile: LinkedInProfile): SectionScore {
   score = Math.min(score, 10);
   
   // Custom suggestion based on current headline and role
-  let suggestedHeadline = `${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')} | Helping companies build impactful solutions through tech innovation 🚀 | ${profile.followers > 0 ? profile.followers + '+ Followers' : 'Building in Public'}`;
+  let suggestedHeadline = `${profile.jobRoleTarget} | ${profile.skills.slice(0, 3).join(' • ')} | Helping companies build impactful solutions through tech innovation | ${profile.followers > 0 ? profile.followers + '+ Followers' : 'Building in Public'}`;
   
   if (profile.jobRoleTarget.toLowerCase().includes('engineer') || profile.jobRoleTarget.toLowerCase().includes('developer')) {
-    suggestedHeadline = `${profile.jobRoleTarget} • ${profile.skills.slice(0, 4).join(' • ')} | Optimizing Scalable Systems & High-Performance Web Apps | 6K+ Reach & Growing 📈`;
+    suggestedHeadline = `${profile.jobRoleTarget} • ${profile.skills.slice(0, 4).join(' • ')} | Optimizing Scalable Systems & High-Performance Web Apps | 6K+ Reach & Growing`;
   }
 
   suggestions.push({
@@ -72,7 +72,7 @@ function analyzeHeadline(profile: LinkedInProfile): SectionScore {
     current: profile.headline,
     suggested: suggestedHeadline
   });
-  return { name: 'Headline', score, maxScore: 10, weight: 15, icon: '✏️', color: '#f59e0b', strengths, weaknesses, suggestions };
+  return { name: 'Headline', score, maxScore: 10, weight: 15, icon: '', color: '#f59e0b', strengths, weaknesses, suggestions };
 }
 
 function analyzeAbout(profile: LinkedInProfile): SectionScore {
@@ -85,28 +85,28 @@ function analyzeAbout(profile: LinkedInProfile): SectionScore {
   else {
     if (a.length > 200) { score += 2; strengths.push('Good length for storytelling'); }
     if (a.length > 500) { score += 2; strengths.push('Comprehensive summary'); }
-    if (a.includes('•') || a.includes('-') || a.includes('✅') || a.includes('🚀')) { score += 2; strengths.push('Uses formatting for readability'); }
-    else { weaknesses.push('Lacks visual formatting (bullets, emojis)'); }
+    if (a.includes('•') || a.includes('-')) { score += 2; strengths.push('Uses formatting for readability'); }
+    else { weaknesses.push('Lacks visual formatting (bullets)'); }
     const achievementWords = ['built', 'led', 'increased', 'reduced', 'achieved', 'launched', 'created', 'developed', 'improved', 'optimized', 'helped'];
     if (achievementWords.some(w => a.toLowerCase().includes(w))) { score += 2; strengths.push('Contains achievement-oriented language'); }
     else { weaknesses.push('Missing achievement-oriented language'); }
   }
   score = Math.min(score, 10);
 
-  const suggestedAbout = `🚀 Passionate ${profile.jobRoleTarget} with expertise in ${profile.skills.slice(0, 3).join(', ')}.
+  const suggestedAbout = `Passionate ${profile.jobRoleTarget} with expertise in ${profile.skills.slice(0, 3).join(', ')}.
 
-💡 What I Do:
+What I Do:
 I specialize in building robust solutions that solve complex technical challenges and deliver business value.
 
-🏆 Key Achievements:
+Key Achievements:
 • Spearheaded development of core features for ${profile.industry} projects
 • Optimized application performance, resulting in improved user engagement
 • Collaborated with cross-functional teams to deliver high-quality codebases
 
-🛠️ Technical Stack:
+Technical Stack:
 ${profile.skills.join(' • ')}
 
-📫 Let's connect and discuss how I can add value to your team!`;
+Let's connect and discuss how I can add value to your team!`;
 
   suggestions.push({
     type: 'rewrite', title: 'High-Impact About Section', impact: 'high', category: 'About',
@@ -114,7 +114,7 @@ ${profile.skills.join(' • ')}
     suggested: suggestedAbout
   });
 
-  return { name: 'About Section', score, maxScore: 10, weight: 15, icon: '📝', color: '#10b981', strengths, weaknesses, suggestions };
+  return { name: 'About Section', score, maxScore: 10, weight: 15, icon: '', color: '#10b981', strengths, weaknesses, suggestions };
 }
 
 function analyzeExperience(profile: LinkedInProfile): SectionScore {
@@ -137,7 +137,7 @@ function analyzeExperience(profile: LinkedInProfile): SectionScore {
     if (exp.some(e => e.description.length > 100)) { score += 1; strengths.push('Detailed descriptions'); }
   }
   score = Math.min(score, 10);
-  return { name: 'Experience', score, maxScore: 10, weight: 20, icon: '💼', color: '#3b82f6', strengths, weaknesses, suggestions };
+  return { name: 'Experience', score, maxScore: 10, weight: 20, icon: '', color: '#3b82f6', strengths, weaknesses, suggestions };
 }
 
 function analyzeSkills(profile: LinkedInProfile): SectionScore {
@@ -153,7 +153,7 @@ function analyzeSkills(profile: LinkedInProfile): SectionScore {
   const hasTrending = trending.filter(t => s.some(sk => sk.toLowerCase() === t.toLowerCase()));
   if (hasTrending.length >= 2) { score += 4; strengths.push(`Has trending skills: ${hasTrending.join(', ')}`); }
   score = Math.min(score, 10);
-  return { name: 'Skills', score, maxScore: 10, weight: 10, icon: '⚡', color: '#ec4899', strengths, weaknesses, suggestions };
+  return { name: 'Skills', score, maxScore: 10, weight: 10, icon: '', color: '#ec4899', strengths, weaknesses, suggestions };
 }
 
 function analyzePosts(profile: LinkedInProfile): SectionScore {
@@ -168,7 +168,7 @@ function analyzePosts(profile: LinkedInProfile): SectionScore {
   else if (profile.averageEngagement >= 20) { score += 1; strengths.push('Good engagement'); }
   if (profile.creatorMode) { score += 1; strengths.push('Creator mode enabled'); }
   score = Math.min(score, 10);
-  return { name: 'Content & Posts', score, maxScore: 10, weight: 10, icon: '📢', color: '#f97316', strengths, weaknesses, suggestions };
+  return { name: 'Content & Posts', score, maxScore: 10, weight: 10, icon: '', color: '#f97316', strengths, weaknesses, suggestions };
 }
 
 function analyzeSEO(profile: LinkedInProfile): SectionScore {
@@ -192,7 +192,7 @@ function analyzeSEO(profile: LinkedInProfile): SectionScore {
   else { weaknesses.push('Low search appearances'); }
 
   score = Math.min(score, 10);
-  return { name: 'SEO & Keywords', score, maxScore: 10, weight: 10, icon: '🔍', color: '#14b8a6', strengths, weaknesses, suggestions };
+  return { name: 'SEO & Keywords', score, maxScore: 10, weight: 10, icon: '', color: '#14b8a6', strengths, weaknesses, suggestions };
 }
 
 function analyzeEngagement(profile: LinkedInProfile): SectionScore {
@@ -206,7 +206,7 @@ function analyzeEngagement(profile: LinkedInProfile): SectionScore {
   else if (profile.followers >= 1000) { score += 1; strengths.push('Growing following (1K+)'); }
   if (profile.recommendations >= 5) { score += 1; strengths.push('Highly recommended'); }
   score = Math.min(score, 10);
-  return { name: 'Engagement', score, maxScore: 10, weight: 5, icon: '🤝', color: '#a855f7', strengths, weaknesses, suggestions };
+  return { name: 'Engagement', score, maxScore: 10, weight: 5, icon: '', color: '#a855f7', strengths, weaknesses, suggestions };
 }
 
 function generateActionPlan(sections: SectionScore[]): ActionPlanDay[] {
@@ -224,12 +224,12 @@ function generateActionPlan(sections: SectionScore[]): ActionPlanDay[] {
 
 function generateRoasts(profile: LinkedInProfile, sections: SectionScore[]): RoastItem[] {
   const roasts: RoastItem[] = [];
-  if (profile.followers > 5000) roasts.push({ section: 'Success', roast: "With this many followers, why are you even using this tool? You're practically an influencer.", emoji: '💅' });
-  else if (profile.connections < 200) roasts.push({ section: 'Network', roast: "Only 200 connections? Are you using LinkedIn or a private group chat?", emoji: '👵' });
+  if (profile.followers > 5000) roasts.push({ section: 'Success', roast: "With this many followers, why are you even using this tool? You're practically an influencer.", emoji: '' });
+  else if (profile.connections < 200) roasts.push({ section: 'Network', roast: "Only 200 connections? Are you using LinkedIn or a private group chat?", emoji: '' });
   
-  if (profile.headline.length > 150) roasts.push({ section: 'Headline', roast: "Your headline is long enough to be a short story. Chill with the keywords.", emoji: '📜' });
+  if (profile.headline.length > 150) roasts.push({ section: 'Headline', roast: "Your headline is long enough to be a short story. Chill with the keywords.", emoji: '' });
   
-  if (roasts.length === 0) roasts.push({ section: 'Overall', roast: "Your profile is dangerously close to being perfect. I'm bored.", emoji: '😴' });
+  if (roasts.length === 0) roasts.push({ section: 'Overall', roast: "Your profile is dangerously close to being perfect. I'm bored.", emoji: '' });
   return roasts;
 }
 

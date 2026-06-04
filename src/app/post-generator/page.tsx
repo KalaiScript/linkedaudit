@@ -9,10 +9,10 @@ import { generateViralHooks } from '@/lib/content-generator';
 import { generatePostAction } from '@/app/actions/ai-actions';
 
 const templates = [
-  { id: 'tips', label: 'Value Tips', content: "💡 5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
-  { id: 'story', label: 'Personal Story', content: "I&apos;ll never forget the day [Story Introduction]...\n\nIt taught me that [Key Lesson].\n\nSometimes we need to [Actionable Advice].\n\nHow has your journey been? 👇" },
-  { id: 'announcement', label: 'Announcement', content: "🚀 Big news! I&apos;m excited to share that [Event/Project]...\n\nThis is a huge milestone for [Context].\n\nThank you to [People] for the support!\n\n#BuildingInPublic #Milestone" },
-  { id: 'debate', label: 'Engagement/Debate', content: "Hot Take: [Topic] is overrated. Here&apos;s why:\n\n1. [Reason 1]\n2. [Reason 2]\n\nAgree or disagree? Let&apos;s discuss in the comments. 🤝" },
+  { id: 'tips', label: 'Value Tips', content: "5 things I wish I knew when starting [Topic]...\n\n1. [Point 1]\n2. [Point 2]\n3. [Point 3]\n\nConsistency is key. What would you add?\n\n#Career #Tips #Growth" },
+  { id: 'story', label: 'Personal Story', content: "I&apos;ll never forget the day [Story Introduction]...\n\nIt taught me that [Key Lesson].\n\nSometimes we need to [Actionable Advice].\n\nHow has your journey been?" },
+  { id: 'announcement', label: 'Announcement', content: "Big news! I&apos;m excited to share that [Event/Project]...\n\nThis is a huge milestone for [Context].\n\nThank you to [People] for the support!\n\n#BuildingInPublic #Milestone" },
+  { id: 'debate', label: 'Engagement/Debate', content: "Hot Take: [Topic] is overrated. Here&apos;s why:\n\n1. [Reason 1]\n2. [Reason 2]\n\nAgree or disagree? Let&apos;s discuss in the comments." },
 ];
 
 export default function PostGeneratorPage() {
@@ -78,10 +78,10 @@ export default function PostGeneratorPage() {
     setTimeout(() => {
       let newText = postText;
       switch(action) {
-        case 'improve': newText = `✨ Enhanced: ${postText}\n\n(AI refined for maximum clarity and professional impact)`; break;
-        case 'rephrase': newText = `🔄 Rephrased: ${postText.split(' ').reverse().join(' ')}... just kidding! \n\nActually, the AI would rephrase your core message for better flow here.`; break;
+        case 'improve': newText = `Enhanced: ${postText}\n\n(AI refined for maximum clarity and professional impact)`; break;
+        case 'rephrase': newText = `Rephrased: ${postText.split(' ').reverse().join(' ')}... just kidding! \n\nActually, the AI would rephrase your core message for better flow here.`; break;
         case 'shorten': newText = postText.slice(0, Math.floor(postText.length * 0.7)) + "..."; break;
-        case 'emoji': newText = postText + " 🚀 💡 🔥 ✨"; break;
+        case 'emoji': newText = postText + " (AI would normally add emojis here, but they are currently disabled)"; break;
         case 'hashtags': newText = postText + "\n\n#LinkedAudit #ProfessionalGrowth #AI"; break;
       }
       setPostText(newText);
@@ -103,7 +103,7 @@ export default function PostGeneratorPage() {
           
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
             <Link href="/" style={{ color: 'rgba(226,232,240,0.5)', textDecoration: 'none', fontSize: 14, display: 'flex', alignItems: 'center', gap: 4 }}>
-              ← Back to Home
+               Back to Home
             </Link>
           </div>
 
@@ -123,7 +123,7 @@ export default function PostGeneratorPage() {
               {/* Viral Hooks Section */}
               <div className="glass-card" style={{ padding: 24, marginBottom: 24, border: '1px solid rgba(251,191,36,0.1)' }}>
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fbbf24', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  🪝 Viral Hook Generator
+                  Viral Hook Generator
                 </h3>
                 <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 16 }}>
                   Get catchy opening lines to stop the scroll.
@@ -160,11 +160,10 @@ export default function PostGeneratorPage() {
 
               <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-                  <button onClick={handleGeneratePost} className="action-pill" disabled={isGenerating} style={{ background: 'rgba(251,191,36,0.15)', borderColor: '#fbbf24', color: '#fbbf24' }}>🚀 Generate with AI</button>
-                  <button onClick={() => runAssistant('improve')} className="action-pill" disabled={isGenerating}>✨ Improve</button>
-                  <button onClick={() => runAssistant('rephrase')} className="action-pill" disabled={isGenerating}>🔄 Rephrase</button>
-                  <button onClick={() => runAssistant('shorten')} className="action-pill" disabled={isGenerating}>📏 Shorten</button>
-                  <button onClick={() => runAssistant('emoji')} className="action-pill" disabled={isGenerating}>😀 Add Emojis</button>
+                  <button onClick={handleGeneratePost} className="action-pill" disabled={isGenerating} style={{ background: 'rgba(251,191,36,0.15)', borderColor: '#fbbf24', color: '#fbbf24' }}>Generate with AI</button>
+                  <button onClick={() => runAssistant('improve')} className="action-pill" disabled={isGenerating}>Improve</button>
+                  <button onClick={() => runAssistant('rephrase')} className="action-pill" disabled={isGenerating}>Rephrase</button>
+                  <button onClick={() => runAssistant('shorten')} className="action-pill" disabled={isGenerating}>Shorten</button>
                   <button onClick={() => runAssistant('hashtags')} className="action-pill" disabled={isGenerating}># Hashtags</button>
                 </div>
 
@@ -201,7 +200,7 @@ export default function PostGeneratorPage() {
 
                 <div style={{ marginTop: 20 }}>
                   <button onClick={handleCopy} className="glow-btn" style={{ width: '100%', padding: '14px', borderRadius: 10, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                    📋 Copy to Clipboard
+                    Copy to Clipboard
                   </button>
                 </div>
               </div>
@@ -226,8 +225,8 @@ export default function PostGeneratorPage() {
             {/* Preview Side */}
             <div style={{ position: 'sticky', top: 100 }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
-                <button onClick={() => setPreviewMode('desktop')} className={`action-pill ${previewMode === 'desktop' ? 'active' : ''}`}>🖥 Desktop</button>
-                <button onClick={() => setPreviewMode('mobile')} className={`action-pill ${previewMode === 'mobile' ? 'active' : ''}`}>📱 Mobile</button>
+                <button onClick={() => setPreviewMode('desktop')} className={`action-pill ${previewMode === 'desktop' ? 'active' : ''}`}>Desktop</button>
+                <button onClick={() => setPreviewMode('mobile')} className={`action-pill ${previewMode === 'mobile' ? 'active' : ''}`}>Mobile</button>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -249,7 +248,7 @@ export default function PostGeneratorPage() {
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 700, fontSize: 14, color: '#111' }}>{profile?.name || 'User Name'}</div>
                       <div style={{ fontSize: 12, color: '#666', lineHeight: 1.2 }}>{profile?.headline || 'Your Professional Headline'}</div>
-                      <div style={{ fontSize: 12, color: '#666' }}>12h • 🌐</div>
+                      <div style={{ fontSize: 12, color: '#666' }}>12h</div>
                     </div>
                   </div>
 
@@ -261,9 +260,9 @@ export default function PostGeneratorPage() {
                   {/* Mock Stats */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee', fontSize: 12, color: '#666' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      👍 💙 💡 64
+                      64 likes
                     </div>
-                    <div>27 comments • 4 reposts</div>
+                    <div>27 comments  4 reposts</div>
                   </div>
 
                   {/* Mock Actions */}
@@ -288,7 +287,7 @@ export default function PostGeneratorPage() {
           background: rgba(99, 102, 241, 0.1);
           border: 1px solid rgba(99, 102, 241, 0.2);
           color: #a5b4fc;
-          font-size: 13,
+          font-size: 13px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;

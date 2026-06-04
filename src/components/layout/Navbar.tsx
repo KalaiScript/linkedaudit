@@ -31,7 +31,6 @@ export default function Navbar() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 20, fontWeight: 800, color: 'white',
           }}>
-            🐝
           </div>
           <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0' }}>
             Linked<span style={{ color: '#fbbf24' }}>Audit</span>
@@ -58,7 +57,7 @@ export default function Navbar() {
           }}
           aria-label="Toggle menu"
         >
-          {menuOpen ? '✕' : '☰'}
+          {menuOpen ? '' : ''}
         </button>
       </div>
 

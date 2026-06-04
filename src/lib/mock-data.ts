@@ -73,24 +73,24 @@ export const demoProfile: LinkedInProfile = {
 export const strongProfile: LinkedInProfile = {
   url: 'https://linkedin.com/in/sarah-tech-lead',
   name: 'Sarah Chen',
-  headline: 'Senior Full Stack Engineer | React • Node.js • AWS | Building Scalable SaaS Products | Ex-Google',
-  about: `🚀 Passionate software engineer with 6+ years of experience building high-performance web applications that serve millions of users.
+  headline: 'Senior Full Stack Engineer | React  Node.js  AWS | Building Scalable SaaS Products | Ex-Google',
+  about: `Passionate software engineer with 6+ years of experience building high-performance web applications that serve millions of users.
 
 Currently leading a team of 8 engineers at TechCorp, where I architect and develop scalable microservices handling 10M+ daily requests. Previously at Google, I contributed to core infrastructure projects that improved search latency by 23%.
 
-💡 Core Expertise:
-• Frontend: React, Next.js, TypeScript, Vue.js
-• Backend: Node.js, Python, Go, GraphQL
-• Cloud: AWS (Certified Solutions Architect), GCP, Docker, Kubernetes
-• Data: PostgreSQL, MongoDB, Redis, Elasticsearch
+Core Expertise:
+ Frontend: React, Next.js, TypeScript, Vue.js
+ Backend: Node.js, Python, Go, GraphQL
+ Cloud: AWS (Certified Solutions Architect), GCP, Docker, Kubernetes
+ Data: PostgreSQL, MongoDB, Redis, Elasticsearch
 
-🏆 Key Achievements:
-• Led migration to microservices architecture, reducing deployment time by 60%
-• Built real-time analytics dashboard processing 5M events/day
-• Open source contributor with 2,000+ GitHub stars
-• Speaker at ReactConf 2025 and NodeConf EU
+Key Achievements:
+ Led migration to microservices architecture, reducing deployment time by 60%
+ Built real-time analytics dashboard processing 5M events/day
+ Open source contributor with 2,000+ GitHub stars
+ Speaker at ReactConf 2025 and NodeConf EU
 
-📫 Always open to connecting with fellow engineers and discussing technology trends. Let's build something amazing together!`,
+Always open to connecting with fellow engineers and discussing technology trends. Let's build something amazing together!`,
   location: 'San Francisco, CA',
   connections: 2847,
   followers: 5200,

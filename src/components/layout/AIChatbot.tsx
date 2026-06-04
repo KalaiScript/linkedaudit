@@ -13,7 +13,7 @@ export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I\'m HiveMind 🐝. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
+    { role: 'assistant', content: 'Hi! I\'m HiveMind. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
   ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -53,15 +53,15 @@ export default function AIChatbot() {
           // Remove the command from the displayed message
           reply = reply.replace(navMatch[0], '').trim();
           // If the message becomes empty, use a default confirmation
-          if (!reply) reply = `Heading over to ${path} now! 🚀`;
+          if (!reply) reply = `Heading over to ${path} now!`;
         }
 
         setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
       } else {
-        setMessages(prev => [...prev, { role: 'assistant', content: `Snag: ${data.error || 'The hive is busy. Try again!'} 🐝` }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: `Snag: ${data.error || 'The hive is busy. Try again!'} ` }]);
       }
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Check your hive connectivity! 🐝' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Check your hive connectivity!' }]);
     } finally {
       setLoading(false);
     }
@@ -86,10 +86,11 @@ export default function AIChatbot() {
           border: 'none', cursor: 'pointer',
           boxShadow: '0 10px 25px rgba(245, 158, 11, 0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          fontSize: 'clamp(24px, 6vw, 30px)'
+          fontSize: 'clamp(24px, 6vw, 30px)',
+          color: 'white'
         }}
       >
-        {isOpen ? '✕' : '🐝'}
+        {isOpen ? '' : ''}
       </motion.button>
 
       {/* Chat Window */}
@@ -118,12 +119,12 @@ export default function AIChatbot() {
               padding: '16px 20px', borderBottom: '1px solid rgba(251, 191, 36, 0.2)',
               display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(251, 191, 36, 0.05)'
             }}>
-              <div style={{ fontSize: 24 }}>🐝</div>
+              <div style={{ fontSize: 24 }}></div>
               <div>
                 <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>HiveMind AI</h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} className="animate-online" />
-                  <p style={{ margin: 0, fontSize: 11, color: '#fbbf24' }}>Online • Expert Assistant</p>
+                  <p style={{ margin: 0, fontSize: 11, color: '#fbbf24' }}>Online  Expert Assistant</p>
                 </div>
               </div>
             </div>
@@ -173,10 +174,10 @@ export default function AIChatbot() {
                   style={{
                     background: '#fbbf24', border: 'none', borderRadius: 8,
                     width: 40, height: 40, cursor: 'pointer', display: 'flex',
-                    alignItems: 'center', justifyContent: 'center'
+                    alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold'
                   }}
                 >
-                  🚀
+                  SEND
                 </button>
               </div>
             </div>

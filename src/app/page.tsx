@@ -5,19 +5,19 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
 const features = [
-  { icon: '📊', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
-  { icon: '✏️', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
-  { icon: '🎯', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
-  { icon: '🔍', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
-  { icon: '📄', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
-  { icon: '💡', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
-  { icon: '🔗', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
-  { icon: '🔥', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
+  { icon: '', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
+  { icon: '', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
+  { icon: '', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
+  { icon: '', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
+  { icon: '', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
+  { icon: '', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
+  { icon: '', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
+  { icon: '', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
 ];
 
 const steps = [
   { num: '01', title: 'Enter Your Profile', desc: 'Provide your headline, about section, and career goals directly in our secure auditor.' },
-  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section — photo impact, headline strength, about storytelling, and more.' },
+  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section  photo impact, headline strength, about storytelling, and more.' },
   { num: '03', title: 'Get Your Audit Report', desc: 'Receive scores, suggestions, AI rewrites, and a personalized 7-day action plan.' },
 ];
 
@@ -48,7 +48,7 @@ export default function LandingPage() {
               maxWidth: '90vw',
               textAlign: 'center'
             }}>
-              ✨ LinkedAudit: The Future of LinkedIn Growth
+              LinkedAudit: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
@@ -61,8 +61,8 @@ export default function LandingPage() {
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 17, textDecoration: 'none' }}>
-              🚀 Free Profile Audit
+            <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
+              Free Profile Audit
             </Link>
           </motion.div>
 
@@ -137,7 +137,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }}
-          className="gradient-border" style={{ maxWidth: 700, margin: '0 auto', padding: 60 }}
+          className="gradient-border" style={{ maxWidth: 700, margin: '0 auto', padding: 'clamp(32px, 8vw, 60px)' }}
         >
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 16 }}>
             Ready to Level Up Your LinkedIn?
@@ -145,8 +145,8 @@ export default function LandingPage() {
           <p style={{ color: 'rgba(226,232,240,0.5)', marginBottom: 32, fontSize: 16 }}>
             Join thousands of professionals who have transformed their LinkedIn profiles with AI.
           </p>
-          <Link href="/audit" className="glow-btn" style={{ padding: '16px 48px', fontSize: 17, textDecoration: 'none' }}>
-            🚀 Free Profile Audit
+          <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
+            Free Profile Audit
           </Link>
         </motion.div>
       </section>

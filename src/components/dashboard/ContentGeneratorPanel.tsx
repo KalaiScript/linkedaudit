@@ -41,7 +41,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
 
       <div className="glass-card" style={{ padding: 24, marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'linear-gradient(to right, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.3)' }}>
         <div>
-          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>✍️ Profile Rewrite Suggestions</h3>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>Profile Rewrite Suggestions</h3>
           <p style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>
             {loading ? 'AI is crafting high-impact copy for your profile...' : 'Optimized content for your LinkedIn sections based on your target role and current profile.'}
           </p>
@@ -52,7 +52,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {loading && currentItems.length === 0 ? (
           <div style={{ padding: 60, textAlign: 'center' }}>
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} style={{ fontSize: 48, marginBottom: 20 }}>✍️</motion.div>
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} style={{ fontSize: 48, marginBottom: 20 }}>Edit</motion.div>
             <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 16 }}>AI is writing your {tabs[activeTab]}...</p>
           </div>
         ) : currentItems.length === 0 ? (
@@ -86,7 +86,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
                     color: copied === `${activeTab}-${i}` ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
                   }}
                 >
-                  {copied === `${activeTab}-${i}` ? '✓ Copied!' : '📋 Copy'}
+                  {copied === `${activeTab}-${i}` ? ' Copied!' : 'Copy'}
                 </button>
               </div>
               <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
