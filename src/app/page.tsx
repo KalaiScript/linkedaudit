@@ -31,17 +31,17 @@ export default function LandingPage() {
       {/* HERO */}
       <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px', textAlign: 'center', position: 'relative' }}>
         {/* Glow orbs */}
-        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,102,194,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,65,130,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24, display: 'flex', justifyContent: 'center' }}>
             <span style={{ 
               padding: '8px 20px', 
               borderRadius: 100, 
-              background: 'rgba(139,92,246,0.12)', 
-              border: '1px solid rgba(139,92,246,0.25)', 
-              color: '#a78bfa', 
+              background: 'rgba(10,102,194,0.12)', 
+              border: '1px solid rgba(10,102,194,0.25)', 
+              color: 'var(--accent-blue-light)', 
               fontSize: 'clamp(11px, 3vw, 13px)', 
               fontWeight: 600, 
               letterSpacing: 0.5,
@@ -118,10 +118,10 @@ export default function LandingPage() {
             <motion.div key={i} variants={fadeUp} transition={{ duration: 0.5 }} className="responsive-flex" style={{ display: 'flex', gap: 24, marginBottom: 40, alignItems: 'flex-start' }}>
               <div style={{
                 minWidth: 56, height: 56, borderRadius: 14,
-                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
-                border: '1px solid rgba(99,102,241,0.2)',
+                background: 'rgba(10, 102, 194, 0.1)',
+                border: '1px solid rgba(10, 102, 194, 0.2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, fontWeight: 800, color: '#a78bfa',
+                fontSize: 20, fontWeight: 800, color: 'var(--accent-blue-light)',
               }}>
                 {step.num}
               </div>

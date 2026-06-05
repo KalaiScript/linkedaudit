@@ -26,14 +26,15 @@ export default function Navbar() {
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+            width: 36, height: 36, borderRadius: 8,
+            background: 'var(--accent-blue)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 20, fontWeight: 800, color: 'white',
+            fontSize: 18, fontWeight: 800, color: 'white',
           }}>
+            LA
           </div>
-          <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0' }}>
-            Linked<span style={{ color: '#fbbf24' }}>Audit</span>
+          <span style={{ fontSize: 20, fontWeight: 700, color: '#ffffff' }}>
+            Linked<span style={{ color: 'var(--accent-blue)' }}>Audit</span>
           </span>
         </Link>
 

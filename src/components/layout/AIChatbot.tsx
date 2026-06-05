@@ -13,7 +13,7 @@ export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I\'m HiveMind. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
+    { role: 'assistant', content: 'Hi! I\'m AuditBot. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
   ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -82,15 +82,16 @@ export default function AIChatbot() {
           width: 'clamp(50px, 12vw, 60px)', 
           height: 'clamp(50px, 12vw, 60px)', 
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+          background: 'var(--accent-blue)',
           border: 'none', cursor: 'pointer',
-          boxShadow: '0 10px 25px rgba(245, 158, 11, 0.4)',
+          boxShadow: '0 10px 25px rgba(10, 102, 194, 0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          fontSize: 'clamp(24px, 6vw, 30px)',
+          fontSize: 'clamp(20px, 5vw, 24px)',
+          fontWeight: 'bold',
           color: 'white'
         }}
       >
-        {isOpen ? '' : ''}
+        {isOpen ? '✕' : 'LA'}
       </motion.button>
 
       {/* Chat Window */}
@@ -116,15 +117,18 @@ export default function AIChatbot() {
           >
             {/* Header */}
             <div style={{
-              padding: '16px 20px', borderBottom: '1px solid rgba(251, 191, 36, 0.2)',
-              display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(251, 191, 36, 0.05)'
+              padding: '16px 20px', borderBottom: '1px solid rgba(10, 102, 194, 0.2)',
+              display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(10, 102, 194, 0.05)'
             }}>
-              <div style={{ fontSize: 24 }}></div>
+              <div style={{ 
+                width: 32, height: 32, borderRadius: 6, background: 'var(--accent-blue)', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 'bold', color: 'white' 
+              }}>LA</div>
               <div>
-                <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>HiveMind AI</h4>
+                <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>AuditBot AI</h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} className="animate-online" />
-                  <p style={{ margin: 0, fontSize: 11, color: '#fbbf24' }}>Online  Expert Assistant</p>
+                  <p style={{ margin: 0, fontSize: 11, color: 'var(--accent-blue-light)' }}>Online Career Expert</p>
                 </div>
               </div>
             </div>
@@ -139,8 +143,8 @@ export default function AIChatbot() {
                   alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
                   maxWidth: '85%', padding: '10px 14px', borderRadius: 12,
                   fontSize: 14, lineHeight: 1.5,
-                  background: m.role === 'user' ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(255,255,255,0.05)',
-                  color: m.role === 'user' ? '#06060e' : '#e2e8f0',
+                  background: m.role === 'user' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.05)',
+                  color: m.role === 'user' ? '#ffffff' : '#e2e8f0',
                   border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.1)'
                 }}>
                   {m.content}
@@ -155,16 +159,16 @@ export default function AIChatbot() {
             </div>
 
             {/* Input */}
-            <div style={{ padding: 16, borderTop: '1px solid rgba(251, 191, 36, 0.2)' }}>
+            <div style={{ padding: 16, borderTop: '1px solid rgba(10, 102, 194, 0.2)' }}>
               <div style={{ display: 'flex', gap: 8 }}>
                 <input
                   type="text"
-                  placeholder="Ask HiveMind..."
+                  placeholder="Ask AuditBot..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                   style={{
-                    flex: 1, background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(251, 191, 36, 0.2)',
+                    flex: 1, background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(10, 102, 194, 0.2)',
                     borderRadius: 8, padding: '10px 14px', color: '#fff', fontSize: 14, outline: 'none'
                   }}
                 />
@@ -172,12 +176,12 @@ export default function AIChatbot() {
                   onClick={handleSend}
                   disabled={loading}
                   style={{
-                    background: '#fbbf24', border: 'none', borderRadius: 8,
+                    background: 'var(--accent-blue)', border: 'none', borderRadius: 8,
                     width: 40, height: 40, cursor: 'pointer', display: 'flex',
                     alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold'
                   }}
                 >
-                  SEND
+                  ↑
                 </button>
               </div>
             </div>
