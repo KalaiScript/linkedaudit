@@ -24,7 +24,7 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
       6. Recruiter Simulation: Write a 1-sentence internal "Recruiter Verdict" on their profile (e.g., "High potential, but lacks technical depth in About section").
       7. Emojis: DO NOT use any emojis in any part of the response.
 
-      RETURN JSON ONLY:
+      RETURN JSON ONLY. IMPORTANT: Do NOT include ANY emojis in the generated content (headlines, about sections, roasts, strategy tips, verdict). Use plain text and standard punctuation only.
       {
         "overallScore": number,
         "recruiterReadiness": number,
@@ -38,11 +38,11 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
         "posts": { "style": string, "content": string }[],
         "seoKeywords": { "keyword": string, "importance": "high" | "medium", "reason": string }[],
         "recruiterVerdict": string,
-        "roasts": { "section": string, "roast": string }[]
+        "roasts": { "section": string, "roast": string, "emoji": string }[]
       }
-    `;
+      `;
 
-    const response = await callAI([{ role: 'user', content: prompt }], "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON. Ensure the About section has frequent double-newlines for readability.");
+      const response = await callAI([{ role: 'user', content: prompt }], "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON. Ensure the About section has frequent double-newlines for readability. NEVER use emojis.");
     
     // Attempt to parse JSON from the response
     let analysis;

@@ -307,7 +307,7 @@ export default function AuditPage() {
                   </div>
 
                   <div className="responsive-grid-2" style={{ marginBottom: 20 }}>
-                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React  Node.js" />
+                    <InputField label="Current Headline" value={headline} onChange={setHeadline} placeholder="Senior Software Engineer | React • Node.js" />
                     <InputField label="Years of Experience" value={yearsExp} onChange={setYearsExp} placeholder={isFresher ? '0' : '3'} type="number" />
                   </div>
 
@@ -354,7 +354,7 @@ export default function AuditPage() {
                     {selectedSkills.length > 0 && (
                       <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                         <span style={{ fontSize: 12, color: 'rgba(226,232,240,0.4)', alignSelf: 'center' }}>Selected:</span>
-                        {selectedSkills.map(s => <span key={s} style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>{s} </span>)}
+                        {selectedSkills.map(s => <span key={s} style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>{s} •</span>)}
                       </div>
                     )}
                   </div>
