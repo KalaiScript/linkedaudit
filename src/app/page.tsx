@@ -26,6 +26,23 @@ const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 export default function LandingPage() {
   return (
     <>
+      <div style={{ 
+        background: 'linear-gradient(90deg, var(--accent-blue), var(--accent-blue-light))', 
+        color: 'white', 
+        padding: '8px 24px', 
+        fontSize: 12, 
+        fontWeight: 700, 
+        textAlign: 'center',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        textTransform: 'uppercase',
+        letterSpacing: 1
+      }}>
+        🔥 LIVE: LinkHive users are seeing 3.5x more recruiter profile views this week!
+      </div>
       <Navbar />
 
       {/* HERO */}
@@ -48,7 +65,7 @@ export default function LandingPage() {
               maxWidth: '90vw',
               textAlign: 'center'
             }}>
-              LinkedAudit: The Future of LinkedIn Growth
+              LinkHive: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
@@ -57,12 +74,15 @@ export default function LandingPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
-            Generate viral posts, optimize your profile, and build a massive personal brand with LinkedAudit&apos;s suite of AI tools.
+            Generate viral posts, optimize your profile, and build a massive personal brand with LinkHive&apos;s suite of AI tools.
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
               Free Profile Audit
+            </Link>
+            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
+              Roast My Profile 🔥
             </Link>
           </motion.div>
 
@@ -131,6 +151,34 @@ export default function LandingPage() {
               </div>
             </motion.div>
           ))}
+        </motion.div>
+      </section>
+
+      {/* FEATURED CREATOR */}
+      <section style={{ padding: '80px 24px', maxWidth: 1000, margin: '0 auto' }}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ duration: 0.6 }}
+          className="glass-card" style={{ padding: '40px', display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}
+        >
+          <div style={{ position: 'relative' }}>
+            <img src="/profile.png" alt="Kalaiyarasan" style={{ width: 180, height: 180, borderRadius: 20, objectFit: 'cover', border: '2px solid var(--accent-blue)' }} />
+            <div style={{ position: 'absolute', bottom: -10, right: -10, background: 'var(--accent-blue)', color: 'white', padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>Creator</div>
+          </div>
+          <div style={{ flex: 1, minWidth: 300 }}>
+            <h2 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>Build Your <span className="gradient-text">Personal Brand</span></h2>
+            <p style={{ color: 'rgba(226,232,240,0.6)', fontSize: 16, lineHeight: 1.6, marginBottom: 20 }}>
+              "I built LinkHive to help professionals like you leverage AI for career growth. Your LinkedIn profile is your digital CV—let's make it stand out."
+            </p>
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+              <a href="https://www.linkedin.com/in/kalaiscript/" target="_blank" rel="noopener noreferrer" className="glow-btn" style={{ textDecoration: 'none', padding: '12px 24px', fontSize: 15 }}>
+                Connect with Kalai
+              </a>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ padding: '8px', borderRadius: 8, background: 'rgba(10,102,194,0.1)', color: 'var(--accent-blue-light)' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </section>
 

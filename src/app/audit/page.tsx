@@ -219,7 +219,7 @@ export default function AuditPage() {
         >
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 12 }}>
-              Audit Your <span className="gradient-text">LinkedAudit Profile</span>
+              Audit Your <span className="gradient-text">LinkHive Profile</span>
             </h1>
             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 16 }}>
               {step === 1 ? 'Step 1: Define your target and profile URL' : step === 2 ? 'Step 2: Your professional identity & skills' : 'Step 3: Your LinkedIn activity'}

@@ -13,7 +13,7 @@ export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I\'m AuditBot. Ask me anything about LinkedIn optimization, career branding, or how to use LinkedAudit!' }
+    { role: 'assistant', content: 'Hi! I\'m HiveBot. Ask me anything about LinkedIn optimization, career branding, or how to use LinkHive!' }
   ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -76,22 +76,25 @@ export default function AIChatbot() {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed', 
-          bottom: 'clamp(16px, 4vw, 24px)', 
-          right: 'clamp(16px, 4vw, 24px)', 
-          zIndex: 9999,
-          width: 'clamp(50px, 12vw, 60px)', 
-          height: 'clamp(50px, 12vw, 60px)', 
+          bottom: '20px', 
+          right: '20px', 
+          zIndex: 99999,
+          width: '60px', 
+          height: '60px', 
           borderRadius: '50%',
           background: 'var(--accent-blue)',
           border: 'none', cursor: 'pointer',
           boxShadow: '0 10px 25px rgba(10, 102, 194, 0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', 
-          fontSize: 'clamp(20px, 5vw, 24px)',
-          fontWeight: 'bold',
-          color: 'white'
+          padding: 0,
+          overflow: 'hidden'
         }}
       >
-        {isOpen ? '✕' : 'LA'}
+        {isOpen ? (
+          <span style={{ fontSize: 24, color: 'white', fontWeight: 'bold' }}>✕</span>
+        ) : (
+          <img src="/logo.png" alt="HiveBot" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        )}
       </motion.button>
 
       {/* Chat Window */}
@@ -103,11 +106,11 @@ export default function AIChatbot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
               position: 'fixed', 
-              bottom: 'clamp(80px, 15vh, 100px)', 
-              right: 'clamp(12px, 4vw, 24px)', 
-              zIndex: 9999,
-              width: 'min(400px, 92vw)', 
-              height: 'min(500px, 65vh)',
+              bottom: '90px', 
+              right: '20px', 
+              zIndex: 99999,
+              width: 'min(400px, calc(100vw - 40px))', 
+              height: 'min(600px, calc(100vh - 120px))',
               display: 'flex', 
               flexDirection: 'column',
               boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
@@ -120,12 +123,9 @@ export default function AIChatbot() {
               padding: '16px 20px', borderBottom: '1px solid rgba(10, 102, 194, 0.2)',
               display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(10, 102, 194, 0.05)'
             }}>
-              <div style={{ 
-                width: 32, height: 32, borderRadius: 6, background: 'var(--accent-blue)', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 'bold', color: 'white' 
-              }}>LA</div>
+              <img src="/logo.png" alt="HiveBot Logo" style={{ width: 32, height: 32, borderRadius: 6 }} />
               <div>
-                <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>AuditBot AI</h4>
+                <h4 style={{ margin: 0, fontSize: 15, color: '#f1f5f9' }}>HiveBot AI</h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} className="animate-online" />
                   <p style={{ margin: 0, fontSize: 11, color: 'var(--accent-blue-light)' }}>Online Career Expert</p>
@@ -163,7 +163,7 @@ export default function AIChatbot() {
               <div style={{ display: 'flex', gap: 8 }}>
                 <input
                   type="text"
-                  placeholder="Ask AuditBot..."
+                  placeholder="Ask HiveBot..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}

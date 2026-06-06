@@ -45,7 +45,7 @@ function DashboardContent() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`LinkedAudit-${profile?.name || 'Profile'}.pdf`);
+      pdf.save(`LinkHive-${profile?.name || 'Profile'}.pdf`);
     } catch (err) {
       console.error("Export failed", err);
     }

@@ -82,7 +82,7 @@ export default function PostGeneratorPage() {
         case 'rephrase': newText = `Rephrased: ${postText.split(' ').reverse().join(' ')}... just kidding! \n\nActually, the AI would rephrase your core message for better flow here.`; break;
         case 'shorten': newText = postText.slice(0, Math.floor(postText.length * 0.7)) + "..."; break;
         case 'emoji': newText = postText + " (AI would normally add emojis here, but they are currently disabled)"; break;
-        case 'hashtags': newText = postText + "\n\n#LinkedAudit #ProfessionalGrowth #AI"; break;
+        case 'hashtags': newText = postText + "\n\n#LinkHive #ProfessionalGrowth #AI"; break;
       }
       setPostText(newText);
       setIsGenerating(false);

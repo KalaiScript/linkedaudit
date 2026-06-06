@@ -12,18 +12,19 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, marginBottom: 40 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ 
-                width: 32, height: 32, borderRadius: 8, 
-                background: 'var(--accent-blue)', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                fontSize: 14, fontWeight: 800, color: 'white' 
-              }}>
-                LA
-              </div>
-              <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>Linked<span style={{ color: 'var(--accent-blue)' }}>Audit</span></span>
-            </div>            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
+              <img src="/logo.png" alt="LinkHive Logo" style={{ width: 32, height: 32, borderRadius: 6 }} />
+              <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>Link<span style={{ color: 'var(--accent-blue)' }}>Hive</span></span>
+            </div>
+            <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
               AI-powered LinkedIn profile analyzer and post generator.
             </p>
+            <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <img src="/profile.png" alt="Creator" style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid var(--accent-blue)' }} />
+              <div>
+                <p style={{ fontSize: 12, color: 'rgba(226,232,240,0.5)', margin: 0 }}>Created by</p>
+                <a href="https://www.linkedin.com/in/kalaiscript/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue-light)', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>Kalaiyarasan</a>
+              </div>
+            </div>
           </div>
           <div>
             <h4 style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 600, marginBottom: 16, textTransform: 'uppercase', letterSpacing: 1 }}>Product</h4>
@@ -52,7 +53,7 @@ export default function Footer() {
         </div>
         <div style={{ borderTop: '1px solid rgba(99,102,241,0.1)', paddingTop: 24, textAlign: 'center' }}>
           <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13 }}>
-             2026 LinkedAudit. Built with AI. All rights reserved.
+             2026 LinkHive. Built with AI. All rights reserved.
           </p>
         </div>
       </div>

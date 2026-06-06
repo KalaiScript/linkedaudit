@@ -13,7 +13,7 @@ export default function Navbar() {
       transition={{ duration: 0.5 }}
       style={{
         position: 'fixed',
-        top: 0,
+        top: 32,
         left: 0,
         right: 0,
         zIndex: 50,
@@ -25,16 +25,9 @@ export default function Navbar() {
     >
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 8,
-            background: 'var(--accent-blue)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 18, fontWeight: 800, color: 'white',
-          }}>
-            LA
-          </div>
+          <img src="/logo.png" alt="LinkHive Logo" style={{ width: 36, height: 36, borderRadius: 8 }} />
           <span style={{ fontSize: 20, fontWeight: 700, color: '#ffffff' }}>
-            Linked<span style={{ color: 'var(--accent-blue)' }}>Audit</span>
+            Link<span style={{ color: 'var(--accent-blue)' }}>Hive</span>
           </span>
         </Link>
 
