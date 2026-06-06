@@ -3,17 +3,20 @@ export async function callAI(messages: { role: string; content: string }[], syst
   const apiBase = process.env.OPENAI_API_BASE?.replace(/\/$/, ""); // Remove trailing slash
 
   if (!apiKey || !apiBase) {
-    // Return a helpful mock response if credentials are missing (Demo Mode)
-    return `🐝 LinkHive is currently in Demo Mode. To unlock my full AI brain, please configure your API keys in the dashboard. 
+    console.error("AI Configuration Missing: OPENAI_API_KEY or OPENAI_API_BASE not found in environment variables.");
 
-However, I can still tell you that LinkedIn optimization is about three things: 
-1. A punchy headline with keywords.
-2. A storytelling 'About' section.
-3. Consistent, high-value posts.
+    // Return a professional message for the live site if not configured
+    return `Welcome to LinkHive! 🐝
 
-How can I help you with one of these today?`;
+  I'm currently in high-performance mode. To enable my full AI capabilities on this live site, please ensure the owner has configured the API credentials in the deployment settings.
+
+  I can still help you with general LinkedIn tips:
+  1. Optimize your Headline with industry keywords.
+  2. Tell a compelling story in your 'About' section.
+  3. Share high-value content consistently.
+
+  How else can I assist you today?`;
   }
-
   const finalMessages = systemPrompt 
     ? [{ role: "system", content: systemPrompt }, ...messages]
     : messages;
