@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ReviewsSection from '@/components/layout/ReviewsSection';
 
 const features = [
   { icon: '📊', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
@@ -187,6 +188,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      <ReviewsSection />
       <Footer />
     </>
   );
