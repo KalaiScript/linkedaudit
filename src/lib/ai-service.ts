@@ -3,7 +3,15 @@ export async function callAI(messages: { role: string; content: string }[], syst
   const apiBase = process.env.OPENAI_API_BASE?.replace(/\/$/, ""); // Remove trailing slash
 
   if (!apiKey || !apiBase) {
-    throw new Error("AI API credentials not configured");
+    // Return a helpful mock response if credentials are missing (Demo Mode)
+    return `🐝 LinkHive is currently in Demo Mode. To unlock my full AI brain, please configure your API keys in the dashboard. 
+
+However, I can still tell you that LinkedIn optimization is about three things: 
+1. A punchy headline with keywords.
+2. A storytelling 'About' section.
+3. Consistent, high-value posts.
+
+How can I help you with one of these today?`;
   }
 
   const finalMessages = systemPrompt 

@@ -16,8 +16,8 @@ export function getLetterGrade(score: number): string {
 export function getGradeColor(grade: string): string {
   if (grade.startsWith('A')) return 'text-emerald-400';
   if (grade.startsWith('B')) return 'text-blue-400';
-  if (grade.startsWith('C')) return 'text-yellow-400';
-  if (grade.startsWith('D')) return 'text-orange-400';
+  if (grade.startsWith('C')) return 'text-blue-400';
+  if (grade.startsWith('D')) return 'text-blue-500';
   return 'text-red-400';
 }
 
@@ -25,7 +25,7 @@ export function getScoreColor(score: number, max: number): string {
   const pct = (score / max) * 100;
   if (pct >= 80) return '#10b981';
   if (pct >= 60) return '#3b82f6';
-  if (pct >= 40) return '#f59e0b';
+  if (pct >= 40) return 'var(--accent-blue)';
   return '#ef4444';
 }
 

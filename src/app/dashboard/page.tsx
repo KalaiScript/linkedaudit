@@ -259,7 +259,7 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <StatCard icon="" label="Connections" value={`${result.profile.connections}`} color="#3b82f6" />
-          <StatCard icon="" label="Followers" value={`${result.profile.followers}`} color="#f59e0b" />
+          <StatCard icon="" label="Followers" value={`${result.profile.followers}`} color="#3b82f6" />
           <StatCard icon="" label="Posts/Week" value={`${result.profile.postsPerWeek}`} color="#ec4899" />
         </div>
       </div>
@@ -301,11 +301,11 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
           
           {/* Recruiter Eye-Track Simulation */}
           <div className="glass-card" style={{ padding: 24, border: '1px solid rgba(251, 191, 36, 0.2)' }}>
-            <h3 style={{ color: '#fbbf24', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Recruiter &quot;Eye-Track&quot; Simulation</h3>
+            <h3 style={{ color: '#3b82f6', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Recruiter &quot;Eye-Track&quot; Simulation</h3>
             <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 20 }}>Where recruiters look first on your profile (heat-map based on AI analysis).</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <EyeTrackItem label="Headline & Photo" percent={95} color="#ef4444" />
-              <EyeTrackItem label="Recent Experience" percent={82} color="#f59e0b" />
+              <EyeTrackItem label="Recent Experience" percent={82} color="#3b82f6" />
               <EyeTrackItem label="About Section (First 3 lines)" percent={65} color="#3b82f6" />
               <EyeTrackItem label="Skills & Endorsements" percent={40} color="#10b981" />
             </div>

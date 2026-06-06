@@ -38,7 +38,7 @@ export default function ScoreCircle({ score, maxScore, size = 180, label, showGr
     function getColor(p: number) {
       if (p >= 0.8) return '#10b981';
       if (p >= 0.6) return '#3b82f6';
-      if (p >= 0.4) return '#f59e0b';
+      if (p >= 0.4) return 'var(--accent-blue)';
       return '#ef4444';
     }
 

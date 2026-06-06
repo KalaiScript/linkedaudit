@@ -15,7 +15,7 @@ export default function SectionCard({ section, index, roastMode, roast }: Sectio
   const [copied, setCopied] = useState<number | null>(null);
   const pct = (section.score / section.maxScore) * 100;
 
-  const barColor = pct >= 80 ? '#10b981' : pct >= 60 ? '#3b82f6' : pct >= 40 ? '#f59e0b' : '#ef4444';
+  const barColor = pct >= 80 ? '#10b981' : pct >= 60 ? '#3b82f6' : pct >= 40 ? 'var(--accent-blue)' : '#ef4444';
 
   const handleCopy = (text: string, idx: number) => {
     navigator.clipboard.writeText(text);

@@ -72,7 +72,7 @@ function analyzeHeadline(profile: LinkedInProfile): SectionScore {
     current: profile.headline,
     suggested: suggestedHeadline
   });
-  return { name: 'Headline', score, maxScore: 10, weight: 15, icon: '', color: '#f59e0b', strengths, weaknesses, suggestions };
+  return { name: 'Headline', score, maxScore: 10, weight: 15, icon: '', color: 'var(--accent-blue)', strengths, weaknesses, suggestions };
 }
 
 function analyzeAbout(profile: LinkedInProfile): SectionScore {
@@ -168,7 +168,7 @@ function analyzePosts(profile: LinkedInProfile): SectionScore {
   else if (profile.averageEngagement >= 20) { score += 1; strengths.push('Good engagement'); }
   if (profile.creatorMode) { score += 1; strengths.push('Creator mode enabled'); }
   score = Math.min(score, 10);
-  return { name: 'Content & Posts', score, maxScore: 10, weight: 10, icon: '', color: '#f97316', strengths, weaknesses, suggestions };
+  return { name: 'Content & Posts', score, maxScore: 10, weight: 10, icon: '', color: '#06b6d4', strengths, weaknesses, suggestions };
 }
 
 function analyzeSEO(profile: LinkedInProfile): SectionScore {

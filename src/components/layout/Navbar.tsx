@@ -22,8 +22,8 @@ export default function Navbar() {
     >
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src="/logo.png" alt="LinkHive Logo" style={{ width: 36, height: 36, borderRadius: 8 }} />
-          <span style={{ fontSize: 20, fontWeight: 700, color: '#ffffff' }}>
+          <img src="/logo.png" alt="LinkHive Logo" style={{ width: 'clamp(30px, 8vw, 36px)', height: 'clamp(30px, 8vw, 36px)', borderRadius: 8 }} />
+          <span style={{ fontSize: 'clamp(16px, 5vw, 20px)', fontWeight: 700, color: '#ffffff' }}>
             Link<span style={{ color: 'var(--accent-blue)' }}>Hive</span>
           </span>
         </Link>
@@ -43,12 +43,12 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           className="nav-mobile-btn"
           style={{
-            display: 'none', background: 'none', border: 'none', color: '#e2e8f0',
-            cursor: 'pointer', padding: 8, fontSize: 24,
+            display: 'none', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#e2e8f0',
+            cursor: 'pointer', padding: '8px 12px', fontSize: 20, borderRadius: 8,
           }}
           aria-label="Toggle menu"
         >
-          {menuOpen ? '' : ''}
+          {menuOpen ? '✕' : '☰'}
         </button>
       </div>
 

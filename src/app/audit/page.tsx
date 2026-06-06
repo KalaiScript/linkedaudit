@@ -232,7 +232,7 @@ export default function AuditPage() {
                   width: 36, height: 36, borderRadius: '50%', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
                   fontSize: 14, fontWeight: 700, 
-                  background: step >= s ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(255,255,255,0.05)',
+                  background: step >= s ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light))' : 'rgba(255,255,255,0.05)',
                   border: step >= s ? 'none' : '1px solid rgba(255,255,255,0.1)',
                   color: step >= s ? 'white' : 'rgba(255,255,255,0.3)',
                   transition: 'all 0.3s ease'
@@ -341,7 +341,7 @@ export default function AuditPage() {
                           onClick={() => toggleSkill(skill)}
                           style={{
                             padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                            background: selectedSkills.includes(skill) ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(255,255,255,0.05)',
+                            background: selectedSkills.includes(skill) ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light))' : 'rgba(255,255,255,0.05)',
                             color: selectedSkills.includes(skill) ? 'white' : 'rgba(255,255,255,0.5)',
                             border: '1px solid ' + (selectedSkills.includes(skill) ? 'transparent' : 'rgba(255,255,255,0.1)'),
                             cursor: 'pointer', transition: 'all 0.2s'
@@ -435,7 +435,7 @@ function ToggleField({ label, checked, onChange }: { label: string; checked: boo
         onClick={() => onChange(!checked)}
         style={{
           width: 40, height: 22, borderRadius: 11, padding: 2, cursor: 'pointer', border: 'none',
-          background: checked ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : 'rgba(251,191,36,0.1)',
+          background: checked ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-light))' : 'rgba(10,102,194,0.1)',
           transition: 'all 0.3s', position: 'relative',
         }}
       >

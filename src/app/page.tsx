@@ -29,12 +29,20 @@ export default function LandingPage() {
       <Header />
 
       {/* HERO */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '160px 24px 80px', textAlign: 'center', position: 'relative' }}>
+      <section style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        padding: 'clamp(140px, 15vh, 180px) 24px 80px', 
+        textAlign: 'center', 
+        position: 'relative' 
+      }}>
         {/* Glow orbs */}
-        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,102,194,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,65,130,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '10%', left: '20%', width: 'min(400px, 80vw)', height: 'min(400px, 80vw)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,102,194,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 'min(350px, 70vw)', height: 'min(350px, 70vw)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,65,130,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
-        <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1 }}>
+        <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.15 } } }} style={{ maxWidth: 800, position: 'relative', zIndex: 1, width: '100%' }}>
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ marginBottom: 24, display: 'flex', justifyContent: 'center' }}>
             <span style={{ 
               padding: '8px 20px', 
@@ -42,37 +50,27 @@ export default function LandingPage() {
               background: 'rgba(10,102,194,0.12)', 
               border: '1px solid rgba(10,102,194,0.25)', 
               color: 'var(--accent-blue-light)', 
-              fontSize: 'clamp(11px, 3vw, 13px)', 
+              fontSize: 'clamp(10px, 3vw, 13px)', 
               fontWeight: 600, 
               letterSpacing: 0.5,
-              maxWidth: '90vw',
+              maxWidth: '100%',
               textAlign: 'center'
             }}>
               LinkHive: The Future of LinkedIn Growth
             </span>
           </motion.div>
 
-          <motion.h1 variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 24, color: '#f1f5f9' }}>
+          <motion.h1 variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(32px, 8vw, 72px)', fontWeight: 800, lineHeight: 1.1, marginBottom: 24, color: '#f1f5f9' }}>
             Dominate LinkedIn<br />With <span className="gradient-text">AI Power</span>
           </motion.h1>
 
-          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
+          <motion.p variants={fadeUp} transition={{ duration: 0.6 }} style={{ fontSize: 'clamp(15px, 3.5vw, 20px)', color: 'rgba(226,232,240,0.5)', lineHeight: 1.7, marginBottom: 40, maxWidth: 600, margin: '0 auto 40px' }}>
             Generate viral posts, optimize your profile, and build a massive personal brand with LinkHive&apos;s suite of AI tools.
           </motion.p>
 
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }} style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
               Free Profile Audit
-            </Link>
-            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ 
-              padding: '16px clamp(24px, 5vw, 48px)', 
-              fontSize: 17, 
-              textDecoration: 'none',
-              borderColor: '#f97316',
-              color: '#fb923c',
-              boxShadow: 'inset 0 0 10px rgba(249, 115, 22, 0.1)'
-            }}>
-              Roast My Profile 🔥
             </Link>
           </motion.div>
 

@@ -39,7 +39,7 @@ export default function MomentumChecklist() {
           </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: '#fbbf24' }}>+{totalPoints} XP</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: '#3b82f6' }}>+{totalPoints} XP</div>
           <div style={{ fontSize: 11, color: 'rgba(226,232,240,0.3)', textTransform: 'uppercase' }}>Daily Growth</div>
         </div>
       </div>
@@ -48,7 +48,7 @@ export default function MomentumChecklist() {
       <div style={{ height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 2, marginBottom: 20, overflow: 'hidden' }}>
         <motion.div
           animate={{ width: `${progress}%` }}
-          style={{ height: '100%', background: '#fbbf24' }}
+          style={{ height: '100%', background: '#3b82f6' }}
         />
       </div>
 

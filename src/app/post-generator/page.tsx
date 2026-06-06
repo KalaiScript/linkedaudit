@@ -121,8 +121,8 @@ export default function PostGeneratorPage() {
             {/* Editor Side */}
             <div>
               {/* Viral Hooks Section */}
-              <div className="glass-card" style={{ padding: 24, marginBottom: 24, border: '1px solid rgba(251,191,36,0.1)' }}>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fbbf24', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div className="glass-card" style={{ padding: 24, marginBottom: 24, border: '1px solid rgba(10,102,194,0.1)' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-blue-light)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                   Viral Hook Generator
                 </h3>
                 <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 13, marginBottom: 16 }}>
@@ -132,7 +132,7 @@ export default function PostGeneratorPage() {
                   onClick={handleGenerateHooks} 
                   className="tab-btn" 
                   disabled={!profile}
-                  style={{ width: '100%', marginBottom: 16, background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.2)', color: '#fbbf24' }}
+                  style={{ width: '100%', marginBottom: 16, background: 'rgba(10,102,194,0.1)', borderColor: 'rgba(251,191,36,0.2)', color: 'var(--accent-blue-light)' }}
                 >
                   Generate Hooks
                 </button>
@@ -160,7 +160,7 @@ export default function PostGeneratorPage() {
 
               <div className="glass-card" style={{ padding: 24, marginBottom: 24 }}>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-                  <button onClick={handleGeneratePost} className="action-pill" disabled={isGenerating} style={{ background: 'rgba(251,191,36,0.15)', borderColor: '#fbbf24', color: '#fbbf24' }}>Generate with AI</button>
+                  <button onClick={handleGeneratePost} className="action-pill" disabled={isGenerating} style={{ background: 'rgba(10,102,194,0.2)', borderColor: 'var(--accent-blue)', color: 'var(--accent-blue-light)' }}>Generate with AI</button>
                   <button onClick={() => runAssistant('improve')} className="action-pill" disabled={isGenerating}>Improve</button>
                   <button onClick={() => runAssistant('rephrase')} className="action-pill" disabled={isGenerating}>Rephrase</button>
                   <button onClick={() => runAssistant('shorten')} className="action-pill" disabled={isGenerating}>Shorten</button>
