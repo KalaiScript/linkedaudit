@@ -137,7 +137,7 @@ function DashboardContent() {
   if (!profile) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: '#06060e' }}>
-        <Navbar />
+        <Header />
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card" style={{ padding: 60, textAlign: 'center', maxWidth: 600 }}>
           <div style={{ fontSize: 80, marginBottom: 32 }}></div>
           <h2 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', marginBottom: 16 }}>No Audit Data Found</h2>
