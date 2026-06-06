@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import Navbar from '@/components/layout/Navbar';
+import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ScoreCircle from '@/components/dashboard/ScoreCircle';
 import SectionCard from '@/components/dashboard/SectionCard';
@@ -178,8 +178,8 @@ function DashboardContent() {
 
   return (
     <>
-      <Navbar />
-      <main style={{ minHeight: '100vh', padding: '100px 24px 60px', maxWidth: 1200, margin: '0 auto' }}>
+      <Header />
+      <main style={{ minHeight: '100vh', padding: '160px 24px 60px', maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 20 }}>
           <div>

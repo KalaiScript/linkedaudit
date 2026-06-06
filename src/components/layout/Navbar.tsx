@@ -12,10 +12,7 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
       style={{
-        position: 'fixed',
-        top: 32,
-        left: 0,
-        right: 0,
+        position: 'relative',
         zIndex: 50,
         padding: '16px 24px',
         background: 'rgba(6, 6, 14, 0.7)',

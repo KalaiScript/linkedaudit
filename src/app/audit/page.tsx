@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/layout/Navbar';
+import Header from '@/components/layout/Header';
 import { fetchLinkedInProfileAction } from '@/app/actions/linkedin-actions';
 
 const userTypes = ['Student', 'Developer', 'Working Professional', 'Other'];
@@ -209,8 +209,8 @@ export default function AuditPage() {
 
   return (
     <>
-      <Navbar />
-      <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
+      <Header />
+      <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '160px 24px 80px' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

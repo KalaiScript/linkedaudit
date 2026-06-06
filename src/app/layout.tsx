@@ -18,8 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="noise-overlay" />
         <div className="page-content">
           {children}
-          <AIChatbot />
         </div>
+        <AIChatbot />
       </body>
     </html>
   );

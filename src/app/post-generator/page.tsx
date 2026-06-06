@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/layout/Navbar';
+import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { LinkedInProfile } from '@/types';
@@ -97,8 +97,8 @@ export default function PostGeneratorPage() {
 
   return (
     <>
-      <Navbar />
-      <main style={{ minHeight: '100vh', paddingTop: '100px', paddingBottom: '60px', background: '#0a0a0f' }}>
+      <Header />
+      <main style={{ minHeight: '100vh', paddingTop: '160px', paddingBottom: '60px', background: '#0a0a0f' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>

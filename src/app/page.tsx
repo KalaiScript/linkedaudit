@@ -1,23 +1,23 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Navbar from '@/components/layout/Navbar';
+import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 const features = [
-  { icon: '', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
-  { icon: '', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
-  { icon: '', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
-  { icon: '', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
-  { icon: '', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
-  { icon: '', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
-  { icon: '', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
-  { icon: '', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
+  { icon: '📊', title: 'AI Profile Scoring', desc: 'Get a comprehensive 0-100 score with section-wise breakdown and detailed analysis.' },
+  { icon: '✍️', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
+  { icon: '🎯', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
+  { icon: '🔍', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
+  { icon: '📑', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
+  { icon: '🚀', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
+  { icon: '🤝', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
+  { icon: '🔥', title: 'Roast Mode', desc: 'Get brutally honest (and funny) feedback about your profile weaknesses.' },
 ];
 
 const steps = [
   { num: '01', title: 'Enter Your Profile', desc: 'Provide your headline, about section, and career goals directly in our secure auditor.' },
-  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section  photo impact, headline strength, about storytelling, and more.' },
+  { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI engine evaluates every section — photo impact, headline strength, about storytelling, and more.' },
   { num: '03', title: 'Get Your Audit Report', desc: 'Receive scores, suggestions, AI rewrites, and a personalized 7-day action plan.' },
 ];
 
@@ -26,27 +26,10 @@ const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 export default function LandingPage() {
   return (
     <>
-      <div style={{ 
-        background: 'linear-gradient(90deg, var(--accent-blue), var(--accent-blue-light))', 
-        color: 'white', 
-        padding: '8px 24px', 
-        fontSize: 12, 
-        fontWeight: 700, 
-        textAlign: 'center',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        textTransform: 'uppercase',
-        letterSpacing: 1
-      }}>
-        🔥 LIVE: LinkHive users are seeing 3.5x more recruiter profile views this week!
-      </div>
-      <Navbar />
+      <Header />
 
       {/* HERO */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px', textAlign: 'center', position: 'relative' }}>
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '160px 24px 80px', textAlign: 'center', position: 'relative' }}>
         {/* Glow orbs */}
         <div style={{ position: 'absolute', top: '10%', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,102,194,0.15), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '20%', right: '15%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,65,130,0.12), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
@@ -81,7 +64,14 @@ export default function LandingPage() {
             <Link href="/audit" className="glow-btn" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
               Free Profile Audit
             </Link>
-            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ padding: '16px clamp(24px, 5vw, 48px)', fontSize: 17, textDecoration: 'none' }}>
+            <Link href="/audit" className="glow-btn glow-btn-outline" style={{ 
+              padding: '16px clamp(24px, 5vw, 48px)', 
+              fontSize: 17, 
+              textDecoration: 'none',
+              borderColor: '#f97316',
+              color: '#fb923c',
+              boxShadow: 'inset 0 0 10px rgba(249, 115, 22, 0.1)'
+            }}>
               Roast My Profile 🔥
             </Link>
           </motion.div>
@@ -166,7 +156,7 @@ export default function LandingPage() {
           <div style={{ flex: 1, minWidth: 300 }}>
             <h2 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>Build Your <span className="gradient-text">Personal Brand</span></h2>
             <p style={{ color: 'rgba(226,232,240,0.6)', fontSize: 16, lineHeight: 1.6, marginBottom: 20 }}>
-              "I built LinkHive to help professionals like you leverage AI for career growth. Your LinkedIn profile is your digital CV—let's make it stand out."
+              &quot;I built LinkHive to help professionals like you leverage AI for career growth. Your LinkedIn profile is your digital CV—let&apos;s make it stand out.&quot;
             </p>
             <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
               <a href="https://www.linkedin.com/in/kalaiscript/" target="_blank" rel="noopener noreferrer" className="glow-btn" style={{ textDecoration: 'none', padding: '12px 24px', fontSize: 15 }}>

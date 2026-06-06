@@ -76,9 +76,9 @@ export default function AIChatbot() {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed', 
-          bottom: '20px', 
-          right: '20px', 
-          zIndex: 99999,
+          bottom: 'max(20px, env(safe-area-inset-bottom))', 
+          right: 'max(20px, env(safe-area-inset-right))', 
+          zIndex: 999999,
           width: '60px', 
           height: '60px', 
           borderRadius: '50%',
@@ -106,9 +106,9 @@ export default function AIChatbot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
               position: 'fixed', 
-              bottom: '90px', 
-              right: '20px', 
-              zIndex: 99999,
+              bottom: 'max(90px, calc(env(safe-area-inset-bottom) + 70px))', 
+              right: 'max(20px, env(safe-area-inset-right))', 
+              zIndex: 999999,
               width: 'min(400px, calc(100vw - 40px))', 
               height: 'min(600px, calc(100vh - 120px))',
               display: 'flex', 
