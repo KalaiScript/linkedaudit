@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=1200&h=400" alt="LinkHive Banner" />
+  <img src="./public/banner.png" alt="LinkHive Banner" />
 
   # 🐝 LinkHive: Your AI-Powered LinkedIn Colony
 
