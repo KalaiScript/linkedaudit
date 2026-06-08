@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import VisitorStats from './VisitorStats';
 
 export default function Footer() {
   return (
@@ -18,7 +19,10 @@ export default function Footer() {
             <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 14, lineHeight: 1.6 }}>
               AI-powered LinkedIn profile analyzer and post generator.
             </p>
-            <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
+            
+            <VisitorStats />
+
+            <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
               <img src="/profile.png" alt="Creator" style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid var(--accent-blue)' }} />
               <div>
                 <p style={{ fontSize: 12, color: 'rgba(226,232,240,0.5)', margin: 0 }}>Created by</p>
