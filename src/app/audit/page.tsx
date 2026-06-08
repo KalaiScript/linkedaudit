@@ -197,7 +197,7 @@ export default function AuditPage() {
     }, 1500);
   };
 
-  const isStep1Valid = userType && (userType === 'Student' ? role : true) && industry && level;
+  const isStep1Valid = url && /^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/.test(url) && userType && (userType === 'Student' ? role : true) && industry && level;
   const isStep2Valid = name && headline && selectedSkills.length > 0;
 
   const addCustomSkill = () => {
@@ -252,8 +252,11 @@ export default function AuditPage() {
                   </h3>
                   
                   <div style={{ marginBottom: 20 }}>
-                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>LinkedIn Profile URL (Optional - to pre-fill photo/name)</label>
+                    <label style={{ display: 'block', color: 'rgba(226,232,240,0.7)', fontSize: 13, fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>LinkedIn Profile URL</label>
                     <input type="text" className="input-field" placeholder="https://linkedin.com/in/your-username" value={url} onChange={e => setUrl(e.target.value)} />
+                    {url && !/^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/.test(url) && (
+                      <p style={{ color: '#ef4444', fontSize: 12, marginTop: 4 }}>Please enter a valid LinkedIn profile URL.</p>
+                    )}
                   </div>
 
                   <div className="responsive-grid-2" style={{ marginBottom: 32 }}>
