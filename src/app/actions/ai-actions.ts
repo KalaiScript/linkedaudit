@@ -93,3 +93,44 @@ export async function generatePostAction(topic: string, profile: LinkedInProfile
     return { success: false, error: String(error) };
   }
 }
+
+export async function polishConnectionMessageAction(
+  draft: string,
+  context: string,
+  profile: LinkedInProfile | null
+) {
+  try {
+    const prompt = `
+      Polish and improve this LinkedIn connection request message.
+      
+      Context: Reaching out to a ${context}
+      Sender Role: ${profile?.jobRoleTarget || 'Professional'}
+      Sender Skills: ${profile?.skills?.join(', ') || 'N/A'}
+
+      REQUIREMENTS:
+      1. Keep it under 300 characters (LinkedIn limit for connection requests).
+      2. Be professional, warm, and personalized.
+      3. Do NOT use emojis.
+      4. Keep the core intent of the original message.
+      5. Make it feel genuine, not salesy.
+
+      Original draft:
+      "${draft}"
+
+      Return ONLY the polished message text, nothing else.
+    `;
+
+    const response = await callAI(
+      [{ role: 'user', content: prompt }],
+      'You are a LinkedIn networking expert. Return ONLY the polished message. No quotes, no preamble.'
+    );
+
+    // Clean up any wrapping quotes from AI
+    const cleaned = response.replace(/^["']|["']$/g, '').trim();
+
+    return { success: true, content: cleaned };
+  } catch (error: unknown) {
+    console.error("Polish Message Error:", error);
+    return { success: false, error: String(error) };
+  }
+}

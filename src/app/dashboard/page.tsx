@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useEffect, Suspense } from 'react';
+import { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -11,6 +11,10 @@ import RadarChart from '@/components/dashboard/RadarChart';
 import ContentGeneratorPanel from '@/components/dashboard/ContentGeneratorPanel';
 import KeywordGapPanel from '@/components/dashboard/KeywordGapPanel';
 import MomentumChecklist from '@/components/dashboard/MomentumChecklist';
+import ProfileCompleteness from '@/components/dashboard/ProfileCompleteness';
+import BeforeAfterPreview from '@/components/dashboard/BeforeAfterPreview';
+import HeadlineABTester from '@/components/dashboard/HeadlineABTester';
+import ConnectionMessageGenerator from '@/components/dashboard/ConnectionMessageGenerator';
 import { analyzeProfile } from '@/lib/analysis-engine';
 import { AuditResult, LinkedInProfile } from '@/types';
 
@@ -125,6 +129,37 @@ function DashboardContent() {
     return baseResult;
   }, [profile, aiAnalysis]);
 
+  // Save audit to history
+  const historySaved = useRef(false);
+  useEffect(() => {
+    if (result && profile && !historySaved.current) {
+      historySaved.current = true;
+      try {
+        const historyEntry = {
+          id: Date.now().toString(),
+          name: profile.name || 'Unknown',
+          headline: profile.headline || '',
+          role: profile.jobRoleTarget || 'Professional',
+          overallScore: result.overallScore,
+          recruiterReadiness: result.recruiterReadiness,
+          personalBrandScore: result.personalBrandScore,
+          atsScore: result.atsScore,
+          timestamp: Date.now(),
+        };
+        const stored = localStorage.getItem('linkhive_audit_history');
+        const history = stored ? JSON.parse(stored) : [];
+        // Avoid duplicate saves within same session (check last entry)
+        const lastEntry = history[history.length - 1];
+        if (!lastEntry || Math.abs(lastEntry.timestamp - historyEntry.timestamp) > 5000) {
+          history.push(historyEntry);
+          localStorage.setItem('linkhive_audit_history', JSON.stringify(history));
+        }
+      } catch (e) {
+        console.error('Failed to save audit history:', e);
+      }
+    }
+  }, [result, profile]);
+
   if (!isMounted) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#06060e', color: '#e2e8f0' }}>
@@ -164,9 +199,9 @@ function DashboardContent() {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 0: return <OverviewTab result={result} loadingAi={loadingAi} />;
+      case 0: return <OverviewTab result={result} loadingAi={loadingAi} aiData={aiAnalysis} />;
       case 1: return <ScoreBreakdownTab result={result} roastMode={roastMode} />;
-      case 2: return <SuggestionsTab result={result} loadingAi={loadingAi} />;
+      case 2: return <SuggestionsTab result={result} loadingAi={loadingAi} aiData={aiAnalysis} />;
       case 3: return <ContentGeneratorPanel profile={result.profile} aiData={aiAnalysis} loading={loadingAi} />;
       case 4: return <SEOTab result={result} />;
       case 5: return <NetworkingTab result={result} />;
@@ -243,7 +278,7 @@ function DashboardContent() {
 }
 
 /* Overview Tab */
-function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
+function OverviewTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: any }) {
   return (
     <div>
       {/* Score cards row */}
@@ -264,6 +299,11 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
         </div>
       </div>
 
+      {/* Before vs After Preview */}
+      <div style={{ marginBottom: 24 }}>
+        <BeforeAfterPreview result={result} aiData={aiData} />
+      </div>
+
       {/* Strengths & Weaknesses */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 24 }}>
         <div className="glass-card" style={{ padding: 24 }}>
@@ -280,8 +320,12 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 24 }}>
+        <ProfileCompleteness profile={result.profile} />
         <MomentumChecklist />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div className="glass-card" style={{ padding: 24 }}>
             <h3 style={{ color: '#a78bfa', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>AI Career Positioning</h3>
@@ -310,7 +354,9 @@ function OverviewTab({ result, loadingAi }: { result: AuditResult; loadingAi: bo
               <EyeTrackItem label="Skills & Endorsements" percent={40} color="#10b981" />
             </div>
           </div>
+        </div>
 
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Industry Benchmarking */}
           <div className="glass-card" style={{ padding: 24 }}>
             <h3 style={{ color: '#06b6d4', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Industry Benchmarking</h3>
@@ -403,7 +449,7 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
 }
 
 /* AI Suggestions Tab */
-function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi: boolean }) {
+function SuggestionsTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: any }) {
   // Use AI strategy tips if available, otherwise fallback to local suggestions
   const aiTips = (result as any).aiStrategyTips;
   
@@ -480,6 +526,9 @@ function SuggestionsTab({ result, loadingAi }: { result: AuditResult; loadingAi:
           ))}
         </>
       )}
+
+      {/* Headline A/B Tester */}
+      <HeadlineABTester profile={result.profile} aiData={aiData} />
     </div>
   );
 }
@@ -556,6 +605,7 @@ function NetworkingTab({ result }: { result: AuditResult }) {
   ];
 
   return (
+    <>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
       {strategies.map((s, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="glass-card" style={{ padding: 24 }}>
@@ -571,6 +621,10 @@ function NetworkingTab({ result }: { result: AuditResult }) {
         </motion.div>
       ))}
     </div>
+
+    {/* Connection Message Generator */}
+    <ConnectionMessageGenerator profile={result.profile} />
+    </>
   );
 }
 

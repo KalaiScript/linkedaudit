@@ -32,6 +32,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-desktop">
           <Link href="/#features" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Features</Link>
           <Link href="/post-generator" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Post Generator</Link>
+          <Link href="/history" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>History</Link>
           
           <Link href="/audit" className="glow-btn" style={{ padding: '10px 24px', fontSize: 14, textDecoration: 'none' }}>
             Analyze Profile
@@ -71,6 +72,7 @@ export default function Navbar() {
           >
             <Link href="/#features" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Features</Link>
             <Link href="/post-generator" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Post Generator</Link>
+            <Link href="/history" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>History</Link>
             
             <Link href="/audit" onClick={() => setMenuOpen(false)} className="glow-btn" style={{ padding: '14px 24px', fontSize: 16, textDecoration: 'none', textAlign: 'center', marginTop: 8 }}>
               Analyze Profile
