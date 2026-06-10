@@ -109,6 +109,23 @@ export interface RoastItem {
   emoji: string;
 }
 
+export interface AIAnalysisResponse {
+  overallScore: number;
+  recruiterReadiness: number;
+  personalBrandScore: number;
+  atsScore: number;
+  topStrengths: string[];
+  topWeaknesses: string[];
+  headlines: { style: string; content: string }[];
+  abouts: { style: string; content: string }[];
+  experienceRewrites: { style: string; content: string }[];
+  posts: { style: string; content: string }[];
+  seoKeywords: { keyword: string; importance: 'high' | 'medium'; reason: string }[];
+  recruiterVerdict: string;
+  roasts: RoastItem[];
+  strategyTips?: { style: string; content: string; impact: 'high' | 'medium' | 'low'; category: string }[];
+}
+
 export interface ContentRewrite {
   type: 'headline' | 'about' | 'experience' | 'post';
   style: string;

@@ -36,6 +36,7 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
         "abouts": { "style": string, "content": string }[],
         "experienceRewrites": { "style": string, "content": string }[],
         "posts": { "style": string, "content": string }[],
+        "strategyTips": { "style": string, "content": string, "impact": "high" | "medium" | "low", "category": string }[],
         "seoKeywords": { "keyword": string, "importance": "high" | "medium", "reason": string }[],
         "recruiterVerdict": string,
         "roasts": { "section": string, "roast": string, "emoji": string }[]
