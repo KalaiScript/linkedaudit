@@ -99,17 +99,17 @@ Navigate to [http://localhost:3000](http://localhost:3000) and start growing!
 
 ---
 
-## 🤝 Join the Colony
+#### 🤝 Join the Colony
 
 We believe in open-source growth. Want to add a new framework? A new audit metric?
 1. **Fork** the hive.
 2. **Pollinate** (Create a feature branch).
 3. **Commit** your honey.
-4. **Pull Request** to the main colony.
+4. **Pull Request** to the main colony....
 
 ---
 
 <div align="center">
   <b>Handcrafted with 💛 by <a href="https://www.linkedin.com/in/kalaiscript/">Kalaiyarasan</a></b><br>
-  <i>Building the future of professional networking, one byte at a time.</i>
+  <i>Building your future of professional networking, one byte at a time....</i>
 </div>

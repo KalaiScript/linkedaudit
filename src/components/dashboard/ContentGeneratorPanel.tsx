@@ -61,39 +61,43 @@ export default function ContentGeneratorPanel({ aiData, loading }: ContentGenera
              <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>The AI might still be processing or encountered a formatting issue.</p>
           </div>
         ) : (
-          currentItems.map((item, i) => (
-            <motion.div
-              key={`${activeTab}-${i}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.08 }}
-              className="glass-card"
-              style={{ padding: 20 }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <span style={{
-                  padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                  background: 'rgba(139,92,246,0.12)', color: '#c4b5fd',
-                }}>
-                  { (item as { style?: string }).style || 'Suggested'}
-                </span>
-                <button
-                  onClick={() => handleCopy( (item as { content?: string }).content || (item as string), `${activeTab}-${i}`)}
-                  style={{
-                    padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                    background: copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
-                    border: '1px solid ' + (copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.3)' : 'rgba(99,102,241,0.2)'),
-                    color: copied === `${activeTab}-${i}` ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
-                  }}
-                >
-                  {copied === `${activeTab}-${i}` ? ' Copied!' : 'Copy'}
-                </button>
-              </div>
-              <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
-                { (item as { content?: string }).content || (item as string)}
-              </p>
-            </motion.div>
-          ))
+          currentItems.map((item, i) => {
+            const itemStyle = (item as any)?.style || 'Suggested';
+            const itemContent = (item as any)?.content || (typeof item === 'string' ? item : '');
+            return (
+              <motion.div
+                key={`${activeTab}-${i}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.08 }}
+                className="glass-card"
+                style={{ padding: 20 }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{
+                    padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                    background: 'rgba(139,92,246,0.12)', color: '#c4b5fd',
+                  }}>
+                    {itemStyle}
+                  </span>
+                  <button
+                    onClick={() => handleCopy(itemContent, `${activeTab}-${i}`)}
+                    style={{
+                      padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                      background: copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
+                      border: '1px solid ' + (copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.3)' : 'rgba(99,102,241,0.2)'),
+                      color: copied === `${activeTab}-${i}` ? '#6ee7b7' : '#a5b4fc', cursor: 'pointer',
+                    }}
+                  >
+                    {copied === `${activeTab}-${i}` ? ' Copied!' : 'Copy'}
+                  </button>
+                </div>
+                <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                  {itemContent}
+                </p>
+              </motion.div>
+            );
+          })
         )}
       </div>
     </div>
