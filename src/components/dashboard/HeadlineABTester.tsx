@@ -1,15 +1,27 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LinkedInProfile } from '@/types';
+import { LinkedInProfile, AIAnalysisResponse } from '@/types';
 import { generateHeadlines } from '@/lib/content-generator';
 
 interface HeadlineVote { index: number; vote: 'up' | 'down' | null; }
 
-export default function HeadlineABTester({ profile, aiData }: { profile: LinkedInProfile; aiData: any }) {
+export default function HeadlineABTester({ profile, aiData }: { profile: LinkedInProfile; aiData: AIAnalysisResponse | null }) {
   const [votes, setVotes] = useState<HeadlineVote[]>([]);
   const [showWinner, setShowWinner] = useState(false);
   const [copied, setCopied] = useState<number | null>(null);
+
+  const getCTRScore = useCallback((headline: string, index: number) => {
+    let base = 2.1;
+    if (headline.length > 100 && headline.length < 200) base += 1.2;
+    if (headline.includes('|') || headline.includes('•')) base += 0.8;
+    if (/\d/.test(headline)) base += 1.5;
+    if (headline.toLowerCase().includes('helping')) base += 0.6;
+    const vote = votes.find(v => v.index === index);
+    if (vote?.vote === 'up') base += 1.0;
+    if (vote?.vote === 'down') base -= 0.5;
+    return Math.min(Math.max(base, 1.0), 8.5).toFixed(1);
+  }, [votes]);
 
   const headlines = useMemo(() => {
     const aiHeadlines = aiData?.headlines || [];
@@ -20,18 +32,6 @@ export default function HeadlineABTester({ profile, aiData }: { profile: LinkedI
     ];
     return all.slice(0, 4);
   }, [profile, aiData]);
-
-  const getCTRScore = (headline: string, index: number) => {
-    let base = 2.1;
-    if (headline.length > 100 && headline.length < 200) base += 1.2;
-    if (headline.includes('|') || headline.includes('•')) base += 0.8;
-    if (/\d/.test(headline)) base += 1.5;
-    if (headline.toLowerCase().includes('helping')) base += 0.6;
-    const vote = votes.find(v => v.index === index);
-    if (vote?.vote === 'up') base += 1.0;
-    if (vote?.vote === 'down') base -= 0.5;
-    return Math.min(Math.max(base, 1.0), 8.5).toFixed(1);
-  };
 
   const handleVote = (index: number, vote: 'up' | 'down') => {
     setVotes(prev => {
@@ -60,7 +60,7 @@ export default function HeadlineABTester({ profile, aiData }: { profile: LinkedI
       if (s + bonus > bestScore) { bestScore = s + bonus; bestIdx = i; }
     });
     return bestIdx;
-  }, [showWinner, headlines, votes]);
+  }, [showWinner, headlines, votes, getCTRScore]);
 
   return (
     <div className="glass-card" style={{ padding: 24, marginTop: 20 }}>

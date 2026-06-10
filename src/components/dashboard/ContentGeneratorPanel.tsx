@@ -1,24 +1,24 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LinkedInProfile } from '@/types';
+import { LinkedInProfile, AIAnalysisResponse } from '@/types';
 
 interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
-  aiData?: unknown;
+  aiData?: AIAnalysisResponse | null;
   loading?: boolean;
 }
 
 const tabs = ['Headlines', 'About Section', 'Experience', 'Posts'];
 
-export default function ContentGeneratorPanel({ profile, aiData, loading }: ContentGeneratorPanelProps) {
+export default function ContentGeneratorPanel({ aiData, loading }: ContentGeneratorPanelProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const headlines =  (aiData as any)?.headlines || [];
-  const abouts =  (aiData as any)?.abouts || [];
-  const expRewrites =  (aiData as any)?.experienceRewrites || [];
-  const posts =  (aiData as any)?.posts || [];
+  const headlines =  aiData?.headlines || [];
+  const abouts =  aiData?.abouts || [];
+  const expRewrites =  aiData?.experienceRewrites || [];
+  const posts =  aiData?.posts || [];
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -61,7 +61,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
              <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>The AI might still be processing or encountered a formatting issue.</p>
           </div>
         ) : (
-          currentItems.map((item: any, i: number) => (
+          currentItems.map((item, i) => (
             <motion.div
               key={`${activeTab}-${i}`}
               initial={{ opacity: 0, y: 10 }}
@@ -75,10 +75,10 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
                   padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
                   background: 'rgba(139,92,246,0.12)', color: '#c4b5fd',
                 }}>
-                  { (item as any).style || 'Suggested'}
+                  { (item as { style?: string }).style || 'Suggested'}
                 </span>
                 <button
-                  onClick={() => handleCopy( (item as any).content || item, `${activeTab}-${i}`)}
+                  onClick={() => handleCopy( (item as { content?: string }).content || (item as string), `${activeTab}-${i}`)}
                   style={{
                     padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
                     background: copied === `${activeTab}-${i}` ? 'rgba(16,185,129,0.2)' : 'rgba(99,102,241,0.12)',
@@ -90,7 +90,7 @@ export default function ContentGeneratorPanel({ profile, aiData, loading }: Cont
                 </button>
               </div>
               <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-line' }}>
-                { (item as any).content || item}
+                { (item as { content?: string }).content || (item as string)}
               </p>
             </motion.div>
           ))

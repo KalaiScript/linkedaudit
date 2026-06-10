@@ -1,9 +1,9 @@
 'use client';
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { AuditResult } from '@/types';
+import { AuditResult, AIAnalysisResponse } from '@/types';
 
-export default function BeforeAfterPreview({ result, aiData }: { result: AuditResult; aiData: any }) {
+export default function BeforeAfterPreview({ result, aiData }: { result: AuditResult; aiData: AIAnalysisResponse | null }) {
   const optimized = useMemo(() => {
     const aiHeadline = aiData?.headlines?.[0]?.content || `${result.profile.jobRoleTarget} | ${result.profile.skills.slice(0, 3).join(' • ')} | Building Impactful Solutions`;
     const aiAbout = aiData?.abouts?.[0]?.content || `Passionate ${result.profile.jobRoleTarget} with expertise in ${result.profile.skills.slice(0, 3).join(', ')}. Focused on delivering high-impact solutions in the ${result.profile.industry || 'Tech'} space.`;

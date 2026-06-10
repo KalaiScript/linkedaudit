@@ -92,6 +92,8 @@ export interface AuditResult {
   personalBrandScore: number;
   atsScore: number;
   roastFeedback: RoastItem[];
+  aiStrategyTips?: { style: string; content: string; impact: 'high' | 'medium' | 'low'; category: string }[];
+  seoKeywords?: { keyword: string; importance: 'high' | 'medium'; reason: string }[];
 }
 
 export interface ActionPlanDay {

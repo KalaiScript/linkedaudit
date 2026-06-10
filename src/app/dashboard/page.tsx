@@ -16,7 +16,7 @@ import BeforeAfterPreview from '@/components/dashboard/BeforeAfterPreview';
 import HeadlineABTester from '@/components/dashboard/HeadlineABTester';
 import ConnectionMessageGenerator from '@/components/dashboard/ConnectionMessageGenerator';
 import { analyzeProfile } from '@/lib/analysis-engine';
-import { AuditResult, LinkedInProfile } from '@/types';
+import { AuditResult, LinkedInProfile, AIAnalysisResponse } from '@/types';
 
 import { getFullAIAnalysisAction } from '@/app/actions/ai-actions';
 import html2canvas from 'html2canvas';
@@ -29,9 +29,10 @@ function DashboardContent() {
   const [activeTab, setActiveTab] = useState(0);
   const [roastMode, setRoastMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [aiAnalysis, setAiAnalysis] = useState<AuditResult | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysisResponse | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [profile, setProfile] = useState<LinkedInProfile | null>(null);
 
   const handleExport = async () => {
     const dashboard = document.getElementById('dashboard-content');
@@ -57,21 +58,19 @@ function DashboardContent() {
   };
 
   useEffect(() => {
-    /* eslint-disable react-hooks/set-state-in-effect */
-    setIsMounted(true);
-    /* eslint-enable react-hooks/set-state-in-effect */
+    setTimeout(() => setIsMounted(true), 0);
   }, []);
 
-  const profile: LinkedInProfile | null = useMemo(() => {
-    if (typeof window !== 'undefined' && isMounted) {
+  useEffect(() => {
+    if (isMounted) {
       const stored = localStorage.getItem('linkhive_profile');
       if (stored) {
         try {
-          return JSON.parse(stored);
+          const parsed = JSON.parse(stored);
+          setTimeout(() => setProfile(parsed), 0);
         } catch { }
       }
     }
-    return null;
   }, [isMounted]);
 
   useEffect(() => {
@@ -83,8 +82,8 @@ function DashboardContent() {
       const fetchAnalysis = async () => {
         setLoadingAi(true);
         const result = await getFullAIAnalysisAction(profile);
-        if (result.success) {
-          setAiAnalysis(result.analysis as any);
+        if (result.success && result.analysis) {
+          setAiAnalysis(result.analysis as AIAnalysisResponse);
         } else {
           // Fallback or handle error silently if needed, or show a toast
           console.error("AI Analysis failed:", result.error);
@@ -112,18 +111,17 @@ function DashboardContent() {
 
     const baseResult = analyzeProfile(fullProfile);
     if (aiAnalysis) {
-      // Use any here to map the custom AI response structure to our AuditResult
-      const aiData = aiAnalysis as any;
       return {
         ...baseResult,
-        overallScore: aiData.overallScore || baseResult.overallScore,
-        recruiterReadiness: aiData.recruiterReadiness || baseResult.recruiterReadiness,
-        personalBrandScore: aiData.personalBrandScore || baseResult.personalBrandScore,
-        atsScore: aiData.atsScore || baseResult.atsScore,
-        topStrengths: aiData.topStrengths || baseResult.topStrengths,
-        topWeaknesses: aiData.topWeaknesses || baseResult.topWeaknesses,
-        roastFeedback: aiData.roasts || baseResult.roastFeedback,
-        aiStrategyTips: aiData.strategyTips,
+        overallScore: aiAnalysis.overallScore || baseResult.overallScore,
+        recruiterReadiness: aiAnalysis.recruiterReadiness || baseResult.recruiterReadiness,
+        personalBrandScore: aiAnalysis.personalBrandScore || baseResult.personalBrandScore,
+        atsScore: aiAnalysis.atsScore || baseResult.atsScore,
+        topStrengths: aiAnalysis.topStrengths || baseResult.topStrengths,
+        topWeaknesses: aiAnalysis.topWeaknesses || baseResult.topWeaknesses,
+        roastFeedback: aiAnalysis.roasts || baseResult.roastFeedback,
+        aiStrategyTips: aiAnalysis.strategyTips,
+        seoKeywords: aiAnalysis.seoKeywords,
       };
     }
     return baseResult;
@@ -225,12 +223,12 @@ function DashboardContent() {
               <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 15, margin: 0 }}>
                 Analysis for <strong style={{ color: '#a78bfa' }}>{result.profile.name}</strong>  {result.profile.jobRoleTarget}
               </p>
-              {(aiAnalysis as any)?.recruiterVerdict && (
+              {aiAnalysis?.recruiterVerdict && (
                 <div style={{ 
                   padding: '4px 12px', borderRadius: 100, background: 'rgba(59,130,246,0.1)', 
                   border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', fontSize: 11, fontWeight: 700
                 }}>
-                  VERDICT: {(aiAnalysis as any).recruiterVerdict}
+                  VERDICT: {aiAnalysis.recruiterVerdict}
                 </div>
               )}
             </div>
@@ -278,7 +276,7 @@ function DashboardContent() {
 }
 
 /* Overview Tab */
-function OverviewTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: any }) {
+function OverviewTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: AIAnalysisResponse | null }) {
   return (
     <div>
       {/* Score cards row */}
@@ -449,9 +447,9 @@ function ScoreBreakdownTab({ result, roastMode }: { result: AuditResult; roastMo
 }
 
 /* AI Suggestions Tab */
-function SuggestionsTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: any }) {
+function SuggestionsTab({ result, loadingAi, aiData }: { result: AuditResult; loadingAi: boolean; aiData: AIAnalysisResponse | null }) {
   // Use AI strategy tips if available, otherwise fallback to local suggestions
-  const aiTips = (result as any).aiStrategyTips;
+  const aiTips = aiData?.strategyTips;
   
   const allSuggestions = aiTips 
     ? aiTips.map((tip: { style?: string; title?: string; content?: string; suggested?: string; impact?: 'high' | 'medium' | 'low' }) => ({
@@ -537,8 +535,10 @@ function SuggestionsTab({ result, loadingAi, aiData }: { result: AuditResult; lo
 function SEOTab({ result }: { result: AuditResult }) {
   const seoSection = result.sections.find(s => s.name.includes('SEO'));
   const keywords = result.profile.seoKeywords;
-  const missing = ['Full Stack Development', 'System Design', 'Agile Methodologies', 'Cloud Computing', 'Technical Leadership'].filter(k => !keywords.some(kw => kw.toLowerCase().includes(k.toLowerCase())));
-  const seoKeywords = (result as any).seoKeywords;
+  const seoKeywords = result.seoKeywords;
+  const missing = seoKeywords 
+    ? seoKeywords.map(k => k.keyword)
+    : ['Full Stack Development', 'System Design', 'Agile Methodologies', 'Cloud Computing', 'Technical Leadership'].filter(k => !keywords.some(kw => kw.toLowerCase().includes(k.toLowerCase())));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

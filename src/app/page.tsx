@@ -1,6 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ReviewsSection from '@/components/layout/ReviewsSection';
@@ -149,7 +150,7 @@ export default function LandingPage() {
           className="glass-card" style={{ padding: '40px', display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}
         >
           <div style={{ position: 'relative' }}>
-            <img src="/profile.png" alt="Kalaiyarasan" style={{ width: 180, height: 180, borderRadius: 20, objectFit: 'cover', border: '2px solid var(--accent-blue)' }} />
+            <Image src="/profile.png" alt="Kalaiyarasan" width={180} height={180} style={{ borderRadius: 20, objectFit: 'cover', border: '2px solid var(--accent-blue)' }} />
             <div style={{ position: 'absolute', bottom: -10, right: -10, background: 'var(--accent-blue)', color: 'white', padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>Creator</div>
           </div>
           <div style={{ flex: 1, minWidth: 300 }}>

@@ -1,4 +1,4 @@
-import { ContentRewrite } from '@/types';
+import { ContentRewrite, AISuggestion } from '@/types';
 
 export function generateHeadlines(role: string, skills: string[], level: string): ContentRewrite[] {
   const s = skills.slice(0, 3).join('  ');
@@ -71,7 +71,6 @@ export function generateExperienceRewrites(title: string, company: string, descr
 
 export function generatePosts(role: string, skills: string[]): ContentRewrite[] {
   const topSkill = skills[0] || 'Software Development';
-  const secondarySkill = skills[1] || 'Modern Tech Stack';
   
   return [
     {
@@ -105,23 +104,28 @@ export function generateViralHooks(role: string, skills: string[]): string[] {
   ];
 }
 
-export function generateAISuggestions(role: string, skills: string[], level: string): ContentRewrite[] {
+export function generateAISuggestions(role: string, skills: string[], level: string): AISuggestion[] {
   return [
     {
-      type: 'about' as any, style: 'Profile Strategy',
-      content: `Your headline should focus on the *value* you provide, not just your job title. Instead of "${role}", try "Helping companies build ${skills[0] || 'scalable'} solutions as a ${role}". This makes you stand out to recruiters immediately.`
+      type: 'tip', title: 'Profile Strategy',
+      current: `Current role: ${role}`,
+      suggested: `Your headline should focus on the *value* you provide, not just your job title. Instead of "${role}", try "Helping companies build ${skills[0] || 'scalable'} solutions as a ${role}". This makes you stand out to recruiters immediately.`,
+      impact: 'high', category: 'Profile'
     },
     {
-      type: 'about' as any, style: 'Content Strategy',
-      content: `You have great expertise in ${skills.slice(0, 2).join(' and ')}. Start sharing weekly insights about these topics. Engagement increases by 40% when you post consistent, value-driven content rather than just personal updates.`
+      type: 'tip', title: 'Content Strategy',
+      suggested: `You have great expertise in ${skills.slice(0, 2).join(' and ')}. Start sharing weekly insights about these topics. Engagement increases by 40% when you post consistent, value-driven content rather than just personal updates.`,
+      impact: 'medium', category: 'Engagement'
     },
     {
-      type: 'about' as any, style: 'Experience Strategy',
-      content: `In your experience section, use "Action Verbs" like "Spearheaded", "Architected", and "Optimized". Ensure every bullet point follows the X-Y-Z formula: "Accomplished [X] as measured by [Y], by doing [Z]".`
+      type: 'improvement', title: 'Experience Strategy',
+      suggested: `In your experience section, use "Action Verbs" like "Spearheaded", "Architected", and "Optimized". Ensure every bullet point follows the X-Y-Z formula: "Accomplished [X] as measured by [Y], by doing [Z]".`,
+      impact: 'high', category: 'Experience'
     },
     {
-      type: 'about' as any, style: 'Networking Strategy',
-      content: `Since you are a ${level} ${role}, focus on connecting with senior engineers and tech leads in the ${skills[0] || 'tech'} space. Personalized connection requests mentioning their recent work can lead to a 3x higher acceptance rate.`
+      type: 'tip', title: 'Networking Strategy',
+      suggested: `Since you are a ${level} ${role}, focus on connecting with senior engineers and tech leads in the ${skills[0] || 'tech'} space. Personalized connection requests mentioning their recent work can lead to a 3x higher acceptance rate.`,
+      impact: 'medium', category: 'Networking'
     },
   ];
 }

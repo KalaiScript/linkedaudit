@@ -35,11 +35,12 @@ export default function HistoryPage() {
   const [selectedAudit, setSelectedAudit] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => setIsMounted(true), 0);
     const stored = localStorage.getItem('linkhive_audit_history');
     if (stored) {
       try {
-        setAudits(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        setTimeout(() => setAudits(parsed), 0);
       } catch {}
     }
   }, []);
