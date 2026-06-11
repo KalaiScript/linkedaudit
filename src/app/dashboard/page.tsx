@@ -143,6 +143,7 @@ function DashboardContent() {
           personalBrandScore: result.personalBrandScore,
           atsScore: result.atsScore,
           timestamp: Date.now(),
+          fullProfile: profile,
         };
         const stored = localStorage.getItem('linkhive_audit_history');
         const history = stored ? JSON.parse(stored) : [];

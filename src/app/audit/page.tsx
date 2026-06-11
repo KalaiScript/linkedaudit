@@ -105,17 +105,25 @@ export default function AuditPage() {
 
       if (url && url.includes('linkedin.com/in/')) {
         setFetchingMinimal(true);
-        const res = await fetchLinkedInProfileAction(url);
-        if (res.success && res.data) {
-          if (res.data.name) setName(res.data.name);
-          if (res.data.headline) setHeadline(res.data.headline);
-          if (res.data.about) setAbout(res.data.about);
-          if (res.data.location) setLocation(res.data.location);
-          if (res.data.followers) setFollowers(res.data.followers.toString());
-          if (res.data.connections) setConnections(res.data.connections.toString());
-          // Auto-calculate search appearances based on followers/activity if not provided
-          if (res.data.searchAppearances) setSearchAppearances(res.data.searchAppearances.toString());
-          else if (res.data.followers) setSearchAppearances(Math.round(res.data.followers / 20).toString());
+        try {
+          const res = await fetchLinkedInProfileAction(url);
+          if (res.success && res.data) {
+            if (res.data.name) setName(res.data.name);
+            if (res.data.headline) setHeadline(res.data.headline);
+            if (res.data.about) setAbout(res.data.about);
+            if (res.data.location) setLocation(res.data.location);
+            if (res.data.followers) setFollowers(res.data.followers.toString());
+            if (res.data.connections) setConnections(res.data.connections.toString());
+            // Auto-calculate search appearances based on followers/activity if not provided
+            if (res.data.searchAppearances) setSearchAppearances(res.data.searchAppearances.toString());
+            else if (res.data.followers) setSearchAppearances(Math.round(res.data.followers / 20).toString());
+          } else if (res.error) {
+            console.error("LinkedIn fetch failed:", res.error);
+            // Optionally show a non-blocking alert or message
+            alert("Note: " + res.error + "\n\nYou can still proceed by entering your details manually.");
+          }
+        } catch (e) {
+          console.error("Error during pre-fill:", e);
         }
         setFetchingMinimal(false);
       }

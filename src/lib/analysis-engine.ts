@@ -209,7 +209,7 @@ function analyzeEngagement(profile: LinkedInProfile): SectionScore {
   return { name: 'Engagement', score, maxScore: 10, weight: 5, icon: '', color: '#a855f7', strengths, weaknesses, suggestions };
 }
 
-function generateActionPlan(sections: SectionScore[]): ActionPlanDay[] {
+function generateActionPlan(): ActionPlanDay[] {
   const plan: ActionPlanDay[] = [
     { day: 1, title: 'Visual Presence', description: 'Optimize your visual brand', tasks: ['Review banner for impact', 'Update profile photo if needed'], impact: 'high', completed: false },
     { day: 2, title: 'Headline Strategy', description: 'Maximize search visibility', tasks: ['Add social proof to headline', 'Include core role and secondary skills'], impact: 'high', completed: false },
@@ -222,7 +222,7 @@ function generateActionPlan(sections: SectionScore[]): ActionPlanDay[] {
   return plan;
 }
 
-function generateRoasts(profile: LinkedInProfile, sections: SectionScore[]): RoastItem[] {
+function generateRoasts(profile: LinkedInProfile): RoastItem[] {
   const roasts: RoastItem[] = [];
   if (profile.followers > 5000) roasts.push({ section: 'Success', roast: "With this many followers, why are you even using this tool? You're practically an influencer.", emoji: '' });
   else if (profile.connections < 200) roasts.push({ section: 'Network', roast: "Only 200 connections? Are you using LinkedIn or a private group chat?", emoji: '' });
@@ -261,10 +261,10 @@ export function analyzeProfile(profile: LinkedInProfile): AuditResult {
     topStrengths: allStrengths,
     topWeaknesses: allWeaknesses,
     opportunities: ['Collaborate with other creators', 'Diversify content formats', 'Scale post frequency'],
-    actionPlan: generateActionPlan(sections),
+    actionPlan: generateActionPlan(),
     careerPositioning: [profile.jobRoleTarget, ...profile.skills.slice(0, 3).map(s => `${s} Specialist`)],
     personalBrandScore: Math.min(personalBrandScore, 100),
     atsScore: Math.min(Math.round(overallScore * 0.98), 100),
-    roastFeedback: generateRoasts(profile, sections),
+    roastFeedback: generateRoasts(profile),
   };
 }

@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { LinkedInProfile, AIAnalysisResponse } from '@/types';
+import { LinkedInProfile, AIAnalysisResponse, ContentRewrite } from '@/types';
+import { generateHeadlines, generateAboutSections, generateExperienceRewrites, generatePosts } from '@/lib/content-generator';
 
 interface ContentGeneratorPanelProps {
   profile: LinkedInProfile;
@@ -11,14 +12,30 @@ interface ContentGeneratorPanelProps {
 
 const tabs = ['Headlines', 'About Section', 'Experience', 'Posts'];
 
-export default function ContentGeneratorPanel({ aiData, loading }: ContentGeneratorPanelProps) {
+export default function ContentGeneratorPanel({ profile, aiData, loading }: ContentGeneratorPanelProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const headlines =  aiData?.headlines || [];
-  const abouts =  aiData?.abouts || [];
-  const expRewrites =  aiData?.experienceRewrites || [];
-  const posts =  aiData?.posts || [];
+  const headlines = useMemo(() => {
+    if (aiData?.headlines && aiData.headlines.length > 0) return aiData.headlines;
+    return generateHeadlines(profile.jobRoleTarget, profile.skills, profile.experienceLevel);
+  }, [aiData, profile]);
+
+  const abouts = useMemo(() => {
+    if (aiData?.abouts && aiData.abouts.length > 0) return aiData.abouts;
+    return generateAboutSections(profile.jobRoleTarget, profile.skills, profile.experienceLevel, profile.industry);
+  }, [aiData, profile]);
+
+  const expRewrites = useMemo(() => {
+    if (aiData?.experienceRewrites && aiData.experienceRewrites.length > 0) return aiData.experienceRewrites;
+    const lastExp = profile.experience[0];
+    return generateExperienceRewrites(lastExp?.title || profile.jobRoleTarget, lastExp?.company || 'Company', lastExp?.description || '', profile.skills);
+  }, [aiData, profile]);
+
+  const posts = useMemo(() => {
+    if (aiData?.posts && aiData.posts.length > 0) return aiData.posts;
+    return generatePosts(profile.jobRoleTarget, profile.skills);
+  }, [aiData, profile]);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -43,27 +60,28 @@ export default function ContentGeneratorPanel({ aiData, loading }: ContentGenera
         <div>
           <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 }}>Profile Rewrite Suggestions</h3>
           <p style={{ color: 'rgba(226,232,240,0.7)', fontSize: 14 }}>
-            {loading ? 'AI is crafting high-impact copy for your profile...' : 'Optimized content for your LinkedIn sections based on your target role and current profile.'}
+            {loading ? 'AI is crafting high-impact copy for your profile...' : (aiData ? 'Optimized content for your LinkedIn sections based on your target role and current profile.' : 'Template-based suggestions to optimize your LinkedIn sections.')}
           </p>
         </div>
       </div>
 
       {/* Content */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {loading && currentItems.length === 0 ? (
+        {loading && (!aiData || currentItems.length === 0) ? (
           <div style={{ padding: 60, textAlign: 'center' }}>
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} style={{ fontSize: 48, marginBottom: 20 }}>Edit</motion.div>
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} style={{ fontSize: 48, marginBottom: 20 }}>📝</motion.div>
             <p style={{ color: 'rgba(226,232,240,0.4)', fontSize: 16 }}>AI is writing your {tabs[activeTab]}...</p>
           </div>
         ) : currentItems.length === 0 ? (
           <div className="glass-card" style={{ padding: 40, textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)' }}>
-             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 15 }}>No AI suggestions generated for this section yet.</p>
-             <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>The AI might still be processing or encountered a formatting issue.</p>
+             <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 15 }}>No suggestions generated for this section yet.</p>
+             <p style={{ color: 'rgba(226,232,240,0.3)', fontSize: 13, marginTop: 8 }}>Try adding more details to your profile to get better results.</p>
           </div>
         ) : (
           currentItems.map((item, i) => {
-            const itemStyle = (item as any)?.style || 'Suggested';
-            const itemContent = (item as any)?.content || (typeof item === 'string' ? item : '');
+            const rewriteItem = item as ContentRewrite;
+            const itemStyle = rewriteItem.style || 'Suggested';
+            const itemContent = rewriteItem.content || '';
             return (
               <motion.div
                 key={`${activeTab}-${i}`}
@@ -103,3 +121,4 @@ export default function ContentGeneratorPanel({ aiData, loading }: ContentGenera
     </div>
   );
 }
+

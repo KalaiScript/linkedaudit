@@ -27,9 +27,11 @@ interface SavedAudit {
   personalBrandScore: number;
   atsScore: number;
   timestamp: number;
+  fullProfile?: LinkedInProfile;
 }
 
 export default function HistoryPage() {
+  const router = useRouter();
   const [audits, setAudits] = useState<SavedAudit[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<string | null>(null);
@@ -52,8 +54,19 @@ export default function HistoryPage() {
   };
 
   const handleClearAll = () => {
-    setAudits([]);
-    localStorage.removeItem('linkhive_audit_history');
+    if (confirm('Are you sure you want to clear all audit history?')) {
+      setAudits([]);
+      localStorage.removeItem('linkhive_audit_history');
+    }
+  };
+
+  const handleRestore = (audit: SavedAudit) => {
+    if (audit.fullProfile) {
+      localStorage.setItem('linkhive_profile', JSON.stringify(audit.fullProfile));
+      router.push('/dashboard');
+    } else {
+      alert('Full profile data not available for this legacy audit.');
+    }
   };
 
   const chartData = useMemo(() => {
@@ -278,13 +291,13 @@ export default function HistoryPage() {
                           <p style={{ color: 'rgba(226,232,240,0.5)', fontSize: 13, marginBottom: 8 }}>
                             <strong style={{ color: 'rgba(226,232,240,0.7)' }}>Headline:</strong> {audit.headline}
                           </p>
-                          <Link
-                            href="/dashboard"
+                          <button
+                            onClick={() => handleRestore(audit)}
                             className="glow-btn"
-                            style={{ padding: '8px 20px', fontSize: 13, textDecoration: 'none', display: 'inline-block', marginTop: 8 }}
+                            style={{ padding: '8px 20px', fontSize: 13, border: 'none', cursor: 'pointer', marginTop: 8 }}
                           >
-                            View Full Dashboard
-                          </Link>
+                            Restore & View Dashboard
+                          </button>
                         </motion.div>
                       )}
                     </AnimatePresence>

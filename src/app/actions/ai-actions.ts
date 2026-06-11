@@ -45,6 +45,11 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
 
       const response = await callAI([{ role: 'user', content: prompt }], "You are a fast, professional LinkedIn auditor. Return ONLY valid JSON. Ensure the About section has frequent double-newlines for readability. NEVER use emojis.");
     
+    // Check if the response is the "Welcome to LinkHive" fallback
+    if (response.includes("Welcome to LinkHive!") || response.includes("AI Configuration Missing")) {
+      return { success: false, error: "AI API credentials are not configured. Showing local template results." };
+    }
+
     // Attempt to parse JSON from the response
     let analysis;
     try {
@@ -53,7 +58,7 @@ export async function getFullAIAnalysisAction(profile: LinkedInProfile) {
       analysis = JSON.parse(jsonStr);
     } catch (e) {
       console.error("Failed to parse AI JSON:", e);
-      throw new Error("The AI returned an invalid response format. Please try again.");
+      return { success: false, error: "The AI returned an invalid response format. Please try again." };
     }
     
     return { success: true, analysis };
