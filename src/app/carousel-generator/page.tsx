@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { LinkedInProfile } from '@/types';
 import { generateCarouselAction } from '@/app/actions/ai-actions';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jsPDF';
+import jsPDF from 'jspdf';
 
 interface Slide {
   slideNumber: number;
