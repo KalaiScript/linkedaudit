@@ -140,3 +140,107 @@ export async function polishConnectionMessageAction(
     return { success: false, error: String(error) };
   }
 }
+
+export async function generateCarouselAction(
+  topic: string,
+  slideCount: number,
+  tone: string,
+  profile: LinkedInProfile | null
+) {
+  try {
+    const prompt = `
+      Generate a LinkedIn carousel with ${slideCount} slides on the topic "${topic}" using a "${tone}" tone.
+      
+      User Profile Context (if available):
+      Role: ${profile?.jobRoleTarget || 'Professional'}
+      Skills: ${profile?.skills.join(', ') || 'N/A'}
+
+      REQUIREMENTS:
+      1. Structure: Return exactly ${slideCount} slides.
+      2. Content: Each slide must have a title, a brief core point (subtitle/sentence), and 1 to 3 key takeaways/bullets.
+      3. Style: Keep text highly punchy and concise (it must fit on a slide!).
+      4. Emojis: Do NOT use any emojis.
+      
+      Return ONLY valid JSON matching this schema:
+      {
+        "slides": [
+          {
+            "slideNumber": number,
+            "title": "Slide Title",
+            "subtitle": "Slide Subtitle/Main Point",
+            "bullets": ["Bullet point 1", "Bullet point 2"]
+          }
+        ]
+      }
+    `;
+
+    const response = await callAI(
+      [{ role: 'user', content: prompt }],
+      'You are a LinkedIn content strategist. Return ONLY valid JSON. NEVER use emojis.'
+    );
+
+    let parsed;
+    try {
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      const jsonStr = jsonMatch ? jsonMatch[0] : response;
+      parsed = JSON.parse(jsonStr);
+    } catch (e) {
+      console.error("Failed to parse Carousel JSON:", e);
+      return { success: false, error: "AI returned invalid JSON. Please try again." };
+    }
+
+    return { success: true, slides: parsed.slides };
+  } catch (error: unknown) {
+    console.error("Generate Carousel Action Error:", error);
+    return { success: false, error: String(error) };
+  }
+}
+
+export async function generateRepliesAction(
+  postText: string,
+  style: string,
+  profile: LinkedInProfile | null
+) {
+  try {
+    const prompt = `
+      Generate 3 distinct, engaging, and professional comments/replies to this LinkedIn post.
+      
+      Reply style/tone: ${style}
+      Sender Role: ${profile?.jobRoleTarget || 'Professional'}
+      Sender Skills: ${profile?.skills?.join(', ') || 'N/A'}
+
+      Original post:
+      "${postText}"
+
+      REQUIREMENTS:
+      1. Keep comments brief, impactful, and authentic.
+      2. Do NOT use emojis.
+      3. Ensure each comment is unique and offers distinct value (e.g. sharing a thought, asking a question, validation).
+      
+      Return ONLY valid JSON matching this schema:
+      {
+        "replies": ["Reply 1", "Reply 2", "Reply 3"]
+      }
+    `;
+
+    const response = await callAI(
+      [{ role: 'user', content: prompt }],
+      'You are a LinkedIn networking expert. Return ONLY valid JSON. NEVER use emojis.'
+    );
+
+    let parsed;
+    try {
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      const jsonStr = jsonMatch ? jsonMatch[0] : response;
+      parsed = JSON.parse(jsonStr);
+    } catch (e) {
+      console.error("Failed to parse Replies JSON:", e);
+      return { success: false, error: "AI returned invalid JSON. Please try again." };
+    }
+
+    return { success: true, replies: parsed.replies };
+  } catch (error: unknown) {
+    console.error("Generate Replies Action Error:", error);
+    return { success: false, error: String(error) };
+  }
+}
