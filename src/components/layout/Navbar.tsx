@@ -34,6 +34,7 @@ export default function Navbar() {
           <Link href="/post-generator" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Post Generator</Link>
           <Link href="/carousel-generator" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Carousel Gen</Link>
           <Link href="/reply-assistant" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Reply Assistant</Link>
+          <Link href="/scheduler" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>Planner</Link>
           <Link href="/history" style={{ color: 'rgba(226,232,240,0.6)', textDecoration: 'none', fontSize: 14, fontWeight: 500, transition: 'color 0.2s' }}>History</Link>
           
           <Link href="/audit" className="glow-btn" style={{ padding: '10px 20px', fontSize: 13, textDecoration: 'none' }}>
@@ -76,6 +77,7 @@ export default function Navbar() {
             <Link href="/post-generator" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Post Generator</Link>
             <Link href="/carousel-generator" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Carousel Gen</Link>
             <Link href="/reply-assistant" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Reply Assistant</Link>
+            <Link href="/scheduler" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>Planner</Link>
             <Link href="/history" onClick={() => setMenuOpen(false)} style={{ color: 'rgba(226,232,240,0.7)', textDecoration: 'none', fontSize: 18, fontWeight: 500, padding: '12px 0' }}>History</Link>
             
             <Link href="/audit" onClick={() => setMenuOpen(false)} className="glow-btn" style={{ padding: '14px 24px', fontSize: 16, textDecoration: 'none', textAlign: 'center', marginTop: 8 }}>

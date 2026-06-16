@@ -11,6 +11,7 @@ const features = [
   { icon: '✍️', title: 'Content Rewriting', desc: 'AI rewrites your headline, about, and experience sections for maximum impact.' },
   { icon: '🎯', title: 'Recruiter Readiness', desc: 'Simulates how recruiters evaluate your profile with actionable feedback.' },
   { icon: '🔍', title: 'SEO Optimization', desc: 'Keyword analysis and search discoverability scoring for your industry.' },
+  { icon: '📅', title: 'Content Planner', desc: 'Plan your weekly posting schedule, draft content with AI, and download CSV calendars.' },
   { icon: '📑', title: 'ATS Resume Scanner', desc: 'Check if your LinkedIn profile data is optimized for Applicant Tracking Systems.' },
   { icon: '🚀', title: 'AI Growth Hacks', desc: 'Get personalized daily action plans to grow your LinkedIn followers and engagement.' },
   { icon: '🤝', title: 'Network Analysis', desc: 'Evaluate the quality of your connections and get strategic networking advice.' },
