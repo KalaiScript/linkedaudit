@@ -70,7 +70,7 @@ Track your LinkedIn profile improvements over time.
 
 ---
 
-## 🛠️ Bee-hind the Scenes (Tech Stack)
+## 🛠️ Bee-hind the Scenes (Tech Stacks)
 
 LinkHive is built on a high-performance modern web stack:
 
