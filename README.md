@@ -161,6 +161,6 @@ Contributions are welcome! Whether you are adding a new viral hook framework, te
 ---
 
 <div align="center">
-  <b>Handcrafted with 💛 by <a href="https://www.linkedin.com/in/kalaiscript/">Kalaiyarasan</a></b><br>
+  <b>Handcrafted with 💛❤️ by <a href="https://www.linkedin.com/in/kalaiscript/">Kalaiyarasan</a></b><br>
   <i>Building the future of professional branding, one line of code at a time.</i>
 </div>
